@@ -1,4 +1,8 @@
-import { CheckCircleOutlined, ExclamationCircleOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { Modal } from "antd";
 import { NotificationInstance } from "antd/es/notification/interface";
 import { createContext, ReactElement } from "react";
@@ -54,7 +58,7 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
 
   const successMessage = ({ title, description }: Message) => {
     api.success({
-      message: title || t("noti.title.success"),
+      message: title || "Thành công",
       description: description,
       duration: 2,
       style: {
@@ -68,7 +72,7 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
 
   const errorMessage = ({ title, description }: Message) => {
     api.error({
-      message: title || t("noti.title.error"),
+      message: title || "Có lỗi xảy ra",
       description: description,
       duration: 2,
       style: {
@@ -94,9 +98,13 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
     });
   };
 
-  const warningModalMessage = ({ title, description, onSubmit = () => {} }: ComfirmMessage) => {
+  const warningModalMessage = ({
+    title,
+    description,
+    onSubmit = () => {},
+  }: ComfirmMessage) => {
     Modal.warning({
-      title: title || t("noti.title.warningModal"),
+      title: title || "Cảnh Báo",
       content: description,
       okText: t("noti.btn.delete"),
       cancelText: t("noti.btn.comfirm"),
@@ -104,7 +112,12 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
     });
   };
 
-  const deleteMessage = ({ onCancel = () => {}, title, description, onSubmit = () => {} }: ComfirmMessage) => {
+  const deleteMessage = ({
+    onCancel = () => {},
+    title,
+    description,
+    onSubmit = () => {},
+  }: ComfirmMessage) => {
     Modal.confirm({
       className: "modal-message",
       title: title || t("noti.title.delete"),
@@ -131,7 +144,12 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
     });
   };
 
-  const comfirmMessage = ({ onCancel = () => {}, title, description, onSubmit = () => {} }: ComfirmMessage) => {
+  const comfirmMessage = ({
+    onCancel = () => {},
+    title,
+    description,
+    onSubmit = () => {},
+  }: ComfirmMessage) => {
     Modal.confirm({
       className: "modal-message",
       title: title || t("noti.title.comfirm"),
@@ -158,7 +176,11 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
     });
   };
 
-  const successModalMessage = ({ title, description, onSubmit = () => {} }: ComfirmMessage) => {
+  const successModalMessage = ({
+    title,
+    description,
+    onSubmit = () => {},
+  }: ComfirmMessage) => {
     Modal.confirm({
       className: "modal-message",
       title: title || t("noti.title.successModal"),

@@ -1,8 +1,5 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
 import classNames from "classnames/bind";
 
-import { useRef } from "react";
 import styles from "./index.module.scss";
 
 const cx = classNames.bind(styles);
@@ -13,8 +10,8 @@ interface IProps {
   isLoading?: boolean;
 }
 
-const Spinner = ({ fontSize = 24, children, isLoading = true }: IProps) => {
-  const ref = useRef<HTMLDivElement>(null);
+const Spinner = () => {
+  //const ref = useRef<HTMLDivElement>(null);
 
   /* const [styleComponent, setStyleComponent] = useState({});
 
@@ -32,11 +29,12 @@ const Spinner = ({ fontSize = 24, children, isLoading = true }: IProps) => {
   }, [ref]); */
 
   return (
-    <div className={cx("spiner")} ref={ref}>
-      <Spin spinning={isLoading} indicator={<LoadingOutlined style={{ fontSize: fontSize }} spin />}>
-        {children}
-      </Spin>
-    </div>
+    <></>
+    // <div className={cx("spiner")} ref={ref}>
+    //   <Spin spinning={isLoading} indicator={<LoadingOutlined style={{ fontSize: fontSize }} spin />}>
+    //     {children}
+    //   </Spin>
+    // </div>
   );
 };
 
