@@ -1,0 +1,14 @@
+.login-form-container{
+    flex: 1;
+    & :global(.logo-img){
+        margin: 0 auto;
+        margin-top: -30px;
+    }
+    & :global(.btn-login){
+        background-color: #57e1e4;
+        width: 100%;
+        font-size: larger;
+        font-weight: bold;
+    }
+
+}
