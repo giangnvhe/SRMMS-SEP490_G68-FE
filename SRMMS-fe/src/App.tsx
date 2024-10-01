@@ -1,11 +1,10 @@
-import AdminLayout from "./layouts/AdminLayout";
-
 import "./index.css";
+import Login from "./pages/Login";
 
 function App() {
   return (
     <>
-      <AdminLayout />
+      <Login />
     </>
   );
 }

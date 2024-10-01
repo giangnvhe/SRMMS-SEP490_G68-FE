@@ -1,0 +1,27 @@
+@import "../../styles/button.scss";
+
+.button-component {
+  &.btn-success {
+    @include btnSuccess;
+  }
+
+  &.btn-info {
+    @include btnInfo;
+  }
+
+  &.btn-warn {
+    @include btnWarn;
+  }
+
+  &.btn-dark {
+    @include btnDark;
+  }
+
+  &.btn-danger {
+    @include btnDanger;
+  }
+
+  &[disabled] {
+    @include disabled;
+  }
+}
