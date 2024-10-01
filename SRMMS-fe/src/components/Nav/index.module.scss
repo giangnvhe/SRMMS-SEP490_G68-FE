@@ -1,0 +1,42 @@
+.nav-wrapper {
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  z-index: 99;
+  background: #ffffff;
+  width: 98%;
+  box-shadow: 0px -1px 0px 0px #f0f0f0 inset;
+  border-bottom: 1px solid #f0f0f0;
+  :global(.nav-component) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    :global(.logo) {
+      display: flex;
+      align-items: center;
+      img {
+        cursor: pointer;
+        max-height: 80px;
+        margin-left: 10px;
+        @media (max-width: 992px) {
+          max-height: 20px;
+        }
+      }
+      :global(.btn-expaned-sp) {
+        display: block;
+        @media (min-width: 992px) {
+          display: none;
+        }
+      }
+    }
+    :global(.right-group-btn) {
+      display: flex;
+      align-items: center;
+      :global(.drop-down-info) {
+        cursor: pointer;
+        margin-right: 10px;
+      }
+    }
+  }
+}

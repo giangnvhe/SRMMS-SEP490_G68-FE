@@ -1,11 +1,15 @@
+import { notification } from "antd";
+import { NotiContext } from "./context/NotiContext";
 import "./index.css";
-import Login from "./pages/Login";
+import Routers from "./routers";
+
 
 function App() {
+  const [api, contextHolder] = notification.useNotification();
   return (
-    <>
-      <Login />
-    </>
+    <NotiContext api={api} contextHolder={contextHolder}>
+      <Routers />
+    </NotiContext>
   );
 }
 
