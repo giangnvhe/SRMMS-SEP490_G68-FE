@@ -9,6 +9,7 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
+
 export const axiosInstanceFormData = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 100000,
@@ -29,9 +30,9 @@ axiosInstance.interceptors.request.use(
     const accessToken = getAccessToken();
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
-      return config;
     }
-    return Promise.reject();
+    return config;
+    // return Promise.reject();
   },
   (error) => {
     return Promise.reject(error);

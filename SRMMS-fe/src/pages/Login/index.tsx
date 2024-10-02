@@ -5,6 +5,7 @@ import LoginIntro from "./LoginIntro";
 const cx = classNames.bind(styles);
 
 const Login = () => {
+  
   return (
     <div className={cx(styles["login-container"])}>
       <div className={cx("background-image")}></div>
