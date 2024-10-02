@@ -1,4 +1,4 @@
-import { Suspense, useLayoutEffect, useState } from "react";
+import { Suspense, useEffect, useLayoutEffect, useState } from "react";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { BREAKPOINT_SCREEN } from "../../common/const/const";
 import Nav from "../../components/Nav";
@@ -8,6 +8,7 @@ import Spinner from "../../components/Spiner";
 import styles from "./index.module.scss";
 import classNames from "classnames";
 import { ConfigProvider } from "antd";
+import { checkAuthentication } from "../../common/utils/authentication";
 
 const cx = classNames.bind(styles);
 
@@ -32,6 +33,10 @@ const AdminLayout = () => {
       setIsOpenSideBar(true);
     }
   }, [resize]);
+
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
 
   return (
     <ConfigProvider
