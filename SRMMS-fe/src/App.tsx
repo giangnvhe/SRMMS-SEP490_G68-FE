@@ -1,10 +1,14 @@
+
 import "./index.css";
-import Login from "./pages/Login";
+import Page from "./pages/Admin/page";
+
+
 
 function App() {
   return (
     <>
-      <Login />
+      <Page />
+     
     </>
   );
 }
