@@ -1,108 +1,41 @@
-import {
-  CloseOutlined,
-  LoginOutlined,
-  MenuOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { removeAccessToken } from "../../configs/accessToken";
-import useNotification from "../../hooks/useNotification";
-import { logout } from "../../services/auth";
-import type { MenuProps } from "antd";
-import { Avatar, Dropdown, Space } from "antd";
-import { AxiosError } from "axios";
-import classNames from "classnames";
-import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
-import styles from "./index.module.scss";
-import Logo from "../../assets/images/Logo.png";
+import { Avatar, Dropdown, MenuProps, Space } from "antd";
+import { DownOutlined, SmileOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 
-interface Props {
-  isOpenSideBar: boolean;
-  handleHiddenSideBar: () => void;
-  handleShowSideBar: () => void;
+interface IProps {
+  children: JSX.Element;
 }
 
-const Logout = () => {
-  //const navigate = useNavigate();
-
-  //const { errorMessage } = useNotification();
-
-  const handleLogout = useMutation(logout, {
-    onError: (error: AxiosError<{ message: string }>) => {
-      //errorMessage({ description: error.response?.data.message || "" });
+const Nav = ({ children }: IProps) => {
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: "Information",
     },
-    onSuccess: (result) => {
-      //   if (result) {
-      //     removeAccessToken();
-      //     navigate("/login");
-      //   }
+    {
+      key: "2",
+      label: "Logout",
+      icon: <SmileOutlined />,
     },
-  });
-
+  ];
   return (
-    <div onClick={() => handleLogout.mutate()}>
-      <LoginOutlined style={{ marginRight: "10px" }} />
-      <span>Logout</span>
+    <div className="w-full h-16">
+      <div className="flex justify-end py-4 pr-8 border-b-[1px] border-gray-400 bg-local">
+        <Dropdown menu={{ items }}>
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              <Avatar
+                style={{ backgroundColor: "#87d068" }}
+                icon={<UserOutlined />}
+              />
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      </div>
+      <div>{children}</div>
     </div>
   );
 };
 
-const items: MenuProps["items"] = [
-  {
-    label: <a href="https://www.antgroup.com">Edit Profile</a>,
-    key: "0",
-  },
-  {
-    label: <a href="https://www.aliyun.com">Change Password</a>,
-    key: "1",
-  },
-  {
-    type: "divider",
-  },
-  {
-    label: <Logout />,
-    key: "3",
-  },
-];
-
-const cx = classNames.bind(styles);
-
-export default function Nav({
-  isOpenSideBar,
-  handleHiddenSideBar,
-  handleShowSideBar,
-}: Props) {
-  const navigate = useNavigate();
-  return (
-    <div className={cx(styles["nav-wrapper"])}>
-      <div className="nav-component">
-        <div className="logo" onClick={() => navigate("/")}>
-          {isOpenSideBar ? (
-            <CloseOutlined
-              className="btn-expaned-sp"
-              onClick={handleHiddenSideBar}
-            />
-          ) : (
-            <MenuOutlined
-              className="btn-expaned-sp"
-              onClick={handleShowSideBar}
-            />
-          )}
-          <img src={Logo} />
-        </div>
-        <div className={cx("right-group-btn")}>
-          <Dropdown
-            className="drop-down-info"
-            menu={{ items }}
-            trigger={["click"]}
-          >
-            <Space>
-              <Avatar src="" icon={<UserOutlined />} />
-              Click me
-            </Space>
-          </Dropdown>
-        </div>
-      </div>
-    </div>
-  );
-}
+export default Nav;

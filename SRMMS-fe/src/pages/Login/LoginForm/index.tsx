@@ -40,7 +40,6 @@ const LoginForm = () => {
   });
 
   const onSubmitForm = (_values: FormFields) => {
-
     handleLogin.mutate({
       empEmail: _values.empEmail,
       empPassword: _values.empPassword,
@@ -92,7 +91,7 @@ const LoginForm = () => {
           htmlType="submit"
           className="btn-login"
           onClick={submit}
-          // loading={handleLogin.isLoading}
+          loading={handleLogin.isLoading}
         >
           Login
         </ButtonComponent>
