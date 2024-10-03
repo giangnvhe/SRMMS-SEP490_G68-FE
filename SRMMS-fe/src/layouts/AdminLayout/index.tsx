@@ -1,43 +1,9 @@
-import { Suspense, useEffect, useLayoutEffect, useState } from "react";
-import { useWindowSize } from "../../hooks/useWindowSize";
-import { BREAKPOINT_SCREEN } from "../../common/const/const";
-import Nav from "../../components/Nav";
-import Sidebar from "../../pages/Admin";
-import { Outlet } from "react-router-dom";
-import Spinner from "../../components/Spiner";
-import styles from "./index.module.scss";
-import classNames from "classnames";
 import { ConfigProvider } from "antd";
-import { checkAuthentication } from "../../common/utils/authentication";
-
-const cx = classNames.bind(styles);
+import Nav from "../../components/Nav";
+import Sidebar from "../../components/Sidebar";
+import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
-  const [isOpenSideBar, setIsOpenSideBar] = useState(true);
-  const resize = useWindowSize();
-
-  const handleShowSideBar = () => {
-    setIsOpenSideBar(true);
-  };
-
-  const handleHiddenSideBar = () => {
-    setIsOpenSideBar(false);
-  };
-
-  useLayoutEffect(() => {
-    if (window.innerWidth < BREAKPOINT_SCREEN.lg) {
-      setIsOpenSideBar(false);
-    }
-
-    if (window.innerWidth > BREAKPOINT_SCREEN.lg) {
-      setIsOpenSideBar(true);
-    }
-  }, [resize]);
-
-  useEffect(() => {
-    checkAuthentication();
-  }, []);
-
   return (
     <ConfigProvider
       theme={{
@@ -70,18 +36,11 @@ const AdminLayout = () => {
       }}
     >
       <div>
-        <Nav
-          isOpenSideBar={isOpenSideBar}
-          handleHiddenSideBar={handleHiddenSideBar}
-          handleShowSideBar={handleShowSideBar}
-        />
-        <div className={cx("admin-layout")}>
+        <div className="flex">
           <Sidebar />
-          <div className="body-layout">
-            <Suspense fallback={<Spinner />}>
-              <Outlet />
-            </Suspense>
-          </div>
+          <Nav>
+            <Outlet />
+          </Nav>
         </div>
       </div>
     </ConfigProvider>
