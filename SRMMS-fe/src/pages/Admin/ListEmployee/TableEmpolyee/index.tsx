@@ -68,6 +68,7 @@ const TableEmployee = ({ dataTable, refetch, loading, form }: IProps) => {
           current: form.getFieldValue("pageNumber") ?? initialValue.pageNumber,
           pageSize: form.getFieldValue("pageSize") ?? initialValue.pageSize,
         }}
+        scroll={{ x: 1700 }}
       />
     </div>
   );

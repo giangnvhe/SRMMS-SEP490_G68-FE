@@ -1,19 +1,22 @@
-@import "../../styles/variables.scss";
-
-:global(.admin-layout) {
-  width: 100%;
-  height: $min-heigth-user-layout-pc;
-  // css auth
+.admin-layout-container{
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
   @media (max-width: 992px) {
-    height: $min-heigth-user-layout-sp;
+    height: 100vh;
     margin-top: 52px;
   }
-  :global(.body-layout) {
+
+  & :global(.menu-content){
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  & :global(.body-layout){
     width: 100%;
-    height: 100vh;
     overflow: auto;
-    background-color: whitesmoke;
   }
 }

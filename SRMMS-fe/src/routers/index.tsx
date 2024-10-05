@@ -19,7 +19,7 @@ const RouterComponent = () => {
           element: <Dashboard />,
         },
         {
-          path: "/admin/listEmployee",
+          path: "/admin/employees",
           element: <ListEmployee />,
         },
       ],

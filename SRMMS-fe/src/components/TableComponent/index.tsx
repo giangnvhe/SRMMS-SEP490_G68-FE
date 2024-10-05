@@ -16,7 +16,10 @@ interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rowSelection?: TableRowSelection<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onRow?: (record: any, index?: string | number) => HTMLAttributes<any> | TdHTMLAttributes<any>;
+  onRow?: (
+    record: any,
+    index?: string | number
+  ) => HTMLAttributes<any> | TdHTMLAttributes<any>;
   onChange?: TableProps["onChange"];
   loading?: boolean;
   pagination?: false | TablePaginationConfig;

@@ -21,53 +21,41 @@ interface Props {
 
 type MenuItem = Required<MenuProps>["items"][number];
 
-const Sidebar = ({ isOpenSideBar: initialIsOpenSideBar, isAdmin }: Props) => {
+const Sidebar = () => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
-  const [isOpenSideBar, setIsOpenSideBar] = useState(initialIsOpenSideBar);
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
 
-  const toggleSidebar = () => {
-    setIsOpenSideBar(!isOpenSideBar);
-  };
-
   const items: MenuItem[] = [
+    {
+      key: "/admin/dashboard",
+      label: "Dashboard",
+      icon: <AppstoreOutlined />,
+    },
     {
       key: "admin ",
       label: "Employee Management",
       icon: <TeamOutlined />,
       children: [
         {
-          key: "/admin/listEmployee",
+          key: "/admin/employees",
           label: "List Employee",
         },
       ],
     },
     {
-      key: "sub2",
+      key: "admin",
       label: "Ingredient Management",
       icon: <AppstoreOutlined />,
       children: [
-        { key: "5", label: "Option 5" },
-        { key: "6", label: "Option 6" },
-        {
-          key: "sub3",
-          label: "Blog Management",
-          children: [
-            { key: "7", label: "Option 7" },
-            { key: "8", label: "Option 8" },
-          ],
-        },
+        { key: "admin/ingredient", label: "List Ingredient" },
       ],
     },
     {
-      type: "divider",
-    },
-    {
-      key: "sub4",
+      key: "admin",
       label: "Blog Management",
       icon: <SettingOutlined />,
       children: [
@@ -95,14 +83,6 @@ const Sidebar = ({ isOpenSideBar: initialIsOpenSideBar, isAdmin }: Props) => {
 
   return (
     <div>
-      <div className="h-16 flex justify-center items-center text-4xl font-bold text-blue-500">
-        SRMMS
-      </div>
-      <div
-        className={cx("sidebar-wrapper")}
-        style={{ display: isOpenSideBar ? "block" : "none" }}
-      >
-        <div className={`sidebar-component ${isAdmin ? "sidebar-admin" : ""}`}>
           <Menu
             onClick={onClick}
             style={{ width: 256 }}
@@ -112,17 +92,6 @@ const Sidebar = ({ isOpenSideBar: initialIsOpenSideBar, isAdmin }: Props) => {
             items={items}
             inlineCollapsed={collapsed}
           />
-          <div className="group-btn-bottom">
-            <Button
-              type="text"
-              onClick={toggleCollapsed}
-              style={{ marginBottom: 8 }}
-            >
-              {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            </Button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
