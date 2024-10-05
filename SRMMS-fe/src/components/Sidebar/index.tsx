@@ -1,23 +1,48 @@
-import { Menu, MenuProps } from "antd";
 import {
   AppstoreOutlined,
-  MailOutlined,
+  MenuFoldOutlined,
+  MenuOutlined,
+  MenuUnfoldOutlined,
   SettingOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
+import { Button, Menu, MenuProps } from "antd";
+import classNames from "classnames";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./index.module.scss";
+
+const cx = classNames.bind(styles);
+
+interface Props {
+  isOpenSideBar: boolean;
+  isAdmin?: boolean;
+}
 
 type MenuItem = Required<MenuProps>["items"][number];
 
-const Sidebar = () => {
+const Sidebar = ({ isOpenSideBar: initialIsOpenSideBar, isAdmin }: Props) => {
+  const navigate = useNavigate();
+  const [collapsed, setCollapsed] = useState(false);
+  const [isOpenSideBar, setIsOpenSideBar] = useState(initialIsOpenSideBar);
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
+  const toggleSidebar = () => {
+    setIsOpenSideBar(!isOpenSideBar);
+  };
+
   const items: MenuItem[] = [
     {
-      key: "sub1",
+      key: "admin ",
       label: "Employee Management",
-      icon: <MailOutlined />,
+      icon: <TeamOutlined />,
       children: [
         {
-          key: "g1",
+          key: "/admin/listEmployee",
           label: "List Employee",
-          
         },
       ],
     },
@@ -65,6 +90,7 @@ const Sidebar = () => {
 
   const onClick: MenuProps["onClick"] = (e) => {
     console.log("click ", e);
+    navigate(`${e.key}`);
   };
 
   return (
@@ -72,14 +98,31 @@ const Sidebar = () => {
       <div className="h-16 flex justify-center items-center text-4xl font-bold text-blue-500">
         SRMMS
       </div>
-      <Menu
-        onClick={onClick}
-        style={{ width: 256 }}
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
-        mode="inline"
-        items={items}
-      />
+      <div
+        className={cx("sidebar-wrapper")}
+        style={{ display: isOpenSideBar ? "block" : "none" }}
+      >
+        <div className={`sidebar-component ${isAdmin ? "sidebar-admin" : ""}`}>
+          <Menu
+            onClick={onClick}
+            style={{ width: 256 }}
+            defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["sub1"]}
+            mode="inline"
+            items={items}
+            inlineCollapsed={collapsed}
+          />
+          <div className="group-btn-bottom">
+            <Button
+              type="text"
+              onClick={toggleCollapsed}
+              style={{ marginBottom: 8 }}
+            >
+              {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
