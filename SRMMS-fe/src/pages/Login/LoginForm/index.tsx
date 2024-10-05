@@ -7,9 +7,9 @@ import Logo from "../../../assets/images/Logo.png";
 import { useNavigate } from "react-router-dom";
 import useNotification from "../../../hooks/useNotification";
 import { useMutation } from "react-query";
-import { login } from "../../../services/login";
 import { setAccessToken } from "../../../configs/accessToken";
 import { AxiosError } from "axios";
+import { login } from "../../../services/auth";
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +28,7 @@ const LoginForm = () => {
   const handleLogin = useMutation(login, {
     onSuccess: (result) => {
       setAccessToken(result.data.token);
-      navigate("/");
+      navigate("/admin/dashboard");
     },
     onError: (error: AxiosError<{ message: string }>) => {
       errorMessage({
