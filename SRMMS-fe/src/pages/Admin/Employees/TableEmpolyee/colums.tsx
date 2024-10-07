@@ -31,7 +31,7 @@ const UseColumn = () => {
     },
     {
       title: "Address",
-      dataIndex: "empAdress",
+      dataIndex: "empAddress",
       width: "70px",
     },
     {

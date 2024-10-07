@@ -6,3 +6,6 @@ export const BREAKPOINT_SCREEN = {
   xl: 1200,
   xxl: 1600,
 };
+
+export const WIDTH_SIDE_BAR_PC = 256;
+export const WIDTH_SIDE_BAR_SP = 80;

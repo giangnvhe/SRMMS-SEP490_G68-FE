@@ -24,8 +24,6 @@ const ListEmployee = () => {
     getListEmployees(form.getFieldsValue(true))
   );
 
-  console.log("data", getAllEmployees.data);
-
   useEffect(() => {
     if (getAllEmployees.isError) {
       errorMessage({
@@ -35,9 +33,9 @@ const ListEmployee = () => {
       });
     }
     if (getAllEmployees.data) {
-      form.setFieldValue("pageNumber", getAllEmployees?.data?.pageNumber);
-      form.setFieldValue("pageSize", getAllEmployees?.data?.pageSize);
-      setDataTable(getAllEmployees.data);
+      // form.setFieldValue("pageNumber", getAllEmployees?.data?.pageNumber);
+      // form.setFieldValue("pageSize", getAllEmployees?.data?.pageSize);
+      setDataTable(getAllEmployees.data.data);
     }
   }, [getAllEmployees.data, getAllEmployees.isError, getAllEmployees.error]);
 
