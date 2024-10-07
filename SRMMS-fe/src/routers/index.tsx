@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AdminLayout from "../layouts/AdminLayout";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
-import ListEmployee from "../pages/Admin/ListEmployee";
+import ListEmployee from "../pages/Admin/Employees";
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
@@ -19,7 +19,7 @@ const RouterComponent = () => {
           element: <Dashboard />,
         },
         {
-          path: "/admin/listEmployee",
+          path: "/admin/employees",
           element: <ListEmployee />,
         },
       ],

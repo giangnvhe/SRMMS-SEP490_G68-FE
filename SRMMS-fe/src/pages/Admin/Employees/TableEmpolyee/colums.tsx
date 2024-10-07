@@ -11,36 +11,44 @@ const UseColumn = () => {
     },
     {
       title: "Name",
-      render: (text, record) => `${record.empFirstName} ${record.empLastName}`,
+      render: (_, record) => `${record.empFirstName} ${record.empLastName}`,
+      width: "70px",
     },
     {
       title: "Gender",
       dataIndex: "empGender",
+      width: "70px",
     },
     {
       title: "Email",
       dataIndex: "empEmail",
+      width: "70px",
     },
     {
       title: "Phone Number",
       dataIndex: "empPhoneNumber",
+      width: "70px",
     },
     {
       title: "Address",
-      dataIndex: "empAdress",
+      dataIndex: "empAddress",
+      width: "70px",
     },
     {
       title: "Start Date",
       dataIndex: "empStartDate",
+      width: "70px",
     },
     {
       title: "Position",
       dataIndex: "roleName",
+      width: "70px",
     },
     {
       title: "Status",
       dataIndex: "empStatus",
       align: "center",
+      width: "70px",
       render: (status) => (
         <span
           style={{
@@ -59,7 +67,7 @@ const UseColumn = () => {
     },
     {
       title: "Action",
-      width: "10%",
+      width: "70px",
       fixed: "right",
       align: "center",
       render: () => (
