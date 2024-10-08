@@ -1,8 +1,11 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Space, TableColumnsType } from "antd";
 import { EmployeesData } from "../../../../services/employee";
+import { useNavigate } from "react-router-dom";
 
 const UseColumn = () => {
+  const navigate = useNavigate();
+
   const columns: TableColumnsType<EmployeesData> = [
     {
       title: "ID",
@@ -70,9 +73,11 @@ const UseColumn = () => {
       width: "70px",
       fixed: "right",
       align: "center",
-      render: () => (
+      render: (_, record) => (
         <Space size="middle">
-          <EditOutlined />
+          <EditOutlined
+            onClick={() => navigate(`/admin/updateEmployee/${record.empId}`)}
+          />
           <DeleteOutlined />
         </Space>
       ),

@@ -7,7 +7,6 @@ function App() {
   const [api, contextHolder] = notification.useNotification();
   return (
     <ConfigProvider
-      autoInsertSpaceInButton={false}
       theme={{
         token: {
           colorPrimary: "#F16A22",
