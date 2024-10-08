@@ -9,3 +9,5 @@ export const BREAKPOINT_SCREEN = {
 
 export const WIDTH_SIDE_BAR_PC = 256;
 export const WIDTH_SIDE_BAR_SP = 80;
+
+export const FORMAT_DATE_EN = "YYYY-MM-DD";

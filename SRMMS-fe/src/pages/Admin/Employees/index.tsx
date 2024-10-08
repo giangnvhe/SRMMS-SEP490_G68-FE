@@ -2,10 +2,12 @@ import { Form } from "antd";
 import TableEmployee from "./TableEmpolyee";
 import { EmployeesData, getListEmployees } from "../../../services/employee";
 import { useEffect, useState } from "react";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
 import useNotification from "../../../hooks/useNotification";
 import ButtonComponent from "../../../components/ButtonComponent";
+import { useNavigate } from "react-router-dom";
 
 export interface FormFields {
   name: string;
@@ -19,10 +21,13 @@ const ListEmployee = () => {
   const [form] = Form.useForm<FormFields>();
   const [dataTable, setDataTable] = useState<EmployeesData[]>([]);
   const { errorMessage } = useNotification();
+  const navigate = useNavigate();
 
   const getAllEmployees = useQuery("getAllEmployees", () =>
     getListEmployees(form.getFieldsValue(true))
   );
+
+
 
   useEffect(() => {
     if (getAllEmployees.isError) {
@@ -33,8 +38,6 @@ const ListEmployee = () => {
       });
     }
     if (getAllEmployees.data) {
-      // form.setFieldValue("pageNumber", getAllEmployees?.data?.pageNumber);
-      // form.setFieldValue("pageSize", getAllEmployees?.data?.pageSize);
       setDataTable(getAllEmployees.data.data);
     }
   }, [getAllEmployees.data, getAllEmployees.isError, getAllEmployees.error]);
@@ -45,7 +48,12 @@ const ListEmployee = () => {
         <div className="flex justify-center items-center font-bold text-2xl">
           List Employee
         </div>
-        <ButtonComponent>Create Employee</ButtonComponent>
+        <ButtonComponent
+          icon={<PlusCircleOutlined />}
+          onClick={() => navigate("/admin/addEmployee")}
+        >
+          Create Employee
+        </ButtonComponent>
       </div>
       <div className="mt-5 p-9">
         <div className="bg-white p-5">
