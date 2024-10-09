@@ -10,6 +10,7 @@ import { useMutation } from "react-query";
 import { setAccessToken } from "../../../configs/accessToken";
 import { AxiosError } from "axios";
 import { login } from "../../../services/auth";
+import { useAuth } from "../../../context/authProvider";
 
 const cx = classNames.bind(styles);
 
@@ -22,12 +23,21 @@ const LoginForm = () => {
   const [form] = Form.useForm();
   const { submit } = form;
   const navigate = useNavigate();
+  const { setToken, setUser } = useAuth();
 
   const { errorMessage } = useNotification();
 
   const handleLogin = useMutation(login, {
     onSuccess: (result) => {
-      setAccessToken(result.data.token);
+      if (result.status === 200) {
+        setToken(result.data.token);
+        setUser({
+          empEmail: result.data.empEmail,
+          empName: result.data.empName,
+          roleName: result.data.roleName,
+          empLastName: result.data.empLastName
+        })
+      }
       navigate("/admin/dashboard");
     },
     onError: (error: AxiosError<{ message: string }>) => {

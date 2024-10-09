@@ -2,6 +2,7 @@ import { ConfigProvider, notification } from "antd";
 import { NotiContext } from "./context/NotiContext";
 import "./index.css";
 import Routers from "./routers";
+import AuthProvider from "./context/authProvider";
 
 function App() {
   const [api, contextHolder] = notification.useNotification();
@@ -18,9 +19,11 @@ function App() {
         },
       }}
     >
-      <NotiContext api={api} contextHolder={contextHolder}>
-        <Routers />
-      </NotiContext>
+      <AuthProvider>
+        <NotiContext api={api} contextHolder={contextHolder}>
+          <Routers />
+        </NotiContext>
+      </AuthProvider>
     </ConfigProvider>
   );
 }

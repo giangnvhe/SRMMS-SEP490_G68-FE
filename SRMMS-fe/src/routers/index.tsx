@@ -5,6 +5,8 @@ import Dashboard from "../pages/Dashboard";
 import ListEmployee from "../pages/Admin/Employees";
 import AddEmployee from "../pages/Admin/Employees/AddEmployee";
 import UpdateEmployee from "../pages/Admin/Employees/UpdateEmployee";
+import { ProtectedRoute } from "./ProtectedRouter";
+import Logout from "../pages/Logout";
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
@@ -13,24 +15,34 @@ const RouterComponent = () => {
       path: "/",
     },
     {
-      element: <AdminLayout />,
-      path: "/admin",
+      path: "/",
+      element: <ProtectedRoute />,
       children: [
         {
-          path: "/admin/dashboard",
-          element: <Dashboard />,
-        },
-        {
-          path: "/admin/employees",
-          element: <ListEmployee />,
-        },
-        {
-          path: "/admin/addEmployee",
-          element: <AddEmployee />,
-        },
-        {
-          path: "/admin/updateEmployee/:id",
-          element: <UpdateEmployee />,
+          element: <AdminLayout />,
+          path: "/admin",
+          children: [
+            {
+              path: "/admin/dashboard",
+              element: <Dashboard />,
+            },
+            {
+              path: "/admin/employees",
+              element: <ListEmployee />,
+            },
+            {
+              path: "/admin/addEmployee",
+              element: <AddEmployee />,
+            },
+            {
+              path: "/admin/updateEmployee/:id",
+              element: <UpdateEmployee />,
+            },
+            {
+              path: "/admin/logout",
+              element: <Logout />,
+            },
+          ],
         },
       ],
     },
