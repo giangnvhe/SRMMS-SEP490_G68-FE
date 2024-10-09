@@ -7,9 +7,12 @@ interface LoginRequest {
 }
 
 interface LoginResponse {
+  roleName: string;
   empEmail: string;
   empPassword: string;
   token: string;
+  empName: string;
+  empLastName: string;
 }
 
 export const login = async (params: LoginRequest) => {

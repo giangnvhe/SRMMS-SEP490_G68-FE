@@ -10,23 +10,13 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import Logout from "../../pages/Logout";
 
 interface Props {
   isOpenSideBar: boolean;
   handleHiddenSideBar: () => void;
   handleShowSideBar: () => void;
 }
-
-const items: MenuProps["items"] = [
-  {
-    label: <InfoCircleOutlined />,
-    key: "0",
-  },
-  {
-    label: <LogoutOutlined />,
-    key: "1",
-  },
-];
 
 const cx = classNames.bind(styles);
 
@@ -36,6 +26,29 @@ const NavComponent = ({
   handleShowSideBar,
 }: Props) => {
   const navigate = useNavigate();
+  const items: MenuProps["items"] = [
+    {
+      label: (
+        <div className="flex gap-2">
+          <InfoCircleOutlined style={{color: "green"}}/>
+          <p className="font-bold text-sm">Information</p>
+        </div>
+      ),
+      key: "0",
+    },
+    {
+      key: "1",
+      icon: (
+        <div
+          onClick={() => navigate("/admin/logout")}
+          className="flex justify-center items-center gap-2"
+        >
+          <LogoutOutlined style={{ color: "red" }} />
+          <span className="font-bold text-sm">Log out</span>
+        </div>
+      ),
+    },
+  ];
   return (
     <div className={cx(styles["nav-wrapper"])}>
       <div className="nav-component">
