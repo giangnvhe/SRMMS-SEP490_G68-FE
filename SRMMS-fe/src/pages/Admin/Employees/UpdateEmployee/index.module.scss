@@ -1,0 +1,14 @@
+.card-container{
+    padding: 20px;
+    & :global(.form-container){
+        padding: 15px;
+        background-color: white;
+        border-radius: 7px;
+
+        & :global(.form-item){
+            display: grid;
+            grid-template-columns: auto auto;
+            column-gap: 30px;
+        }
+    }
+}

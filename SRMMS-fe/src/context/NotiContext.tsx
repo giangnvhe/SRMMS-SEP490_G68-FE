@@ -6,7 +6,6 @@ import {
 import { Modal } from "antd";
 import { NotificationInstance } from "antd/es/notification/interface";
 import { createContext, ReactElement } from "react";
-import { useTranslation } from "react-i18next";
 
 interface Props {
   children: JSX.Element;
@@ -54,8 +53,6 @@ const ContextNoti = createContext<Context>({
 });
 
 export const NotiContext = ({ api, contextHolder, children }: Props) => {
-  const { t } = useTranslation();
-
   const successMessage = ({ title, description }: Message) => {
     api.success({
       message: title || "Thành công",
@@ -86,7 +83,7 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
 
   const warningMessage = ({ title, description }: Message) => {
     api.warning({
-      message: title || t("noti.title.warning"),
+      message: title || "Warning",
       description: description,
       duration: 2,
       style: {
@@ -106,8 +103,8 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
     Modal.warning({
       title: title || "Cảnh Báo",
       content: description,
-      okText: t("noti.btn.delete"),
-      cancelText: t("noti.btn.comfirm"),
+      okText: "Xóa",
+      cancelText: "Xác Nhận",
       onOk: () => onSubmit(),
     });
   };
@@ -120,7 +117,7 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
   }: ComfirmMessage) => {
     Modal.confirm({
       className: "modal-message",
-      title: title || t("noti.title.delete"),
+      title: title || "Xóa",
       content: description,
       icon: (
         <QuestionCircleOutlined
@@ -131,8 +128,8 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
           }}
         />
       ),
-      okText: t("noti.btn.delete"),
-      cancelText: t("noti.btn.cancel"),
+      okText: "Xóa",
+      cancelText: "Bỏ",
       okButtonProps: {
         className: "btn-danger",
       },
@@ -152,7 +149,7 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
   }: ComfirmMessage) => {
     Modal.confirm({
       className: "modal-message",
-      title: title || t("noti.title.comfirm"),
+      title: title || "Xác Nhận",
       content: description,
       icon: (
         <ExclamationCircleOutlined
@@ -163,8 +160,8 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
           }}
         />
       ),
-      okText: t("noti.btn.comfirm"),
-      cancelText: t("noti.btn.cancel"),
+      okText: "Xác Nhận",
+      cancelText: "Bỏ",
       okButtonProps: {
         className: "btn-info",
       },
@@ -183,7 +180,7 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
   }: ComfirmMessage) => {
     Modal.confirm({
       className: "modal-message",
-      title: title || t("noti.title.successModal"),
+      title: title || "Thành Công",
       content: description,
       icon: (
         <CheckCircleOutlined
@@ -194,7 +191,7 @@ export const NotiContext = ({ api, contextHolder, children }: Props) => {
           }}
         />
       ),
-      okText: t("noti.btn.comfirm"),
+      okText: "Xác Nhận",
       okButtonProps: {
         className: "btn-info",
       },

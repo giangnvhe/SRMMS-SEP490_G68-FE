@@ -45,18 +45,16 @@ const ButtonComponent = ({
   size = "large",
   htmlType,
 }: IProps) => {
-  const { t } = useTranslation();
-
   const label = useMemo(() => {
     if (children) return children;
 
     switch (btnType) {
       case "create":
-        return t("btn.create");
+        return "create";
       case "cancel":
-        return t("btn.cancel");
+        return "cancel";
       case "save-draft":
-        return t("btn.draft");
+        return "save-draft";
       case "back":
         return "back";
       case "go-back":
@@ -107,7 +105,10 @@ const ButtonComponent = ({
       type={type}
       loading={loading}
       disabled={disabled}
-      className={cx(styles["button-component"], { [className]: !!className, [classColor]: !!classColor })}
+      className={cx(styles["button-component"], {
+        [className]: !!className,
+        [classColor]: !!classColor,
+      })}
       onClick={onClick}
       icon={icon}
       size={size}
