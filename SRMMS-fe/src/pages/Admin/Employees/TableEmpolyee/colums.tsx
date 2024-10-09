@@ -44,7 +44,7 @@ const UseColumn = () => {
     },
     {
       title: "Position",
-      dataIndex: "roleName",
+      render: (_, record) => `${record.empRole.roleName}`,
       width: "70px",
     },
     {

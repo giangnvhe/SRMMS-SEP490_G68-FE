@@ -10,6 +10,7 @@ export interface EmployeesData {
   empFirstName: string;
   empLastName: string;
   empDob: string;
+  empPassword: string;
   empPhoneNumber: number;
   empGender: string;
   empEmail: string;
@@ -17,12 +18,18 @@ export interface EmployeesData {
   empStartDate: string;
   empStatus: boolean;
   roleId: number;
-  roleName: string;
+  empRole: {
+    roleName: string;
+  };
   empFullName?: string;
   action: string;
 }
 
 export interface EmployeesResponse {
+  data: EmployeesData[];
+}
+
+export interface updateEmployeeResponse {
   data: EmployeesData[];
 }
 
@@ -39,6 +46,18 @@ export interface NewEmployeeRequest {
   empStatus: boolean;
 }
 
+export interface UpdateEmployeeRequest {
+  empFirstName: string;
+  empLastName: string;
+  empDob: string;
+  empPhoneNumber: number;
+  empEmail: string;
+  empPassword: string;
+  empStartDate: string;
+  roleId: number;
+  empStatus: boolean;
+}
+
 interface NewEmployeeResponse {
   success: boolean;
   message: string;
@@ -52,6 +71,8 @@ export const getListEmployees = async (
     params,
   });
 
+  console.log(result);
+
   return result;
 };
 
@@ -62,20 +83,23 @@ export const addNewEmployee = async (
   return result;
 };
 
-export const getEmployeeById = async (id: number): Promise<EmployeesData> => {
-  const result: AxiosResponse<EmployeesData> = await axiosInstance.get(
-    getApi("api", `getEmployee/${id}`)
+export const getEmployeeById = async (
+  id: number
+): Promise<AxiosResponse<EmployeesData>> => {
+  const result = await axiosInstance.get(
+    getApi("api", `getEmployeeByID/${id}`)
   );
-  return result.data; // Ensure you return the 'data' property
+
+  return result;
 };
 
 export const updateEmployee = async (
   id: number,
-  payload: NewEmployeeRequest
-): Promise<AxiosResponse<NewEmployeeResponse>> => {
-  const result = await axiosInstance.put<
-    NewEmployeeRequest,
-    AxiosResponse<NewEmployeeResponse>
-  >(getApi("api", `updateEmployee/${id}`), payload);
-  return result;
+  employeeData: UpdateEmployeeRequest
+) => {
+  const response = await axiosInstance.put(
+    getApi("api", `updateEmployee/${id}`),
+    employeeData
+  );
+  return response.data; // Ensure this returns the expected response
 };

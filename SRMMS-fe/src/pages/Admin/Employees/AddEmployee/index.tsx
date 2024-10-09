@@ -128,6 +128,7 @@ const AddEmployee = () => {
 
   const onSubmitForm = () => {
     const formData = form.getFieldsValue();
+    console.log("data", formData);
 
     formData.empStartDate = formData.empStartDate
       ? formData.empStartDate.format("YYYY-MM-DD")
@@ -197,6 +198,14 @@ const AddEmployee = () => {
                   required: true,
                   message: "Last Name must be non-empty",
                 },
+                {
+                  min: 5,
+                  message: "Password must be at least 5 characters",
+                },
+                {
+                  pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/,
+                  message: "Password must contain both letters and numbers",
+                },
               ]}
               placeholder="Enter password employee"
             />
@@ -252,12 +261,19 @@ const AddEmployee = () => {
               name="empAddress"
               label="Address"
               form={form}
+              rules={[
+                {
+                  required: true,
+                  message: "Email must be non-empty",
+                },
+              ]}
               placeholder="Address employee"
               maxLength={2000}
             />
             <RadioComponent
               name="empGender"
               label="Gender"
+              form={form}
               options={options}
               direction="horizontal"
             />

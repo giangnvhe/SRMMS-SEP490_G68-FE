@@ -57,6 +57,7 @@ const RadioComponent = ({
         <Space direction={direction}>
           {options?.map((option) => (
             <Radio
+              checked
               key={option?.value}
               value={option.value}
               disabled={option.disabled}
