@@ -3,21 +3,21 @@ import { AxiosError, AxiosResponse } from "axios";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import ButtonComponent from "../../../../components/ButtonComponent";
-import DatePickerComponent from "../../../../components/DatePickerComponent";
-import InputComponent from "../../../../components/InputComponent";
-import RadioComponent from "../../../../components/RadioComponent";
+import ButtonComponent from "~/components/ButtonComponent";
+import DatePickerComponent from "~/components/DatePickerComponent";
+import InputComponent from "~/components/InputComponent";
+import RadioComponent from "~/components/RadioComponent";
 import SelectComponent, {
   Option,
-} from "../../../../components/SelectComponent";
-import TextAreaComponent from "../../../../components/TextAreaComponent";
-import useNotification from "../../../../hooks/useNotification";
+} from "~/components/SelectComponent";
+import TextAreaComponent from "~/components/TextAreaComponent";
+import useNotification from "~/hooks/useNotification";
 import {
   addNewEmployee,
   getListEmployees,
   NewEmployeeRequest,
-} from "../../../../services/employee";
-import { getRoles } from "../../../../services/role";
+} from "~/services/employee";
+import { getRoles } from "~/services/role";
 import styles from "./index.module.scss";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";

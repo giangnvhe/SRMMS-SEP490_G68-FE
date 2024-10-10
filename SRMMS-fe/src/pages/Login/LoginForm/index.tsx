@@ -1,16 +1,15 @@
 import classNames from "classnames";
 import styles from "./index.module.scss";
 import { Form } from "antd";
-import InputComponent from "../../../components/InputComponent";
-import ButtonComponent from "../../../components/ButtonComponent";
-import Logo from "../../../assets/images/Logo.png";
+import InputComponent from "~/components/InputComponent";
+import ButtonComponent from "~/components/ButtonComponent";
+import Logo from "~/assets/images/Logo.png";
 import { useNavigate } from "react-router-dom";
-import useNotification from "../../../hooks/useNotification";
+import useNotification from "~/hooks/useNotification";
 import { useMutation } from "react-query";
-import { setAccessToken } from "../../../configs/accessToken";
 import { AxiosError } from "axios";
-import { login } from "../../../services/auth";
-import { useAuth } from "../../../context/authProvider";
+import { login } from "~/services/auth";
+import { useAuth } from "~/context/authProvider";
 
 const cx = classNames.bind(styles);
 
@@ -35,8 +34,8 @@ const LoginForm = () => {
           empEmail: result.data.empEmail,
           empName: result.data.empName,
           roleName: result.data.roleName,
-          empLastName: result.data.empLastName
-        })
+          empLastName: result.data.empLastName,
+        });
       }
       navigate("/admin/dashboard");
     },

@@ -1,10 +1,10 @@
 import { Col, Form, FormInstance, Row, TableProps } from "antd";
 import classNames from "classnames";
-import { PAGE_NUMBER, PAGE_SIZE } from "../../../../common/const/pagingation";
-import ButtonComponent from "../../../../components/ButtonComponent";
-import InputComponent from "../../../../components/InputComponent";
-import TableComponent from "../../../../components/TableComponent";
-import { EmployeesData } from "../../../../services/employee";
+import { PAGE_NUMBER, PAGE_SIZE } from "~/common/const/pagingation";
+import ButtonComponent from "~/components/ButtonComponent";
+import InputComponent from "~/components/InputComponent";
+import TableComponent from "~/components/TableComponent";
+import { EmployeesData } from "~/services/employee";
 import UseColumn from "./colums";
 import styles from "./index.module.scss";
 const cx = classNames.bind(styles);

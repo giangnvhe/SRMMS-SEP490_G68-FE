@@ -1,12 +1,12 @@
 import { Form } from "antd";
 import TableEmployee from "./TableEmpolyee";
-import { EmployeesData, getListEmployees } from "../../../services/employee";
+import { EmployeesData, getListEmployees } from "~/services/employee";
 import { useEffect, useState } from "react";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
-import useNotification from "../../../hooks/useNotification";
-import ButtonComponent from "../../../components/ButtonComponent";
+import useNotification from "~/hooks/useNotification";
+import ButtonComponent from "~/components/ButtonComponent";
 import { useNavigate } from "react-router-dom";
 
 export interface FormFields {

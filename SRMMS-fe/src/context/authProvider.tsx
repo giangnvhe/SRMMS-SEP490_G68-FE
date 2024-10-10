@@ -3,7 +3,7 @@ import {
   getAccessToken,
   removeAccessToken,
   setAccessToken,
-} from "../configs/accessToken";
+} from "~/configs/accessToken";
 import { getUserW, removeUserW, setUserW } from "../configs/user";
 export type UserInformation = {
   empEmail: string;

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getAccessToken, removeAccessToken } from "./accessToken";
-import { NOT_FOUND, UNAUTHORIZED } from "../common/const";
+import { NOT_FOUND, UNAUTHORIZED } from "~/common/const";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
