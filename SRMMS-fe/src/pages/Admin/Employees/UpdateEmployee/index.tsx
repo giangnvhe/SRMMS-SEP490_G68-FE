@@ -2,24 +2,22 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Form, Spin } from "antd";
 import { AxiosError, AxiosResponse } from "axios";
 import classNames from "classnames";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import ButtonComponent from "../../../../components/ButtonComponent";
-import DatePickerComponent from "../../../../components/DatePickerComponent";
-import InputComponent from "../../../../components/InputComponent";
-import RadioComponent from "../../../../components/RadioComponent";
-import SelectComponent, {
-  Option,
-} from "../../../../components/SelectComponent";
-import useNotification from "../../../../hooks/useNotification";
+import ButtonComponent from "~/components/ButtonComponent";
+import DatePickerComponent from "~/components/DatePickerComponent";
+import InputComponent from "~/components/InputComponent";
+import RadioComponent from "~/components/RadioComponent";
+import SelectComponent from "~/components/SelectComponent";
+import useNotification from "~/hooks/useNotification";
 import {
   getEmployeeById,
   updateEmployee,
   UpdateEmployeeRequest,
-} from "../../../../services/employee";
-import { getRoles } from "../../../../services/role";
+} from "~/services/employee";
+import { getRoles } from "~/services/role";
 import styles from "./index.module.scss";
 
 const cx = classNames.bind(styles);

@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Space, TableColumnsType } from "antd";
-import { EmployeesData } from "../../../../services/employee";
+import { EmployeesData } from "~/services/employee";
 import { useNavigate } from "react-router-dom";
 
 const UseColumn = () => {
