@@ -10,11 +10,11 @@ function App() {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: "#F16A22",
+          colorPrimary: "#57e1e4",
         },
         components: {
           Button: {
-            primaryShadow: "0px 10px 20px -10px #F16A22",
+            primaryShadow: "0px 10px 20px -10px #57e1e4",
           },
         },
       }}

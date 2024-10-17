@@ -19,6 +19,7 @@ import {
 } from "~/services/employee";
 import { getRoles } from "~/services/role";
 import styles from "./index.module.scss";
+import SwitchComponent from "~/components/SwitchComponent";
 
 const cx = classNames.bind(styles);
 
@@ -144,16 +145,19 @@ const UpdateEmployee = () => {
 
   return (
     <Spin spinning={isLoading} indicator={<LoadingOutlined spin />}>
-      <div>
-        <div className="bg-white p-2 font-bold text-2xl">Update Employee</div>
-        <div className={cx(styles["card-container"])}>
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="bg-white p-4 shadow-md rounded-md text-2xl font-extrabold">
+          Update Employee
+        </div>
+
+        <div className="mt-5">
           <Form
             form={form}
             layout="vertical"
-            className="form-container"
+            className="bg-white p-6 rounded-lg shadow-lg space-y-6"
             onFinish={onSubmitForm}
           >
-            <div className="form-item">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <InputComponent
                 name="empFirstName"
                 label="First Name"
@@ -174,7 +178,7 @@ const UpdateEmployee = () => {
               />
               <DatePickerComponent
                 name="empDob"
-                label="Date of birth"
+                label="Date of Birth"
                 form={form}
               />
               <InputComponent
@@ -216,31 +220,13 @@ const UpdateEmployee = () => {
                 ]}
                 placeholder="Enter password employee"
               />
-
               <DatePickerComponent
                 name="empStartDate"
                 label="Start Date"
                 form={form}
               />
-              {/* <TextAreaComponent
-                name="empAddress"
-                label="Address"
-                form={form}
-                rules={[
-                  { required: true, message: "Address must be non-empty" },
-                ]}
-                placeholder="Address employee"
-                maxLength={2000}
-              /> */}
-              <RadioComponent
-                name="empStatus"
-                label="Status"
-                form={form}
-                options={options}
-                direction="horizontal"
-              />
               <SelectComponent
-                defaultValue={"abc"}
+                defaultValue="abc"
                 name="roleId"
                 label="Role"
                 options={roles || []}
@@ -248,7 +234,18 @@ const UpdateEmployee = () => {
                 rules={[{ required: true, message: "Role must be selected" }]}
               />
             </div>
-            <div className="flex gap-3 justify-end mt-5">
+
+            <div className="mt-4">
+              <SwitchComponent
+                name="empStatus"
+                label="Status"
+                form={form}
+                checkedChildren="Active"
+                unCheckedChildren="Inactive"
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 mt-5">
               <ButtonComponent htmlType="submit">Update</ButtonComponent>
               <ButtonComponent btnType="go-back" onClick={goBack}>
                 Cancel

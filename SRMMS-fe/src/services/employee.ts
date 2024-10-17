@@ -101,5 +101,7 @@ export const updateEmployee = async (
     getApi("api", `updateEmployee/${id}`),
     employeeData
   );
-  return response.data; // Ensure this returns the expected response
+  return response.data; 
 };
+
+

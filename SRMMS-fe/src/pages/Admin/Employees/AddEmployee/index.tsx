@@ -7,9 +7,7 @@ import ButtonComponent from "~/components/ButtonComponent";
 import DatePickerComponent from "~/components/DatePickerComponent";
 import InputComponent from "~/components/InputComponent";
 import RadioComponent from "~/components/RadioComponent";
-import SelectComponent, {
-  Option,
-} from "~/components/SelectComponent";
+import SelectComponent, { Option } from "~/components/SelectComponent";
 import TextAreaComponent from "~/components/TextAreaComponent";
 import useNotification from "~/hooks/useNotification";
 import {
@@ -152,19 +150,19 @@ const AddEmployee = () => {
   }, [isError, error]);
 
   return (
-    <div>
-      <Title level={2} className="bg-white p-2">
-        Add Employee
-      </Title>
-      <div className={cx(styles["card-container"])}>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="bg-white p-4 shadow-md rounded-md text-2xl font-extrabold">
+         Employee
+      </div>
+      <div className="mt-5">
         <Form
           form={form}
           layout="vertical"
-          className="form-container"
+          className="bg-white p-6 rounded-lg shadow-lg space-y-6"
           onFinish={onSubmitForm}
           initialValues={formValues}
         >
-          <div className="form-item">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <InputComponent
               name="empFirstName"
               label="First Name"

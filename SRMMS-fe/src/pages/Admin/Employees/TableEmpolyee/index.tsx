@@ -39,7 +39,7 @@ const TableEmployee = ({ dataTable, refetch, loading, form }: IProps) => {
   };
 
   return (
-    <div>
+    <div className="">
       <Form form={form} onFinish={onSubmitTable} initialValues={initialValue}>
         <Row gutter={8} className={cx("category-search-table")}>
           <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>

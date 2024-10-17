@@ -24,7 +24,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { setToken, setUser } = useAuth();
 
-  const { errorMessage } = useNotification();
+  const { errorMessage, successMessage } = useNotification();
 
   const handleLogin = useMutation(login, {
     onSuccess: (result) => {
@@ -37,22 +37,23 @@ const LoginForm = () => {
           empLastName: result.data.empLastName,
         });
       }
+      successMessage({
+        title: "Đăng Nhập",
+        description: "Đăng nhập thành công",
+      });
       navigate("/admin/dashboard");
     },
     onError: (error: AxiosError<{ message: string }>) => {
       errorMessage({
         description:
-          error.response?.data.message ||
-          "An unexpected error occurred. Please try again.",
+          error.response?.data?.message ||
+          "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
       });
     },
   });
 
-  const onSubmitForm = (_values: FormFields) => {
-    handleLogin.mutate({
-      empEmail: _values.empEmail,
-      empPassword: _values.empPassword,
-    });
+  const onSubmitForm = (values: FormFields) => {
+    handleLogin.mutate(values);
   };
 
   return (
@@ -60,9 +61,9 @@ const LoginForm = () => {
       <img
         src={Logo}
         alt="No Picture"
-        className="logo-img w-40 h-24 object-cover"
+        className="logo-img w-40 h-24 object-cover p-2"
       />
-      <p className="flex justify-center items-center mb-5">
+      <p className="flex justify-center items-center mb-5 font-bold">
         We commit, we are your true partner
       </p>
       <Form
@@ -78,22 +79,22 @@ const LoginForm = () => {
         <InputComponent
           form={form}
           name="empEmail"
-          label="User Name"
+          label="Email"
           rules={[
-            {
-              required: true,
-              message: "Please enter your user name or email.",
-            },
+            { required: true, message: "Vui lòng nhập email của bạn." },
+            { type: "email", message: "Email không hợp lệ." },
           ]}
-          placeholder="Enter your user name or email..."
+          placeholder="Nhập email..."
         />
         <InputComponent
           form={form}
           name="empPassword"
           label="Password"
-          rules={[{ required: true, message: "Please enter your password." }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập password của bạn." },
+          ]}
           type="password"
-          placeholder="Enter your password"
+          placeholder="Nhận password..."
         />
 
         <ButtonComponent
@@ -102,8 +103,11 @@ const LoginForm = () => {
           onClick={submit}
           loading={handleLogin.isLoading}
         >
-          Login
+          Đăng Nhập
         </ButtonComponent>
+        <div className="mt-2 flex cursor-pointer">
+          <span className="forgot-password">Quên mật khẩu ?</span>
+        </div>
       </Form>
     </div>
   );
