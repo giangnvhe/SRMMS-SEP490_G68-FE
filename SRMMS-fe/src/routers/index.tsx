@@ -7,6 +7,7 @@ import AddEmployee from "../pages/Admin/Employees/AddEmployee";
 import UpdateEmployee from "../pages/Admin/Employees/UpdateEmployee";
 import { ProtectedRoute } from "./ProtectedRouter";
 import Logout from "../pages/Logout";
+import ListProduct from "~/pages/Admin/Products";
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
@@ -31,12 +32,16 @@ const RouterComponent = () => {
               element: <ListEmployee />,
             },
             {
-              path: "/admin/addEmployee",
+              path: "/admin/add-employee",
               element: <AddEmployee />,
             },
             {
-              path: "/admin/updateEmployee/:id",
+              path: "/admin/update-employee/:id",
               element: <UpdateEmployee />,
+            },
+            {
+              path: "/admin/products",
+              element: <ListProduct />,
             },
             {
               path: "/admin/logout",

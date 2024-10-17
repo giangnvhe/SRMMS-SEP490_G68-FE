@@ -24,10 +24,13 @@ interface IProps {
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onSearch?: (
     value: string,
-    event?: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>,
+    event?:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLElement>
+      | React.KeyboardEvent<HTMLInputElement>,
     info?: {
       source?: "clear" | "input";
-    },
+    }
   ) => void;
   form: FormInstance;
   prefix?: ReactNode;
@@ -69,8 +72,10 @@ const InputComponent = ({
           defaultValue={defaultValue}
           maxLength={maxLength}
           disabled={disabled}
-          iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-          autoComplete='password'
+          iconRender={(visible) =>
+            visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+          }
+          autoComplete="password"
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}

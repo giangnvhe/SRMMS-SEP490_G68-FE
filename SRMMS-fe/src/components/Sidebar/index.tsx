@@ -1,17 +1,18 @@
-import classNames from "classnames";
 import {
   AppstoreOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ProductOutlined,
+  TableOutlined,
   TeamOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
-import styles from "./index.module.scss";
 import { Button, Menu, MenuProps } from "antd";
-import { useNavigate } from "react-router-dom";
+import classNames from "classnames";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "../../common/const/const";
+import styles from "./index.module.scss";
 
 const cx = classNames.bind(styles);
 type MenuItem = Required<MenuProps>["items"][number];
@@ -32,9 +33,14 @@ const items: MenuItem[] = [
     icon: <TeamOutlined />,
   },
   {
-    key: "/admin/ingredients",
-    label: "Ingredient Management",
+    key: "/admin/products",
+    label: "Product Management",
     icon: <ProductOutlined />,
+  },
+  {
+    key: "/admin/table",
+    label: "Table Management",
+    icon: <TableOutlined />,
   },
   {
     key: "/admin/role",
