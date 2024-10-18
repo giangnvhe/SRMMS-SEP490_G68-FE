@@ -24,21 +24,7 @@ const UseColumn = () => {
       ),
       width: "120px",
     },
-    {
-      title: "Gender",
-      dataIndex: "empGender",
-      align: "center",
-      width: "70px",
-      render: (gender) => (
-        <div
-          className={`text-sm ${
-            gender === "Male" ? "text-blue-500" : "text-pink-500"
-          } font-medium`}
-        >
-          {gender}
-        </div>
-      ),
-    },
+
     {
       title: "Email",
       dataIndex: "empEmail",
@@ -52,34 +38,6 @@ const UseColumn = () => {
       dataIndex: "empPhoneNumber",
       width: "120px",
       render: (phone) => <div className="text-sm text-gray-700">{phone}</div>,
-    },
-    {
-      title: "Address",
-      dataIndex: "empAddress",
-      width: "150px",
-      render: (address) => (
-        <div className="truncate text-sm text-gray-700">{address}</div>
-      ),
-    },
-    {
-      title: "Start Date",
-      dataIndex: "empStartDate",
-      width: "100px",
-      render: (date) => (
-        <div className="text-sm text-gray-700">
-          {dayjs(date).format("DD/MM/YYYY")}
-        </div>
-      ),
-    },
-    {
-      title: "Position",
-      render: (_, record) => (
-        <div className="text-sm font-medium text-gray-800">
-          {record.empRole.roleName}
-        </div>
-      ),
-      width: "100px",
-      align: "center",
     },
     {
       title: "Status",
@@ -98,6 +56,50 @@ const UseColumn = () => {
         </div>
       ),
     },
+    {
+      title: "Position",
+      render: (_, record) => (
+        <div className="text-sm font-medium text-gray-800">
+          {record.empRole.roleName}
+        </div>
+      ),
+      width: "100px",
+      align: "center",
+    },
+    {
+      title: "Address",
+      dataIndex: "empAddress",
+      width: "150px",
+      render: (address) => (
+        <div className="truncate text-sm text-gray-700">{address}</div>
+      ),
+    },
+    {
+      title: "Gender",
+      dataIndex: "empGender",
+      align: "center",
+      width: "70px",
+      render: (gender) => (
+        <div
+          className={`text-sm ${
+            gender === "Male" ? "text-blue-500" : "text-pink-500"
+          } font-medium`}
+        >
+          {gender}
+        </div>
+      ),
+    },
+    {
+      title: "Start Date",
+      dataIndex: "empStartDate",
+      width: "100px",
+      render: (date) => (
+        <div className="text-sm text-gray-700">
+          {dayjs(date).format("DD/MM/YYYY")}
+        </div>
+      ),
+    },
+
     {
       title: "Action",
       width: "50px",

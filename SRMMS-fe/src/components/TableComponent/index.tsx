@@ -24,7 +24,6 @@ interface Props {
   loading?: boolean;
   pagination?: false | TablePaginationConfig;
   className?: string;
-  rowKey?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rowClassName?: (record: any) => string | string;
   virtual?: boolean;
@@ -45,7 +44,6 @@ const TableComponent = ({
   loading,
   pagination,
   onChange,
-  rowKey,
   rowClassName,
   virtual = false,
   scroll = { x: 1366, y: 400 },
@@ -59,7 +57,6 @@ const TableComponent = ({
 }: Props) => {
   return (
     <ConfigProvider
-      autoInsertSpaceInButton={false}
       theme={{
         components: {
           Table: {
@@ -90,7 +87,7 @@ const TableComponent = ({
               }
         }
         onChange={onChange}
-        rowKey={rowKey}
+        rowKey={(data) => data.key}
         virtual={virtual}
         scroll={scroll}
         rowClassName={rowClassName}

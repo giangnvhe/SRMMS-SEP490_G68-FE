@@ -67,7 +67,7 @@ interface NewEmployeeResponse {
 export const getListEmployees = async (
   params: FormFields
 ): Promise<EmployeesResponse> => {
-  const result = await axiosInstance.get(getApi("api", "getAllEmployees"), {
+  const result = await axiosInstance.get(getApi("api", "employee/list"), {
     params,
   });
 
@@ -79,16 +79,17 @@ export const getListEmployees = async (
 export const addNewEmployee = async (
   data: NewEmployeeRequest
 ): Promise<AxiosResponse<NewEmployeeResponse>> => {
-  const result = await axiosInstance.post(getApi("api", "addEmployee"), data);
+  const result = await axiosInstance.post(
+    getApi("api", "employee/create"),
+    data
+  );
   return result;
 };
 
 export const getEmployeeById = async (
   id: number
 ): Promise<AxiosResponse<EmployeesData>> => {
-  const result = await axiosInstance.get(
-    getApi("api", `getEmployeeByID/${id}`)
-  );
+  const result = await axiosInstance.get(getApi("api", `employee/${id}`));
 
   return result;
 };
@@ -98,10 +99,8 @@ export const updateEmployee = async (
   employeeData: UpdateEmployeeRequest
 ) => {
   const response = await axiosInstance.put(
-    getApi("api", `updateEmployee/${id}`),
+    getApi("api", `employee/update/${id}`),
     employeeData
   );
-  return response.data; 
+  return response.data;
 };
-
-
