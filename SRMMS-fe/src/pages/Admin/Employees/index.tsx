@@ -36,7 +36,9 @@ const ListEmployee = () => {
       });
     }
     if (getAllEmployees.data) {
-      setDataTable(getAllEmployees.data.data);
+      setDataTable(
+        getAllEmployees.data.data?.map((d) => ({ ...d, key: d.empId }))
+      );
     }
   }, [getAllEmployees.data, getAllEmployees.isError, getAllEmployees.error]);
 

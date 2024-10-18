@@ -206,20 +206,6 @@ const UpdateEmployee = () => {
                 ]}
                 placeholder="Email employee"
               />
-              <InputComponent
-                name="empPassword"
-                label="Password"
-                form={form}
-                rules={[
-                  { required: true, message: "Password must be non-empty" },
-                  { min: 5, message: "Password must be at least 5 characters" },
-                  {
-                    pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/,
-                    message: "Password must contain both letters and numbers",
-                  },
-                ]}
-                placeholder="Enter password employee"
-              />
               <DatePickerComponent
                 name="empStartDate"
                 label="Start Date"
@@ -233,18 +219,15 @@ const UpdateEmployee = () => {
                 loading={isLoading}
                 rules={[{ required: true, message: "Role must be selected" }]}
               />
-            </div>
-
-            <div className="mt-4">
-              <SwitchComponent
+               <SwitchComponent
                 name="empStatus"
                 label="Status"
                 form={form}
                 checkedChildren="Active"
                 unCheckedChildren="Inactive"
               />
-            </div>
 
+            </div>
             <div className="flex justify-end gap-3 mt-5">
               <ButtonComponent htmlType="submit">Update</ButtonComponent>
               <ButtonComponent btnType="go-back" onClick={goBack}>

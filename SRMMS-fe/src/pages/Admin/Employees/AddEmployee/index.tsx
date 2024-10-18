@@ -152,7 +152,7 @@ const AddEmployee = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="bg-white p-4 shadow-md rounded-md text-2xl font-extrabold">
-         Employee
+        Employee
       </div>
       <div className="mt-5">
         <Form
@@ -187,26 +187,23 @@ const AddEmployee = () => {
               ]}
               placeholder="Enter last name employee"
             />
-            <InputComponent
-              name="empPassword"
-              label="Password"
-              form={form}
-              rules={[
-                {
-                  required: true,
-                  message: "Last Name must be non-empty",
-                },
-                {
-                  min: 5,
-                  message: "Password must be at least 5 characters",
-                },
-                {
-                  pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/,
-                  message: "Password must contain both letters and numbers",
-                },
-              ]}
-              placeholder="Enter password employee"
-            />
+            <div className="flex gap-4">
+              <DatePickerComponent
+                name="empDob"
+                label="Date of birth"
+                form={form}
+                format="YYYY-MM-DD"
+              />
+              <DatePickerComponent
+                name="empStartDate"
+                label="Start Date"
+                form={form}
+                format="YYYY-MM-DD"
+                disabled
+              />
+            </div>
+
+            
             <InputComponent
               name="empPhoneNumber"
               label="Phone Number"
@@ -225,6 +222,13 @@ const AddEmployee = () => {
               onChange={handleOnchangePhone}
               placeholder="Phone number employee"
             />
+            <RadioComponent
+              name="empGender"
+              label="Gender"
+              form={form}
+              options={options}
+              direction="horizontal"
+            />
             <InputComponent
               name="empEmail"
               label="Email"
@@ -241,19 +245,13 @@ const AddEmployee = () => {
               ]}
               placeholder="Email employee"
             />
-            <DatePickerComponent
-              name="empDob"
-              label="Date of birth"
-              form={form}
-              format="YYYY-MM-DD"
+            <SelectComponent
+              name="roleId"
+              label="Role"
+              options={roles || []}
+              loading={isLoading}
             />
-            <DatePickerComponent
-              name="empStartDate"
-              label="Start Date"
-              form={form}
-              format="YYYY-MM-DD"
-              disabled
-            />
+            
 
             <TextAreaComponent
               name="empAddress"
@@ -267,19 +265,6 @@ const AddEmployee = () => {
               ]}
               placeholder="Address employee"
               maxLength={2000}
-            />
-            <RadioComponent
-              name="empGender"
-              label="Gender"
-              form={form}
-              options={options}
-              direction="horizontal"
-            />
-            <SelectComponent
-              name="roleId"
-              label="Role"
-              options={roles || []}
-              loading={isLoading}
             />
           </div>
           <div className="flex gap-3 justify-end mt-5">
