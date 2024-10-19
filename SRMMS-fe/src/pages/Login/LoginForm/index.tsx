@@ -21,7 +21,6 @@ interface FormFields {
 
 const LoginForm = () => {
   const [form] = Form.useForm();
-  const { submit } = form;
   const navigate = useNavigate();
   const { setToken, setUser } = useAuth();
 
@@ -53,7 +52,6 @@ const LoginForm = () => {
     },
   });
 
-
   const onSubmitForm = (values: FormFields) => {
     handleLogin.mutate(values);
   };
@@ -73,7 +71,7 @@ const LoginForm = () => {
         layout="vertical"
         onFinish={onSubmitForm}
         onKeyUp={(e) => {
-          if (e.key === "Enter") {
+          if (e.key === "Enter" && !handleLogin.isLoading) {
             form.submit();
           }
         }}
@@ -102,7 +100,6 @@ const LoginForm = () => {
         <ButtonComponent
           htmlType="submit"
           className="btn-login"
-          onClick={submit}
           loading={handleLogin.isLoading}
         >
           Đăng Nhập
