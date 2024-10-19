@@ -8,6 +8,8 @@ import UpdateEmployee from "../pages/Admin/Employees/UpdateEmployee";
 import { ProtectedRoute } from "./ProtectedRouter";
 import Logout from "../pages/Logout";
 import ListProduct from "~/pages/Admin/Products";
+import CategoryAdmin from "~/pages/Admin/Category";
+import AddOrEditProduct from "~/pages/Admin/Products/AddOrEditProduct";
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
@@ -42,6 +44,18 @@ const RouterComponent = () => {
             {
               path: "/admin/products",
               element: <ListProduct />,
+            },
+            {
+              path: "/admin/category",
+              element: <CategoryAdmin />,
+            },
+            {
+              path: "/admin/add-product",
+              element: <AddOrEditProduct />,
+            },
+            {
+              path: "/admin/update-product/:id",
+              element: <AddOrEditProduct />,
             },
             {
               path: "/admin/logout",

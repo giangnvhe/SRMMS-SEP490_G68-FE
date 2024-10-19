@@ -1,5 +1,6 @@
 import {
   AppstoreOutlined,
+  FolderOpenOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ProductOutlined,
@@ -36,6 +37,18 @@ const items: MenuItem[] = [
     key: "/admin/products",
     label: "Product Management",
     icon: <ProductOutlined />,
+    children: [
+      {
+        key: "/admin/products",
+        label: "Product List",
+        icon: <FolderOpenOutlined />,
+      },
+      {
+        key: "/admin/category",
+        label: "Category List",
+        icon: <ProductOutlined />,
+      },
+    ],
   },
   {
     key: "/admin/table",
