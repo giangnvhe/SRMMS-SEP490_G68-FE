@@ -47,7 +47,6 @@ const initialFormValues = {
 };
 
 const AddEmployee = () => {
-  const { Title } = Typography;
   const [form] = Form.useForm();
   const { successMessage, errorMessage } = useNotification();
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -80,7 +79,7 @@ const AddEmployee = () => {
 
     if (!validateEmailFormat(emailInput)) {
       errorMessage({
-        description: "Invalid email format",
+        description: "email không đúng formmat",
       });
       return false;
     }
@@ -88,7 +87,7 @@ const AddEmployee = () => {
     const existEmail = emailList?.find((value) => value === emailInput);
     if (existEmail) {
       errorMessage({
-        description: "Email already exists",
+        description: "Email đã tồn tại",
       });
       return false;
     }
@@ -101,7 +100,7 @@ const AddEmployee = () => {
     {
       onSuccess: (success: AxiosResponse<{ message: string }>) => {
         successMessage({
-          description: success.data.message || "Add new employee successfully",
+          description: success.data.message || "Tạo mới thành công",
         });
         form.resetFields();
         setFormValues(initialFormValues);
@@ -109,7 +108,7 @@ const AddEmployee = () => {
       onError: (error: AxiosError<{ message: string }>) => {
         errorMessage({
           description:
-            error.response?.data.message || "Add new employee failed!!",
+            error.response?.data.message || "Đã có lỗi xảy ra, tạo mới thất bại!",
         });
       },
     }

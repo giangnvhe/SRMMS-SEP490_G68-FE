@@ -10,10 +10,10 @@ const UseColumn = () => {
   const columns: TableColumnsType<EmployeesData> = [
     {
       title: "ID",
-      dataIndex: "empId",
+      dataIndex: "index",
       align: "center",
       width: "50px",
-      render: (id) => <div className="text-xs font-semibold">{id}</div>,
+      render: (_text, _record, index) => index + 1,
     },
     {
       title: "Name",
