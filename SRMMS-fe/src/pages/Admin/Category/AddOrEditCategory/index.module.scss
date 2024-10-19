@@ -1,0 +1,22 @@
+.card {
+  background-color: #fff;
+  padding: 20px;
+  & :global(.card-header) {
+    & :global(.card-title) {
+      margin-top: -10px;
+    }
+    & :global(.divider) {
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+  }
+  & :global(.form-button) {
+    display: flex;
+    justify-content: end;
+    & :global(.button-admin) {
+      margin-right: 10px;
+    }
+  }
+}

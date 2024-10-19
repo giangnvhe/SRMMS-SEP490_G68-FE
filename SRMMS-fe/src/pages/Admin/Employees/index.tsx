@@ -56,7 +56,7 @@ const ListEmployee = () => {
           Create Employee
         </ButtonComponent>
       </div>
-      <div className="mt-5 px-10">
+      <div className="mt-10 px-10">
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <TableEmployee
             dataTable={dataTable}

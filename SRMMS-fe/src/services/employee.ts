@@ -70,9 +70,6 @@ export const getListEmployees = async (
   const result = await axiosInstance.get(getApi("api", "employee/list"), {
     params,
   });
-
-  console.log(result);
-
   return result;
 };
 
@@ -89,7 +86,7 @@ export const addNewEmployee = async (
 export const getEmployeeById = async (
   id: number
 ): Promise<AxiosResponse<EmployeesData>> => {
-  const result = await axiosInstance.get(getApi("api", `employee/${id}`));
+  const result = await axiosInstance.get(getApi("api", `employee/getEmployee/${id}`));
 
   return result;
 };
