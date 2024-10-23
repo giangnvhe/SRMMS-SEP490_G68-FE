@@ -39,7 +39,7 @@ const items: MenuItem[] = [
     icon: <ProductOutlined />,
     children: [
       {
-        key: "/admin/products",
+        key: "/admin/product",
         label: "Product List",
         icon: <FolderOpenOutlined />,
       },

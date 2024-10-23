@@ -1,8 +1,7 @@
-import { FormInstance, Space, TableColumnsType, TableProps } from "antd";
+import { Form, FormInstance, Space, TableColumnsType, TableProps } from "antd";
 import { PAGE_NUMBER, PAGE_SIZE } from "~/common/const/pagingation";
 import { CategoryData } from "~/services/category_product";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 import TableComponent from "~/components/TableComponent";
 import useNotification from "~/hooks/useNotification";
 
@@ -80,17 +79,20 @@ function TableCategory({
 
   return (
     <div>
-      <TableComponent
-        columns={columns}
-        onChange={handleTableChange}
-        dataSource={dataTable}
-        loading={loading}
-        pagination={{
-          current: form.getFieldValue("pageNumber") ?? initialValue.pageNumber,
-          pageSize: form.getFieldValue("pageSize") ?? initialValue.pageSize,
-        }}
-        scroll={{ x: 1700 }}
-      />
+      <Form form={form}>
+        <TableComponent
+          columns={columns}
+          onChange={handleTableChange}
+          dataSource={dataTable}
+          loading={loading}
+          pagination={{
+            current:
+              form.getFieldValue("pageNumber") ?? initialValue.pageNumber,
+            pageSize: form.getFieldValue("pageSize") ?? initialValue.pageSize,
+          }}
+          scroll={{ x: 1700 }}
+        />
+      </Form>
     </div>
   );
 }

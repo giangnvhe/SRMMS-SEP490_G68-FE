@@ -1,22 +1,18 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { Form, Spin } from "antd";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
+import ButtonComponent from "~/components/ButtonComponent";
 import InputComponent from "~/components/InputComponent";
+import TextAreaComponent from "~/components/TextAreaComponent";
 import useNotification from "~/hooks/useNotification";
-import { LoadingOutlined } from "@ant-design/icons";
 import {
   addNewCategory,
   CategoryData,
   NewCategoryRequest,
   updateCategory,
 } from "~/services/category_product";
-import styles from "./index.module.scss";
-import classNames from "classnames";
-import TextAreaComponent from "~/components/TextAreaComponent";
-import ButtonComponent from "~/components/ButtonComponent";
-
-const cx = classNames.bind(styles);
 
 interface IProps {
   onCancel: () => void;
@@ -109,43 +105,48 @@ const AddOrEditCategory = ({ onCancel, categoryData, refetch }: IProps) => {
 
   return (
     <Spin spinning={isLoading} indicator={<LoadingOutlined spin />}>
-      <div className={cx(styles["card"])}>
+      <div className="p-6 bg-gray-50 shadow-lg rounded-lg">
         <Form
           form={form}
           layout="vertical"
           onFinish={onSubmitForm}
           initialValues={formValues}
         >
-          <InputComponent
-            className={cx("form-item")}
-            name="catName"
-            label="Category Name"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng không để trống",
-              },
-            ]}
-            form={form}
-            placeholder="Nhập tên category"
-          />
-          <TextAreaComponent
-            label="Description"
-            name="description"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng không để trống",
-              },
-            ]}
-            form={form}
-            placeholder="Nhập mô tả"
-          />
-          <div className={cx("form-button")}>
-            <ButtonComponent className={cx("button-admin")} htmlType="submit">
-              {isEditCategory ? "Save" : "Create"}
+          <div className="space-y-4">
+            <InputComponent
+              name="catName"
+              label="Category Name"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng không để trống",
+                },
+              ]}
+              form={form}
+              placeholder="Nhập tên category"
+            />
+            <TextAreaComponent
+              label="Description"
+              name="description"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng không để trống",
+                },
+              ]}
+              form={form}
+              placeholder="Nhập mô tả"
+            />
+          </div>
+          <div className="mt-6 flex justify-end space-x-3">
+            <ButtonComponent className="px-5 py-2 rounded-md" htmlType="submit">
+              {categoryData ? "Save" : "Create"}
             </ButtonComponent>
-            <ButtonComponent btnType="go-back" onClick={onCancel}>
+            <ButtonComponent
+              btnType="go-back"
+              onClick={onCancel}
+              className="bg-gray-300 text-gray-800 px-5 py-2 rounded-md hover:bg-gray-400 transition duration-300"
+            >
               Cancel
             </ButtonComponent>
           </div>
