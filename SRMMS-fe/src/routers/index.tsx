@@ -42,7 +42,7 @@ const RouterComponent = () => {
               element: <UpdateEmployee />,
             },
             {
-              path: "/admin/products",
+              path: "/admin/product",
               element: <ListProduct />,
             },
             {

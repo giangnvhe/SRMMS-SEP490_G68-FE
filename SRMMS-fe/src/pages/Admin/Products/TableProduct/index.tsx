@@ -1,59 +1,117 @@
-import { useState } from "react";
+import { Col, Form, FormInstance, Row, TableProps } from "antd";
 import TableComponent from "~/components/TableComponent";
-import UseColumn, { DataType } from "./column";
-import { GetProp, TablePaginationConfig, TableProps } from "antd";
-
-interface TableParams {
-  pagination?: TablePaginationConfig;
-  sortField?: string;
-  sortOrder?: string;
-  filters?: Parameters<GetProp<TableProps, "onChange">>[1];
+import { getCategorySelect, ProductData } from "~/services/product";
+import UseColumn from "./column";
+import { PAGE_NUMBER, PAGE_SIZE } from "~/common/const/pagingation";
+import InputComponent from "~/components/InputComponent";
+import ButtonComponent from "~/components/ButtonComponent";
+import styles from "./index.module.scss";
+import classNames from "classnames";
+import SelectComponent, { Option } from "~/components/SelectComponent";
+import { useQuery } from "react-query";
+import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
+import useNotification from "~/hooks/useNotification";
+const cx = classNames.bind(styles);
+interface IProps {
+  dataTable: ProductData[] | [];
+  refetch: () => void;
+  loading: boolean;
+  form: FormInstance;
+  onSelected: (id: ProductData | undefined) => void;
+  onOk: (key: string) => void;
 }
 
-const TableProduct = () => {
-  
-  const columns = UseColumn();
+const initialValue = {
+  name: null,
+  categoryId: null,
+  pageNumber: PAGE_NUMBER,
+  pageSize: PAGE_SIZE,
+};
 
-  const [tableParams, setTableParams] = useState<TableParams>({
-    pagination: {
-      current: 1,
-      pageSize: 10,
-    },
-  });
+const TableProduct = ({
+  dataTable,
+  refetch,
+  loading,
+  onSelected,
+  form,
+  onOk,
+}: IProps) => {
+  const columns = UseColumn({ onSelected, onOk });
+  const [category, setCategory] = useState<Option[] | []>([]);
+  const { errorMessage } = useNotification();
 
-  const handleTableChange: TableProps["onChange"] = (
-    pagination,
-    filters,
-    sorter
-  ) => {
-    setTableParams((old) => ({
-      ...old,
-      ...filters,
-      ...sorter,
-      pagination: {
-        ...old.pagination,
-        ...pagination,
+  const { isLoading, isError, error } = useQuery(
+    "category",
+    getCategorySelect,
+    {
+      onSuccess: (result) => {
+        setCategory(
+          result.data.map((value: any) => ({
+            label: value.catName,
+            value: `${value.catId}`,
+          }))
+        );
       },
-    }));
+    }
+  );
+
+  useEffect(() => {
+    if (isError) {
+      errorMessage({
+        description: (error as AxiosError)?.message || "API Failed",
+      });
+    }
+  }, [isError, error]);
+
+  const handleTableChange: TableProps["onChange"] = (pagination) => {
+    form.setFieldValue("pageSize", pagination.pageSize);
+    form.setFieldValue("pageNumber", pagination.current);
+    refetch();
   };
 
-  const dataSource: DataType[] = [];
-  for (let i = 0; i < 50; i++) {
-    dataSource.push({
-      key: i,
-      name: `Edward King ${i}`,
-      age: 32,
-      address: `London, Park Lane no. ${i}`,
-    });
-  }
-  
+  const onSubmitTable = () => {
+    form.setFieldValue("pageNumber", PAGE_NUMBER);
+    form.setFieldValue("pageSize", PAGE_SIZE);
+    refetch();
+  };
+
   return (
     <div>
+      <Form form={form} onFinish={onSubmitTable} initialValues={initialValue}>
+        <Row gutter={8} className={cx("product-search-table")}>
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <InputComponent
+              name="name"
+              form={form}
+              placeholder="Tìm kiếm theo name"
+            />
+          </Col>
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <SelectComponent
+              name="categoryId"
+              options={category || []}
+              loading={isLoading}
+              placeholder="Tìm kiếm theo category"
+            />
+          </Col>
+          <Col sm={{ span: 4 }} xs={{ span: 24 }}>
+            <ButtonComponent onClick={() => form.submit()}>
+              Search
+            </ButtonComponent>
+          </Col>
+        </Row>
+      </Form>
       <TableComponent
         columns={columns}
-        dataSource={dataSource}
-        pagination={tableParams.pagination}
+        dataSource={dataTable}
         onChange={handleTableChange}
+        loading={loading}
+        pagination={{
+          current: form.getFieldValue("pageNumber") ?? initialValue.pageNumber,
+          pageSize: form.getFieldValue("pageSize") ?? initialValue.pageSize,
+        }}
+        scroll={{ x: 1700 }}
       />
     </div>
   );

@@ -17,7 +17,7 @@ interface IProps {
   name: string;
   label?: string;
   rules?: Rule[];
-  type?: "password" | "search";
+  type?: "password" | "search" | "file";
   allowClear?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;

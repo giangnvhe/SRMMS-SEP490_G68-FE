@@ -1,6 +1,5 @@
 import ButtonComponent from "~/components/ButtonComponent";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 import TableCategory from "./TableCategory";
 import {
   CategoryData,
@@ -16,7 +15,6 @@ import { AxiosError } from "axios";
 import AddOrEditCategory from "./AddOrEditCategory";
 
 const CategoryAdmin = () => {
-  const navigate = useNavigate();
   const [form] = Form.useForm<FormFields>();
   const [dataTable, setDataTable] = useState<CategoryData[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<
@@ -28,7 +26,6 @@ const CategoryAdmin = () => {
   const getListCategories = useQuery("getListCategories", () =>
     getListCategory(form.getFieldsValue(true))
   );
-  
 
   const deleteCategorys = useMutation(deleteCategory, {
     onSuccess: () => {
@@ -36,15 +33,15 @@ const CategoryAdmin = () => {
       getListCategories.refetch();
     },
     onError: (error: AxiosError) => {
-      errorMessage({ description: error.message || "Đã có lỗi xảy ra, xóa thất bại!!" });
+      errorMessage({
+        description: error.message || "Đã có lỗi xảy ra, xóa thất bại!!",
+      });
     },
   });
 
   const onOk = async (key: string) => {
     deleteCategorys.mutate(key);
   };
-
-
 
   const onSelected = (id: CategoryData | undefined) => {
     setSelectedCategory(id);
@@ -108,9 +105,22 @@ const CategoryAdmin = () => {
         width={900}
         onCancel={onCancel}
         title={
-          selectedCategory == undefined
-            ? "Add New Category"
-            : "Edit Category"
+          <span
+            style={{
+              fontSize: "24px",
+              fontWeight: "600",
+              color: "#fff",
+              background: "linear-gradient(90deg, #4A90E2, #50E3C2)",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+              display: "inline-block",
+            }}
+          >
+            {selectedCategory === undefined
+              ? "✨ Add New Category"
+              : "🛠️ Edit Category"}
+          </span>
         }
         open={openModal}
       >

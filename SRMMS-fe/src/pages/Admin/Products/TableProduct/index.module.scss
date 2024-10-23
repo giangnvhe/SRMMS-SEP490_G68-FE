@@ -1,0 +1,14 @@
+.table-product-admin {
+  background-color: white;
+  & :global(.product-search-table) {
+    padding-top: 15px;
+    padding-left: 16px;
+    margin-bottom: -10px;
+  }
+  @media (max-width: 574px) {
+    & :global(.category-search-table) {
+      margin-bottom: 8px;
+      padding-right: 16px;
+    }
+  }
+}
