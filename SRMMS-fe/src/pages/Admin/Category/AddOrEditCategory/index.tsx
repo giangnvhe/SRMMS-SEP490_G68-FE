@@ -21,9 +21,8 @@ interface IProps {
 }
 
 const initialFormValues = {
-  name: "",
+  catName: "",
   description: null,
-  parentId: "",
 };
 
 interface MutationUpdateCategory {
