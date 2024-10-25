@@ -1,15 +1,18 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AdminLayout from "../layouts/AdminLayout";
-import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
-import ListEmployee from "../pages/Admin/Employees";
-import AddEmployee from "../pages/Admin/Employees/AddEmployee";
-import UpdateEmployee from "../pages/Admin/Employees/UpdateEmployee";
 import { ProtectedRoute } from "./ProtectedRouter";
-import Logout from "../pages/Logout";
-import ListProduct from "~/pages/Admin/Products";
-import CategoryAdmin from "~/pages/Admin/Category";
-import AddOrEditProduct from "~/pages/Admin/Products/AddOrEditProduct";
+import { lazy } from "react";
+
+const Login = lazy(() => import("~/pages/Login"));
+const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
+const Dashboard = lazy(() => import("~/pages/Dashboard"));
+const ListEmployee = lazy(() => import("~/pages/Admin/Employees"));
+const AddEmployee = lazy(() => import("~/pages/Admin/Employees/AddEmployee"));
+const UpdateEmployee = lazy(
+  () => import("~/pages/Admin/Employees/UpdateEmployee")
+);
+const Logout = lazy(() => import("~/pages/Logout"));
+const ListProduct = lazy(() => import("~/pages/Admin/Products"));
+const CategoryAdmin = lazy(() => import("~/pages/Admin/Category"));
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
@@ -48,14 +51,6 @@ const RouterComponent = () => {
             {
               path: "/admin/category",
               element: <CategoryAdmin />,
-            },
-            {
-              path: "/admin/add-product",
-              element: <AddOrEditProduct />,
-            },
-            {
-              path: "/admin/update-product/:id",
-              element: <AddOrEditProduct />,
             },
             {
               path: "/admin/logout",
