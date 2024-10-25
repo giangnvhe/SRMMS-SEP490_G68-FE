@@ -24,13 +24,13 @@ import type {
 } from "antd/es/upload/interface";
 
 const initialFormValues = {
-  productName: "",
-  description: "",
-  price: "",
-  category: undefined,
-  calories: "",
-  cookingTime: "",
-  status: false,
+  ProductName: "",
+  Description: "",
+  Price: "",
+  Category: undefined,
+  Calories: "",
+  CookingTime: "",
+  Status: false,
   image: "",
 };
 
@@ -135,18 +135,18 @@ const AddOrEditProduct = ({
   }, [file]);
 
   useEffect(() => {
-    if (productData) {
-      form.setFieldsValue({
-        ProductName: productData.productName,
-        Description: productData.description,
-        Price: productData.price,
-        Category: productData.category,
-        Calories: productData.calories,
-        CookingTime: productData.cookingTime,
-        Status: productData.status,
-      });
-    }
-  }, [productData, form]);
+    isEditProduct
+      ? form.setFieldsValue({
+          ProductName: productData?.productName,
+          Description: productData?.description,
+          Price: productData?.price,
+          Category: productData?.category,
+          Calories: productData?.calories,
+          CookingTime: productData?.cookingTime,
+          Status: productData?.status,
+        })
+      : form.resetFields();
+  }, [productData]);
 
   const onSubmitForm = (values: {
     ProductName: string;
