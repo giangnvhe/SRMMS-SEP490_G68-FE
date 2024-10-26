@@ -13,7 +13,6 @@ export interface ProductData {
   category: string;
   image: string;
   calories: string;
-  cookingTime: number;
   status: boolean;
 }
 
@@ -24,7 +23,6 @@ export interface NewProductRequest {
   Category: number;
   Image: RcFile | null;
   Calories: string;
-  CookingTime: number;
   Status: boolean;
 }
 
@@ -114,3 +112,4 @@ export const deleteProduct = async (
   );
   return result.data;
 };
+

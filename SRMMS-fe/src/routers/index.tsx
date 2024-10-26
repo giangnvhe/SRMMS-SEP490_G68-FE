@@ -6,7 +6,7 @@ const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const Dashboard = lazy(() => import("~/pages/Dashboard"));
 const ListEmployee = lazy(() => import("~/pages/Admin/Employees"));
-const AddEmployee = lazy(() => import("~/pages/Admin/Employees/AddEmployee"));
+const AddEmployee = lazy(() => import("~/pages/Admin/Employees/AddAccount"));
 const UpdateEmployee = lazy(
   () => import("~/pages/Admin/Employees/UpdateEmployee")
 );

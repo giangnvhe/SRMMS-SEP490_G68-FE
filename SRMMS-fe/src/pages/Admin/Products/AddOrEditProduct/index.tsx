@@ -58,7 +58,6 @@ const AddOrEditProduct = ({
   const [formValues, setFormValues] = useState(initialFormValues);
   const isEditProduct = useMemo(() => !!productData, [productData]);
   const { successMessage, errorMessage } = useNotification();
-  //const [file, setFile] = useState<UploadFile | null>(null);
   const [file, setFile] = useState<RcFile | null>(null);
 
   const handleUpdateCategory = useMutation(
@@ -142,7 +141,6 @@ const AddOrEditProduct = ({
           Price: productData?.price,
           Category: productData?.category,
           Calories: productData?.calories,
-          CookingTime: productData?.cookingTime,
           Status: productData?.status,
         })
       : form.resetFields();
@@ -164,7 +162,6 @@ const AddOrEditProduct = ({
       Category: values.Category,
       Image: file,
       Calories: values.Calories,
-      CookingTime: values.CookingTime,
       Status: values.Status,
     };
     if (isEditProduct) {
@@ -195,6 +192,12 @@ const AddOrEditProduct = ({
             <InputComponent
               name="ProductName"
               label="Product Name"
+              rules={[
+                {
+                  required: true,
+                  message: "Tên món không được để trống",
+                },
+              ]}
               placeholder="Nhập tên món ăn"
               form={form}
             />
@@ -205,20 +208,26 @@ const AddOrEditProduct = ({
               rules={[
                 {
                   required: true,
-                  message: "Can not be empty",
+                  message: "Giá không để trống",
                 },
                 {
                   pattern: /^[0-9]+$/,
-                  message: "Price number must be numeric",
+                  message: "Giá phải là số",
                 },
               ]}
               maxLength={11}
               onChange={handleOnchangeInputNumber}
-              placeholder="Phone number employee"
+              placeholder="Nhập giá"
             />
             <SelectComponent
               name="Category"
               label="Category"
+              rules={[
+                {
+                  required: true,
+                  message: "Danh mục không được để trống",
+                },
+              ]}
               options={category || []}
               loading={isLoading}
             />
@@ -229,36 +238,44 @@ const AddOrEditProduct = ({
               rules={[
                 {
                   required: true,
-                  message: "Can not be empty",
+                  message: "Calories không được để trống",
                 },
               ]}
               placeholder="Nhập Calories"
-            />
-            <InputComponent
-              name="CookingTime"
-              label="Time"
-              placeholder="Nhấp thời gian"
-              form={form}
             />
             <UploadComponent
               name="Image"
               label="Image"
               form={form}
+              rules={[
+                {
+                  required: true,
+                  message: "Image không được để trống",
+                },
+              ]}
               onChange={handleFileChange}
             />
             <TextAreaComponent
               label="Description"
               name="Description"
+              rules={[
+                {
+                  required: true,
+                  message: "Description không được để trống",
+                },
+              ]}
               placeholder="Nhập mô tả"
               form={form}
             />
-            <SwitchComponent
-              name="Status"
-              label="Status"
-              form={form}
-              checkedChildren="Active"
-              unCheckedChildren="Inactive"
-            />
+            {isEditProduct && (
+              <SwitchComponent
+                name="Status"
+                label="Status"
+                form={form}
+                checkedChildren="Active"
+                unCheckedChildren="Inactive"
+              />
+            )}
           </div>
 
           <div className="mt-6 flex justify-end space-x-3">

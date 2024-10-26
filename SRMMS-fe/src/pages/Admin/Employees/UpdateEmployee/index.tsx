@@ -113,17 +113,17 @@ const UpdateEmployee = () => {
         const employee = result.data;
 
         form.setFieldsValue({
-          empFirstName: employee.empFirstName,
-          empLastName: employee.empLastName,
-          empPassword: employee.empPassword,
-          empPhoneNumber: employee.empPhoneNumber,
-          empEmail: employee.empEmail,
-          empDob: dayjs(employee.empDob),
-          empStartDate: dayjs(employee.empStartDate),
-          empAddress: employee.empAddress,
-          empGender: employee.empGender,
-          empStatus: employee.empStatus,
-          roleId: employee.roleId ? String(employee.roleId) : null,
+          // empFirstName: employee.empFirstName,
+          // empLastName: employee.empLastName,
+          // empPassword: employee.empPassword,
+          // empPhoneNumber: employee.empPhoneNumber,
+          // empEmail: employee.empEmail,
+          // empDob: dayjs(employee.empDob),
+          // empStartDate: dayjs(employee.empStartDate),
+          // empAddress: employee.empAddress,
+          // empGender: employee.empGender,
+          // empStatus: employee.empStatus,
+          // roleId: employee.roleId ? String(employee.roleId) : null,
         });
       } catch (error) {
         errorMessage({

@@ -1,22 +1,21 @@
-import classNames from "classnames";
-import styles from "./index.module.scss";
 import { Form } from "antd";
-import InputComponent from "~/components/InputComponent";
-import ButtonComponent from "~/components/ButtonComponent";
-import Logo from "~/assets/images/Logo.png";
-import { useNavigate } from "react-router-dom";
-import useNotification from "~/hooks/useNotification";
-import { useMutation } from "react-query";
 import { AxiosError } from "axios";
-import { login } from "~/services/auth";
+import classNames from "classnames";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import Logo from "~/assets/images/Logo.png";
+import ButtonComponent from "~/components/ButtonComponent";
+import InputComponent from "~/components/InputComponent";
 import { useAuth } from "~/context/authProvider";
-import { useEffect } from "react";
+import useNotification from "~/hooks/useNotification";
+import { login } from "~/services/auth";
+import styles from "./index.module.scss";
 
 const cx = classNames.bind(styles);
 
 interface FormFields {
-  empEmail: string;
-  empPassword: string;
+  email: string;
+  password: string;
 }
 
 const LoginForm = () => {
@@ -31,10 +30,9 @@ const LoginForm = () => {
       if (result.status === 200) {
         setToken(result.data.token);
         setUser({
-          empEmail: result.data.empEmail,
-          empName: result.data.empName,
+          email: result.data.email,
+          fullName: result.data.fullName,
           roleName: result.data.roleName,
-          empLastName: result.data.empLastName,
         });
       }
       successMessage({
@@ -51,7 +49,6 @@ const LoginForm = () => {
       });
     },
   });
-
 
   const onSubmitForm = (values: FormFields) => {
     handleLogin.mutate(values);
@@ -79,7 +76,7 @@ const LoginForm = () => {
       >
         <InputComponent
           form={form}
-          name="empEmail"
+          name="email"
           label="Email"
           rules={[
             { required: true, message: "Vui lòng nhập email của bạn." },
@@ -89,7 +86,7 @@ const LoginForm = () => {
         />
         <InputComponent
           form={form}
-          name="empPassword"
+          name="password"
           label="Password"
           rules={[
             { required: true, message: "Vui lòng nhập password của bạn." },

@@ -9,7 +9,6 @@ interface IProps {
 }
 
 function UseColumn({ onSelected, onOk }: IProps) {
-
   const { comfirmMessage } = useNotification();
   const columns: TableColumnsType<ProductData> = [
     {
