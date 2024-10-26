@@ -6,10 +6,9 @@ import {
 } from "~/configs/accessToken";
 import { getUserW, removeUserW, setUserW } from "../configs/user";
 export type UserInformation = {
-  empEmail: string;
+  email: string;
   roleName: string;
-  empName: string;
-  empLastName: string;
+  fullName: string;
 };
 type MyContextValue = {
   token: string | undefined;

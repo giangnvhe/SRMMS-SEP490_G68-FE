@@ -1,46 +1,39 @@
-import { Form } from "antd";
-import TableEmployee from "./TableEmpolyee";
-import { EmployeesData, getListEmployees } from "~/services/employee";
-import { useEffect, useState } from "react";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { useQuery } from "react-query";
+import { Form } from "antd";
 import { AxiosError } from "axios";
-import useNotification from "~/hooks/useNotification";
-import ButtonComponent from "~/components/ButtonComponent";
+import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import ButtonComponent from "~/components/ButtonComponent";
+import useNotification from "~/hooks/useNotification";
+import { AccountData, getListAccount } from "~/services/employee";
+import TableEmployee, { FormFields } from "./TableAccount";
 
-export interface FormFields {
-  name: string;
-  description: string;
-  pagination: { pageNumber: number; pageSize: number };
-  pageNumber: number;
-  pageSize: number;
-}
+
 
 const ListEmployee = () => {
   const [form] = Form.useForm<FormFields>();
-  const [dataTable, setDataTable] = useState<EmployeesData[]>([]);
+  const [dataTable, setDataTable] = useState<AccountData[]>([]);
   const { errorMessage } = useNotification();
   const navigate = useNavigate();
 
-  const getAllEmployees = useQuery("getAllEmployees", () =>
-    getListEmployees(form.getFieldsValue(true))
+  const getAllAccount = useQuery("getAllEmployees", () =>
+    getListAccount(form.getFieldsValue(true))
   );
 
   useEffect(() => {
-    if (getAllEmployees.isError) {
+    if (getAllAccount.isError) {
       errorMessage({
         description:
-          (getAllEmployees.error as AxiosError)?.message ||
-          "Đã có lỗi xảy ra!!!",
+          (getAllAccount.error as AxiosError)?.message || "Đã có lỗi xảy ra!!!",
       });
     }
-    if (getAllEmployees.data) {
+    if (getAllAccount.data) {
       setDataTable(
-        getAllEmployees.data.data?.map((d) => ({ ...d, key: d.empId }))
+        getAllAccount.data.data?.map((d) => ({ ...d, key: d.accountId }))
       );
     }
-  }, [getAllEmployees.data, getAllEmployees.isError, getAllEmployees.error]);
+  }, [getAllAccount.data, getAllAccount.isError, getAllAccount.error]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -60,8 +53,8 @@ const ListEmployee = () => {
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <TableEmployee
             dataTable={dataTable}
-            refetch={getAllEmployees.refetch}
-            loading={getAllEmployees.isLoading || getAllEmployees.isFetching}
+            refetch={getAllAccount.refetch}
+            loading={getAllAccount.isLoading || getAllAccount.isFetching}
             form={form}
           />
         </div>
