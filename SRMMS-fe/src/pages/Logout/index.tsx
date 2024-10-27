@@ -13,7 +13,7 @@ const Logout = () => {
       title: "Đăng Xuất",
       description: "Bạn đã đăng xuất thành công.",
     });
-    navigate("/");
+    navigate("/login");
   }, []);
   return <div>Logout page</div>;
 };

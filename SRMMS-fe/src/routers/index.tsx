@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import { lazy } from "react";
+import HomePage from "~/pages/HomePage";
 
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
@@ -18,7 +19,19 @@ const RouterComponent = () => {
   const router = createBrowserRouter([
     {
       element: <Login />,
+      path: "/login",
+    },
+    {
+      element: <HomePage />,
+      path: "/home",
+    },
+    {
+      element: <HomePage />,
       path: "/",
+    },
+    {
+      path: "/logout",
+      element: <Logout />,
     },
     {
       path: "/",

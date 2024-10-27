@@ -39,7 +39,11 @@ const LoginForm = () => {
         title: "Đăng Nhập",
         description: "Đăng nhập thành công",
       });
-      navigate("/admin/dashboard");
+      if (result.data.roleName === "Customer") {
+        navigate("/home");
+      } else {
+        navigate("/admin/dashboard");
+      }
     },
     onError: (error: AxiosError<{ message: string }>) => {
       errorMessage({
