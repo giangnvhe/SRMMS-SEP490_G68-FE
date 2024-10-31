@@ -45,8 +45,6 @@ const ListProduct = () => {
     }
   );
 
-  
-
   const deleProduct = useMutation(deleteProduct, {
     onSuccess: () => {
       successMessage({ description: "Xóa thành công" });
@@ -83,10 +81,22 @@ const ListProduct = () => {
     }
     if (getListProducts.data) {
       setDataTable(
-        getListProducts.data.data?.products.map((d) => ({
+        getListProducts.data.data?.products.map((d, i) => ({
           ...d,
           key: d.productId,
+          index:
+            (getListProducts.data.data.pageNumber - 1) *
+              getListProducts.data.data.pageSize +
+            i +
+            1,
         }))
+      );
+
+      form.setFieldValue("pageNumber", getListProducts.data.data.pageNumber);
+      form.setFieldValue("pageSize", getListProducts.data.data.pageSize);
+      form.setFieldValue(
+        "totalProducts",
+        getListProducts.data.data.totalProducts
       );
     }
   }, [getListProducts.data, getListProducts.isError, getListProducts.error]);

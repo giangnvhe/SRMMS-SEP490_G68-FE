@@ -27,7 +27,12 @@ export interface NewProductRequest {
 }
 
 interface ProductResponse {
-  data: ProductData[];
+  data: {
+    products: ProductData[];
+    pageNumber: number;
+    pageSize: number;
+    totalProducts: number;
+  };
 }
 
 export interface FormFields {
@@ -49,7 +54,6 @@ interface DeleteProductResponse {
   success: boolean;
   message: string;
 }
-
 
 export const getListProduct = async (
   params: FormFields
@@ -103,7 +107,6 @@ export const getCategorySelect = async (): Promise<
   return result;
 };
 
-
 export const deleteProduct = async (
   id: string
 ): Promise<DeleteProductResponse> => {
@@ -112,4 +115,3 @@ export const deleteProduct = async (
   );
   return result.data;
 };
-

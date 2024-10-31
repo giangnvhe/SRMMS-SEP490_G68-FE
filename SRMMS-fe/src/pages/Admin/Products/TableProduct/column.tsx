@@ -1,5 +1,6 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Space, TableColumnsType } from "antd";
+import { Modal, Space, TableColumnsType } from "antd";
+import { useState } from "react";
 import useNotification from "~/hooks/useNotification";
 import { ProductData } from "~/services/product";
 
@@ -10,13 +11,15 @@ interface IProps {
 
 function UseColumn({ onSelected, onOk }: IProps) {
   const { comfirmMessage } = useNotification();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+
   const columns: TableColumnsType<ProductData> = [
     {
       title: "ID",
       dataIndex: "index",
       align: "center",
       width: 20,
-      render: (_, __, index) => index + 1,
     },
     {
       title: "Product Name",
@@ -32,15 +35,35 @@ function UseColumn({ onSelected, onOk }: IProps) {
       align: "center",
       width: 100,
       render: (image: string) => (
-        <div className="flex justify-center items-center h-16">
-          <img
-            src={image}
-            alt="Product"
-            className="w-12 h-12 object-cover rounded"
-          />
-        </div>
+        <>
+          <div
+            className="flex justify-center items-center h-16 cursor-pointer"
+            onClick={() => {
+              setSelectedImage(image);
+              setIsModalOpen(true);
+            }}
+          >
+            <img
+              src={image}
+              alt="Product"
+              className="w-12 h-12 object-cover rounded"
+            />
+          </div>
+          <Modal
+            open={isModalOpen}
+            footer={null}
+            onCancel={() => setIsModalOpen(false)}
+          >
+            <img
+              src={selectedImage}
+              alt="Product Preview"
+              className="w-full object-contain"
+            />
+          </Modal>
+        </>
       ),
     },
+
     {
       title: "Category",
       dataIndex: "category",
