@@ -108,8 +108,9 @@ const TableProduct = ({
         onChange={handleTableChange}
         loading={loading}
         pagination={{
-          current: form.getFieldValue("pageNumber") ?? initialValue.pageNumber,
-          pageSize: form.getFieldValue("pageSize") ?? initialValue.pageSize,
+          current: form.getFieldValue("pageNumber"),
+          pageSize: form.getFieldValue("pageSize"),
+          total: form.getFieldValue("totalProducts"),
         }}
         scroll={{ x: 1700 }}
       />

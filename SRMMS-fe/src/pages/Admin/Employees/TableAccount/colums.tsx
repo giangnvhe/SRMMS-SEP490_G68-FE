@@ -23,7 +23,6 @@ const UseColumn = () => {
       ),
       width: "120px",
     },
-
     {
       title: "Email",
       dataIndex: "email",
