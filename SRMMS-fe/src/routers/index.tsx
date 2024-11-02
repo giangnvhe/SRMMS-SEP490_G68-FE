@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import { lazy } from "react";
 import HomePage from "~/pages/HomePage";
+import TablesManagement from "~/pages/Admin/Tables";
 
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
@@ -54,9 +55,14 @@ const RouterComponent = () => {
               element: <CategoryAdmin />,
             },
             {
+              path: "/admin/tables",
+              element: <TablesManagement />,
+            },
+            {
               path: "/admin/logout",
               element: <Logout />,
             },
+            
           ],
         },
       ],

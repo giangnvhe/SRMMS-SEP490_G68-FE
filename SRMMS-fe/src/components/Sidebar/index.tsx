@@ -8,6 +8,9 @@ import {
   TeamOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
+import { faTh } from "@fortawesome/free-solid-svg-icons";
 import { Button, Menu, MenuProps } from "antd";
 import classNames from "classnames";
 import { useState } from "react";
@@ -51,14 +54,19 @@ const items: MenuItem[] = [
     ],
   },
   {
-    key: "/admin/table",
+    key: "/admin/tables",
     label: "Quản lý bàn",
     icon: <TableOutlined />,
   },
   {
-    key: "/admin/role",
-    label: "Quản lý Role",
-    icon: <UserAddOutlined />,
+    key: "/admin/combo",
+    label: "Quản lý combo",
+    icon: <FontAwesomeIcon icon={faTh} />,
+  },
+  {
+    key: "/admin/order",
+    label: "Quản lý Order",
+    icon: <FontAwesomeIcon icon={faClipboardList} />,
   },
 ];
 
