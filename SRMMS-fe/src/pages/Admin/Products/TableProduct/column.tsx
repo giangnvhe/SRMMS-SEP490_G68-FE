@@ -16,7 +16,7 @@ function UseColumn({ onSelected, onOk }: IProps) {
 
   const columns: TableColumnsType<ProductData> = [
     {
-      title: "ID",
+      title: "STT",
       dataIndex: "index",
       align: "center",
       width: 20,

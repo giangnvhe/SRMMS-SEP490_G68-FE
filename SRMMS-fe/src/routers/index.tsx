@@ -7,10 +7,6 @@ const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const Dashboard = lazy(() => import("~/pages/Dashboard"));
 const ListEmployee = lazy(() => import("~/pages/Admin/Employees"));
-const AddEmployee = lazy(() => import("~/pages/Admin/Employees/AddAccount"));
-const UpdateEmployee = lazy(
-  () => import("~/pages/Admin/Employees/UpdateEmployee")
-);
 const Logout = lazy(() => import("~/pages/Logout"));
 const ListProduct = lazy(() => import("~/pages/Admin/Products"));
 const CategoryAdmin = lazy(() => import("~/pages/Admin/Category"));
@@ -48,14 +44,6 @@ const RouterComponent = () => {
             {
               path: "/admin/employees",
               element: <ListEmployee />,
-            },
-            {
-              path: "/admin/add-employee",
-              element: <AddEmployee />,
-            },
-            {
-              path: "/admin/update-employee/:id",
-              element: <UpdateEmployee />,
             },
             {
               path: "/admin/product",

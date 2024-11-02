@@ -6,8 +6,13 @@ import InputComponent from "~/components/InputComponent";
 import TableComponent from "~/components/TableComponent";
 import UseColumn from "./colums";
 import styles from "./index.module.scss";
-import { AccountData } from "~/services/employee";
-import { useMemo } from "react";
+import { AccountData } from "~/services/account";
+import { useEffect, useMemo, useState } from "react";
+import SelectComponent, { Option } from "~/components/SelectComponent";
+import { useQuery } from "react-query";
+import { getRoles } from "~/services/role";
+import useNotification from "~/hooks/useNotification";
+import { AxiosError } from "axios";
 const cx = classNames.bind(styles);
 
 interface IProps {
@@ -15,6 +20,8 @@ interface IProps {
   refetch: () => void;
   loading: boolean;
   form: FormInstance;
+  onSelected: (id: AccountData | undefined) => void;
+  onOk: (key: string) => void;
 }
 
 export interface FormFields {
@@ -23,6 +30,8 @@ export interface FormFields {
   pagination: { pageNumber: number; pageSize: number };
   pageNumber: number;
   pageSize: number;
+  totalEmployees: number;
+  totalCustomers: number;
 }
 
 const initialValue = {
@@ -32,8 +41,36 @@ const initialValue = {
   pageSize: PAGE_SIZE,
 };
 
-const TableEmployee = ({ dataTable, refetch, loading, form }: IProps) => {
-  const columns = UseColumn();
+const TableEmployee = ({
+  dataTable,
+  refetch,
+  loading,
+  form,
+  onSelected,
+  onOk,
+}: IProps) => {
+  const columns = UseColumn({ onSelected, onOk });
+  const [role, setRole] = useState<Option[] | []>([]);
+  const { errorMessage } = useNotification();
+
+  const { isLoading, isError, error } = useQuery("role", getRoles, {
+    onSuccess: (result) => {
+      setRole(
+        result.data.map((value: any) => ({
+          label: value.roleName,
+          value: `${value.roleId}`,
+        }))
+      );
+    },
+  });
+
+  useEffect(() => {
+    if (isError) {
+      errorMessage({
+        description: (error as AxiosError)?.message || "API Failed",
+      });
+    }
+  }, [isError, error]);
 
   const handleTableChange: TableProps["onChange"] = (pagination) => {
     form.setFieldValue("pageSize", pagination.pageSize);
@@ -48,34 +85,41 @@ const TableEmployee = ({ dataTable, refetch, loading, form }: IProps) => {
   };
 
   const filteredDataTable = useMemo(() => {
-    return dataTable.filter(account => account.roleName !== 'Admin');
+    return dataTable.filter(
+      (account) =>
+        account.roleName !== "Admin" && account.roleName !== "Khách hàng"
+    );
   }, [dataTable]);
 
   return (
     <div className="">
       <Form form={form} onFinish={onSubmitTable} initialValues={initialValue}>
-        <Row
-          justify="space-between"
-          gutter={8}
-          className={cx("category-search-table")}
-        >
+        <Row gutter={8} className={cx("category-search-table")}>
           <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
             <InputComponent
               name="accountName"
               form={form}
-              placeholder="Search By Name"
+              placeholder="Tìm kiếm theo tên"
             />
           </Col>
-          <Col
-            sm={{ span: 4 }}
-            xs={{ span: 24 }}
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <InputComponent
+              name="phone"
+              form={form}
+              placeholder="Tìm kiếm theo số điện thoại"
+            />
+          </Col>
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <SelectComponent
+              name="roleId"
+              options={role || []}
+              loading={isLoading}
+              placeholder="Tìm kiếm theo vị trí"
+            />
+          </Col>
+          <Col sm={{ span: 4 }} xs={{ span: 24 }}>
             <ButtonComponent onClick={() => form.submit()}>
-              Search
+              TÌm Kiếm
             </ButtonComponent>
           </Col>
         </Row>
@@ -86,9 +130,9 @@ const TableEmployee = ({ dataTable, refetch, loading, form }: IProps) => {
         dataSource={filteredDataTable}
         loading={loading}
         pagination={{
-          current: form.getFieldValue("pageNumber") ?? initialValue.pageNumber,
-          pageSize: form.getFieldValue("pageSize") ?? initialValue.pageSize,
-          
+          current: form.getFieldValue("pageNumber"),
+          pageSize: form.getFieldValue("pageSize"),
+          total: form.getFieldValue("totalEmployees"),
         }}
         scroll={{ x: 1700 }}
       />

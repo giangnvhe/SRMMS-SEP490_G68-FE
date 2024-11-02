@@ -76,14 +76,14 @@ const CategoryAdmin = () => {
     <div className="min-h-screen bg-gray-100">
       <div className="flex justify-between items-center bg-white shadow-md p-6">
         <h1 className="text-2xl font-extrabold text-gray-800">
-          Management Category
+          Danh Sách Loại Món Ăn
         </h1>
         <ButtonComponent
           icon={<PlusCircleOutlined />}
           onClick={() => setOpenModal(true)}
           className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2"
         >
-          Create Category
+          Thêm Loại Mới
         </ButtonComponent>
       </div>
       <div className="mt-5 px-10">
@@ -118,8 +118,8 @@ const CategoryAdmin = () => {
             }}
           >
             {selectedCategory === undefined
-              ? "✨ Add New Category"
-              : "🛠️ Edit Category"}
+              ? "✨ Thêm Loại Mới"
+              : "🛠️ Chỉnh Sửa"}
           </span>
         }
         open={openModal}

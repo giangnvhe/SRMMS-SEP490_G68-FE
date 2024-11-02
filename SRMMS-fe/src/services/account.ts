@@ -11,11 +11,21 @@ export interface AccountData {
   email: string;
   phone: number;
   roleName: string;
+  roleId: number;
+  status: boolean;
+  empDob?: string;
+  empStartDate?: string;
   action: string;
 }
 
 export interface AccountResponse {
-  data: AccountData[];
+  data: {
+    accounts: AccountData[];
+    totalCustomers: number;
+    totalEmployees: number;
+    pageNumber: number;
+    pageSize: number;
+  };
 }
 
 export interface updateEmployeeResponse {
@@ -31,15 +41,13 @@ export interface NewEmployeeRequest {
 }
 
 export interface UpdateEmployeeRequest {
-  empFirstName: string;
-  empLastName: string;
-  empDob: string;
-  empPhoneNumber: number;
-  empEmail: string;
-  empPassword: string;
-  empStartDate: string;
+  fullName: string;
+  email: string;
+  phone: number;
   roleId: number;
-  empStatus: boolean;
+  empDob?: string;
+  empStartDate?: string;
+  status: boolean;
 }
 
 interface NewEmployeeResponse {
@@ -76,7 +84,7 @@ export const getEmployeeById = async (
   id: number
 ): Promise<AxiosResponse<AccountData>> => {
   const result = await axiosInstance.get(
-    getApi("api", `employee/getEmployee/${id}`)
+    getApi("api", `account/getByID/${id}`)
   );
 
   return result;
@@ -87,7 +95,7 @@ export const updateEmployee = async (
   employeeData: UpdateEmployeeRequest
 ) => {
   const response = await axiosInstance.put(
-    getApi("api", `employee/update/${id}`),
+    getApi("api", `account/update/${id}`),
     employeeData
   );
   return response.data;
