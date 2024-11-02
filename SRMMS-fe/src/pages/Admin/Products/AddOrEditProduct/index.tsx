@@ -280,14 +280,14 @@ const AddOrEditProduct = ({
 
           <div className="mt-6 flex justify-end space-x-3">
             <ButtonComponent className="px-5 py-2 rounded-md" htmlType="submit">
-              {productData ? "Save" : "Create"}
+              {productData ? "Lưu" : "Tạo mới"}
             </ButtonComponent>
             <ButtonComponent
               btnType="go-back"
               onClick={onCancel}
               className="bg-gray-300 text-gray-800 px-5 py-2 rounded-md hover:bg-gray-400 transition duration-300"
             >
-              Cancel
+              Hủy
             </ButtonComponent>
           </div>
         </Form>

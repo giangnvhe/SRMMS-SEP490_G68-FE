@@ -30,34 +30,34 @@ const items: MenuItem[] = [
   },
   {
     key: "/admin/employees",
-    label: "Employee Management",
+    label: "Quản lý nhân viên",
     icon: <TeamOutlined />,
   },
   {
     key: "/admin/products",
-    label: "Product Management",
+    label: "Quản lý món",
     icon: <ProductOutlined />,
     children: [
       {
         key: "/admin/product",
-        label: "Product List",
+        label: "Danh sách món",
         icon: <FolderOpenOutlined />,
       },
       {
         key: "/admin/category",
-        label: "Category List",
+        label: "Danh sách loại món",
         icon: <ProductOutlined />,
       },
     ],
   },
   {
     key: "/admin/table",
-    label: "Table Management",
+    label: "Quản lý bàn",
     icon: <TableOutlined />,
   },
   {
     key: "/admin/role",
-    label: "Role Management",
+    label: "Quản lý Role",
     icon: <UserAddOutlined />,
   },
 ];

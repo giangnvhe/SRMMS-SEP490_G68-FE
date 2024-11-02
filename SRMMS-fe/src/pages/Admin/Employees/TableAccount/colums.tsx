@@ -1,18 +1,22 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Space, TableColumnsType } from "antd";
-import { useNavigate } from "react-router-dom";
-import { AccountData } from "~/services/employee";
+import useNotification from "~/hooks/useNotification";
+import { AccountData } from "~/services/account";
 
-const UseColumn = () => {
-  const navigate = useNavigate();
+interface IProps {
+  onSelected: (id: AccountData | undefined) => void;
+  onOk: (key: string) => void;
+}
+
+const UseColumn = ({ onSelected, onOk }: IProps) => {
+  const { comfirmMessage } = useNotification();
 
   const columns: TableColumnsType<AccountData> = [
     {
       title: "STT",
-      dataIndex: "accountId",
+      dataIndex: "index",
       align: "center",
       width: "50px",
-      render: (_text, _record) => _record.accountId,
     },
     {
       title: "Full Name",
@@ -55,15 +59,27 @@ const UseColumn = () => {
       render: (_, record) => (
         <Space size="middle">
           <EditOutlined
+            className="text-blue-500 cursor-pointer"
+            onClick={() => onSelected(record)}
+          />
+          <DeleteOutlined
+            className="text-red-500 cursor-pointer"
             onClick={() =>
-              navigate(`/admin/update-employee/${record.accountId}`)
+              comfirmMessage({
+                description: "Do you want delete " + record.fullName + " ?",
+                onSubmit: () => {
+                  if (record.key) {
+                    onOk(record.key as string);
+                  }
+                },
+              })
             }
           />
-          <DeleteOutlined />
         </Space>
       ),
     },
   ];
+
   return columns;
 };
 

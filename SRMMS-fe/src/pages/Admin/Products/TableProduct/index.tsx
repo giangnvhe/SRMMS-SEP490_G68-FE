@@ -97,7 +97,7 @@ const TableProduct = ({
           </Col>
           <Col sm={{ span: 4 }} xs={{ span: 24 }}>
             <ButtonComponent onClick={() => form.submit()}>
-              Search
+              Tìm Kiếm
             </ButtonComponent>
           </Col>
         </Row>
