@@ -106,8 +106,16 @@ const LoginForm = () => {
         >
           Đăng Nhập
         </ButtonComponent>
-        <div className="mt-2 flex cursor-pointer">
-          <span className="forgot-password">Quên mật khẩu ?</span>
+        <div className="mt-2 flex cursor-pointer justify-between text-sm">
+          <p>
+            Do you have a account?{" "}
+            <span className="text-blue-500 hover:text-blue-700 font-medium ml-1">
+              Đăng kí
+            </span>
+          </p>
+          <span className="text-blue-500 hover:text-blue-700 font-medium">
+            Quên mật khẩu?
+          </span>
         </div>
       </Form>
     </div>
