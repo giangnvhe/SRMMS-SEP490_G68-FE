@@ -37,7 +37,7 @@ interface ProductResponse {
 
 export interface FormFields {
   name: string;
-  categoryId: number;
+  categoryId: number | undefined;
   pagination: { pageNumber: number; pageSize: number };
   pageNumber: number;
   pageSize: number;

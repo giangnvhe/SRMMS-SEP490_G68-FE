@@ -3,6 +3,9 @@ import { ProtectedRoute } from "./ProtectedRouter";
 import { lazy } from "react";
 import HomePage from "~/pages/HomePage";
 import TablesManagement from "~/pages/Admin/Tables";
+import AdminOfficer from "~/middleware/Admin";
+import ClientLayout from "~/layouts/ClientLayout";
+import MenuInfor from "~/pages/HomePage/MenuInfor";
 
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
@@ -19,16 +22,26 @@ const RouterComponent = () => {
       path: "/login",
     },
     {
-      element: <HomePage />,
-      path: "/home",
-    },
-    {
-      element: <HomePage />,
-      path: "/",
-    },
-    {
       path: "/logout",
       element: <Logout />,
+    },
+    {
+      path: "/",
+      element: <ClientLayout />,
+      children: [
+        {
+          element: <HomePage />,
+          path: "/home",
+        },
+        {
+          element: <HomePage />,
+          path: "/",
+        },
+        { 
+          element: <MenuInfor />,
+          path: "/thuc-don",
+        },
+      ],
     },
     {
       path: "/",
@@ -40,29 +53,48 @@ const RouterComponent = () => {
           children: [
             {
               path: "/admin/dashboard",
-              element: <Dashboard />,
+              element: (
+                <AdminOfficer>
+                  <Dashboard />
+                </AdminOfficer>
+              ),
             },
             {
               path: "/admin/employees",
-              element: <ListEmployee />,
+              element: (
+                <AdminOfficer>
+                  <ListEmployee />
+                </AdminOfficer>
+              ),
             },
             {
               path: "/admin/product",
-              element: <ListProduct />,
+              element: (
+                <AdminOfficer>
+                  <ListProduct />
+                </AdminOfficer>
+              ),
             },
             {
               path: "/admin/category",
-              element: <CategoryAdmin />,
+              element: (
+                <AdminOfficer>
+                  <CategoryAdmin />
+                </AdminOfficer>
+              ),
             },
             {
               path: "/admin/tables",
-              element: <TablesManagement />,
+              element: (
+                <AdminOfficer>
+                  <TablesManagement />
+                </AdminOfficer>
+              ),
             },
             {
               path: "/admin/logout",
               element: <Logout />,
             },
-            
           ],
         },
       ],
