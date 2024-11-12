@@ -9,7 +9,7 @@ const ClientLayout = () => {
     <div className="flex flex-col h-screen overflow-hidden">
       <Header />
       <div className="flex-grow overflow-y-auto overflow-x-hidden">
-        <div className="content-wrapper pt-[75px]">
+        <div className="content-wrapper pt-[85px] mb-5">
           <div className="body-layout">
             <Suspense fallback={<Spinner />}>
               <Outlet />

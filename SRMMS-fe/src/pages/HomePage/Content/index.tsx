@@ -5,9 +5,8 @@ import Grap2 from "./Grap2";
 import Grap3 from "./Grap3";
 import { useState } from "react";
 import { Button, Form, Modal } from "antd";
-import InputComponent from "~/components/InputComponent";
-import DatePickerComponent from "~/components/DatePickerComponent";
 import { MessageOutlined } from "@ant-design/icons";
+import BookingForm from "~/pages/Client/BookingTable/BookingForm";
 
 const cx = classNames.bind(styles);
 
@@ -51,53 +50,13 @@ const Content = () => {
         <Grap3 />
       </div>
       <Modal
-        title={
-          <span
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "24px",
-              fontWeight: "bold",
-              color: "#333",
-              textAlign: "center",
-              padding: "16px 0",
-            }}
-          >
-            Đặt Bàn
-          </span>
-        }
         visible={isModalVisible}
         onOk={handleOk}
         footer={null}
         onCancel={handleCancel}
+        width={900}
       >
-        <Form layout="vertical" form={form}>
-          <InputComponent
-            form={form}
-            name="name"
-            label="Họ Tên"
-            placeholder="Nhập tên của bạn"
-          />
-          <InputComponent
-            form={form}
-            name="phone"
-            label="Số Điện Thoại"
-            placeholder="Số điện thoại của bạn"
-          />
-          <InputComponent
-            form={form}
-            name="email"
-            label="Email"
-            placeholder="email của bạn"
-          />
-          <DatePickerComponent form={form} name="date" label="Chọn ngày" />
-          <div className="flex justify-end">
-            <Button type="default" className="font-bold bg-lime-500">
-              Đặt Bàn
-            </Button>
-          </div>
-        </Form>
+        <BookingForm />
       </Modal>
       <Button
         type="primary"
