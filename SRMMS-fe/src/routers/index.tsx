@@ -6,6 +6,9 @@ import TablesManagement from "~/pages/Admin/Tables";
 import AdminOfficer from "~/middleware/Admin";
 import ClientLayout from "~/layouts/ClientLayout";
 import MenuInfor from "~/pages/HomePage/MenuInfor";
+import BookingTable from "~/pages/Client/BookingTable";
+import InvoiceDialog from "~/pages/Invoice";
+import OrderList from "~/pages/Staff/Payment";
 
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
@@ -37,9 +40,13 @@ const RouterComponent = () => {
           element: <HomePage />,
           path: "/",
         },
-        { 
+        {
           element: <MenuInfor />,
           path: "/thuc-don",
+        },
+        {
+          element: <BookingTable />,
+          path: "/dat-ban",
         },
       ],
     },

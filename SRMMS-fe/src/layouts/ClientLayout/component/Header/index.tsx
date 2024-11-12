@@ -13,7 +13,7 @@ const items = [
   { key: "2", label: "Thực Đơn" },
   { key: "3", label: "Tin tức" },
   { key: "4", label: "Liên hệ" },
-  { key: "4", label: "Đặt bàn" },
+  { key: "5", label: "Đặt bàn" },
 ];
 
 const Header = () => {
@@ -55,7 +55,7 @@ const Header = () => {
         navigate("/lien-he");
         break;
       case "5":
-        navigate("/booking");
+        navigate("/dat-ban");
         break;
       default:
         break;
