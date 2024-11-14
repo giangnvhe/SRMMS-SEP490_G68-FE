@@ -1,25 +1,32 @@
-import { PlusCircleOutlined } from "@ant-design/icons";
-import { Card, Modal } from "antd";
-import React, { useState } from "react";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Card, Col, Modal, Row, Tooltip, Typography } from "antd";
+import { useState } from "react";
 import { useQuery } from "react-query";
-import ButtonComponent from "~/components/ButtonComponent";
+import { useNavigate } from "react-router-dom";
+import formatter from "~/common/utils/formatter";
 import { getTables, TableData } from "~/services/table";
-import AddTable from "./AddTable";
+import {
+  CONSTANT_TABLE,
+  getStatusColor,
+  HEIGHT_CONTENT_CONTAINER,
+  NOTIFICATION_TABLE,
+  TABLE_STATUS,
+} from "./components/const";
+import LargeTable from "./components/LargeTable";
+import MediumTable from "./components/MediumTable";
+import SmallTable from "./components/SmallTable";
 
-const TablesManagement: React.FC = () => {
-  const [openModal, setOpenModal] = useState(false);
-
-  const onCancel = () => {
-    setOpenModal(false);
-  };
-
- const {
+const TablesManagement = () => {
+  const navigate = useNavigate();
+  const [selectedTable, setSelectedTable] = useState<TableData | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
+  const {
     data: tableData,
     isLoading,
     isError,
     error,
     refetch,
-  } = useQuery<TableData[]>(["tables"], async () => { 
+  } = useQuery<TableData[]>(["tables"], async () => {
     const response = await getTables();
     return response.data;
   });
@@ -41,106 +48,164 @@ const TablesManagement: React.FC = () => {
     );
   }
 
+  const handleTableSelection = (tableName: string) => {
+    if (!tableData) return;
+    const chosenTable = tableData.find(
+      (table) => table.tableName === tableName
+    );
+
+    if (chosenTable) {
+      if (chosenTable.statusName === TABLE_STATUS.AVAILABLE) {
+        setSelectedTable(chosenTable);
+      } else {
+        let message = "";
+
+        switch (chosenTable.statusName) {
+          case TABLE_STATUS.BOOKED:
+            message = NOTIFICATION_TABLE.BOOKED;
+            Modal.warning({
+              title: "Table Status",
+              content: message,
+              style: { top: 20 },
+              okText: "Got it",
+            });
+            break;
+
+          case TABLE_STATUS.IN_USE:
+            message = NOTIFICATION_TABLE.IN_USE;
+            Modal.warning({
+              title: "Table Status",
+              content: message,
+              style: { top: 20 },
+              okText: "Got it",
+            });
+            break;
+
+          case TABLE_STATUS.UNDER_REPAIR:
+            message = NOTIFICATION_TABLE.UNDER_REPAIR;
+            Modal.error({
+              title: "Table Status",
+              content: message,
+              style: { top: 20 },
+              okText: "Got it",
+            });
+            break;
+
+          default:
+            Modal.info({
+              title: "Table Status",
+              content: "Status not recognized.",
+              style: { top: 20 },
+              okText: "Got it",
+            });
+        }
+      }
+    }
+  };
+
+  const handleStatusChange = (status: string) => {
+    setSelectedStatus(status);
+  };
+
+  const filteredTableData = tableData?.filter((table) => {
+    if (selectedStatus === "ALL") return true;
+    return table.statusName === selectedStatus;
+  });
+
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-10 bg-white p-6 rounded-2xl shadow-sm">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 tracking-tight">
-              Sơ đồ bàn
-            </h1>
-            <p className="text-gray-500 mt-1">
-              Quản lý và theo dõi trạng thái các bàn
-            </p>
-          </div>
-          <ButtonComponent
-            icon={<PlusCircleOutlined />}
-            onClick={() => setOpenModal(true)}
-            className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2"
-          >
-            Thêm Bàn Mới
-          </ButtonComponent>
+    <div className=" bg-gray-50 p-6">
+      <div className="text-3xl font-extrabold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
+        Quản Lý Bàn
+      </div>
+      <div className="mb-4 flex flex-wrap space-x-2 space-y-2 md:flex-nowrap md:space-y-0">
+        {["ALL", "Trống", "Đang sử dụng", "Đã đặt", "Đang sửa chữa"].map(
+          (status) => (
+            <button
+              key={status}
+              onClick={() => handleStatusChange(status)}
+              className={`w-full md:w-auto px-3 py-1 md:px-4 md:py-2 text-sm md:text-base font-semibold rounded-lg shadow-sm transition duration-200 ease-in-out
+              ${
+                selectedStatus === status
+                  ? "bg-[#08979C] text-white"
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-blue-100 hover:text-blue-700" // Default state styles
+              }
+            `}
+            >
+              {status}
+            </button>
+          )
+        )}
+      </div>
+      <div
+        className="p-4 bg-white shadow-md rounded-lg overflow-y-auto"
+        style={{ height: HEIGHT_CONTENT_CONTAINER }}
+      >
+        <Row gutter={[16, 16]}>
+          {filteredTableData && filteredTableData.length > 0 ? (
+            filteredTableData.map((table) => (
+              <Col xs={24} sm={12} md={8} key={table.tableId}>
+                <Card
+                  onClick={() => handleTableSelection(table.tableName)}
+                  className="flex flex-col justify-center items-center bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-200 ease-in-out cursor-pointer relative h-[200px]"
+                >
+                  <div>
+                    {table.tableOfPeople != null &&
+                      table.tableOfPeople <= 2 && <SmallTable table={table} />}
+                    {table.tableOfPeople != null &&
+                      table.tableOfPeople > 2 &&
+                      table.tableOfPeople <= 4 && <MediumTable table={table} />}
+                    {table.tableOfPeople != null &&
+                      table.tableOfPeople > 4 &&
+                      table.tableOfPeople <= 6 && <LargeTable table={table} />}
+                  </div>
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-2"
+                    style={{
+                      backgroundColor: getStatusColor(table.statusName),
+                    }}
+                  />
+                </Card>
+              </Col>
+            ))
+          ) : (
+            <div className="text-center w-full text-gray-500 text-lg">
+              No tables available
+            </div>
+          )}
+        </Row>
+      </div>
+      <div
+        style={{
+          marginTop: "20px",
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ display: "flex", gap: "16px" }}>
+          <Tooltip title={formatter(TABLE_STATUS.IN_USE)}>
+            <InfoCircleOutlined style={{ color: "red", fontSize: "18px" }} />
+          </Tooltip>
+          <Tooltip title={formatter(TABLE_STATUS.UNDER_REPAIR)}>
+            <InfoCircleOutlined style={{ color: "purple", fontSize: "18px" }} />
+          </Tooltip>
+          <Tooltip title={formatter(TABLE_STATUS.AVAILABLE)}>
+            <InfoCircleOutlined style={{ color: "green", fontSize: "18px" }} />
+          </Tooltip>
+          <Tooltip title={formatter(TABLE_STATUS.BOOKED)}>
+            <InfoCircleOutlined style={{ color: "orange", fontSize: "18px" }} />
+          </Tooltip>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tableData?.map((table) => (
-            <Card
-              key={table.tableId}
-              className={`cursor-pointer transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-xl overflow-hidden`}
-              style={{
-                backgroundColor:
-                  table.statusName === "Trống"
-                    ? "#dcfce7"
-                    : table.statusName === "Đang sử dụng"
-                    ? "#f3f4f6"
-                    : table.statusName === "Đã đặt"
-                    ? "#ffedd5"
-                    : table.statusName === "Đang sửa chữa"
-                    ? "#ef4444"
-                    : "white",
-              }}
-              styles={{
-                body: { padding: "1.5rem" },
-              }}
-            >
-              <div className="text-center">
-                <h3 className="text-xl font-semibold mb-3 text-gray-800">
-                  {table.tableName}
-                </h3>
-                {/* Trạng thái */}
-                <div className="flex justify-center">
-                  <span
-                    className={`px-6 py-2 rounded-full text-sm font-semibold shadow-sm ${
-                      table.statusName === "Trống"
-                        ? "bg-green-100 text-green-700 ring-1 ring-green-200"
-                        : table.statusName === "Đang sử dụng"
-                        ? "bg-gray-100 text-gray-700 ring-1 ring-gray-200"
-                        : table.statusName === "Đã đặt"
-                        ? "bg-orange-100 text-orange-700 ring-1 ring-orange-200"
-                        : table.statusName === "Đang sửa chữa"
-                        ? "bg-red-100 text-red-700 ring-1 ring-red-200"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {table.statusName}
-                  </span>
-                </div>
-                <div className="mt-4 py-2 px-4 bg-gray-50 rounded-lg">
-                  <p className="text-gray-600">
-                    <span className="font-medium text-gray-800">
-                      {table.tableOfPeople || 0}
-                    </span>{" "}
-                    chỗ ngồi
-                  </p>
-                </div>
-              </div>
-            </Card>
-          ))}
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <div style={{ gap: "16px", display: "flex", alignItems: "center" }}>
+            <Typography.Title level={4} style={{ margin: 0 }}>
+              {CONSTANT_TABLE.TABLE} {selectedTable?.tableName || "N/A"}
+            </Typography.Title>
+          </div>
         </div>
       </div>
-      <Modal
-        footer={null}
-        width={900}
-        title={
-          <span
-            style={{
-              fontSize: "24px",
-              fontWeight: "600",
-              color: "#fff",
-              background: "linear-gradient(90deg, #4A90E2, #50E3C2)",
-              padding: "10px 20px",
-              borderRadius: "8px",
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-              display: "inline-block",
-            }}
-          >
-            Thêm Bàn Mới
-          </span>
-        }
-        open={openModal}
-      >
-        <AddTable onCancel={onCancel} refetch={refetch} />
-      </Modal>
     </div>
   );
 };

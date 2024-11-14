@@ -34,5 +34,5 @@ export const CreateTable = async (
   data: RequestTable
 ): Promise<AxiosResponse<ResponseTable>> => {
   const result = await axiosInstance.post(getApi("api", "table/create"), data);
-  return result;
+  return result.data;
 };
