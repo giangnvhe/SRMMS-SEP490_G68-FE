@@ -184,10 +184,10 @@ const TablesManagement = () => {
         }}
       >
         <div style={{ display: "flex", gap: "16px" }}>
-          <Tooltip title={formatter(TABLE_STATUS.IN_USE)}>
+          <Tooltip title={formatter(TABLE_STATUS.UNDER_REPAIR)}>
             <InfoCircleOutlined style={{ color: "red", fontSize: "18px" }} />
           </Tooltip>
-          <Tooltip title={formatter(TABLE_STATUS.UNDER_REPAIR)}>
+          <Tooltip title={formatter(TABLE_STATUS.IN_USE)}>
             <InfoCircleOutlined style={{ color: "purple", fontSize: "18px" }} />
           </Tooltip>
           <Tooltip title={formatter(TABLE_STATUS.AVAILABLE)}>
