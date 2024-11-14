@@ -1,4 +1,4 @@
-import { Typography, Row, Col } from "antd";
+import { Typography } from "antd";
 import { TableData } from "~/services/table";
 
 interface IProps {

@@ -2,7 +2,6 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Card, Col, Modal, Row, Tooltip, Typography } from "antd";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
 import formatter from "~/common/utils/formatter";
 import { getTables, TableData } from "~/services/table";
 import {
@@ -17,7 +16,7 @@ import MediumTable from "./components/MediumTable";
 import SmallTable from "./components/SmallTable";
 
 const TablesManagement = () => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [selectedTable, setSelectedTable] = useState<TableData | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
   const {
@@ -127,7 +126,7 @@ const TablesManagement = () => {
               ${
                 selectedStatus === status
                   ? "bg-[#08979C] text-white"
-                  : "bg-white text-gray-700 border border-gray-300 hover:bg-blue-100 hover:text-blue-700" // Default state styles
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-blue-100 hover:text-blue-700" 
               }
             `}
             >
