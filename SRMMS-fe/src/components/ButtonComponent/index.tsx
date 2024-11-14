@@ -3,13 +3,12 @@ import { Button } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import classNames from "classnames/bind";
 import { FC, ReactNode, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import styles from "./index.module.scss";
 
 const cx = classNames.bind(styles);
 
 export interface IProps {
-  children?: string | JSX.Element;
+  children?: ReactNode;
   loading?: boolean;
   disabled?: boolean;
   className?: string;
