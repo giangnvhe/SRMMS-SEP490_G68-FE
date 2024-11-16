@@ -4,7 +4,6 @@ import AdminOfficer from "~/middleware/Admin";
 import { ProtectedRoute } from "./ProtectedRouter";
 import EmployeeLayout from "~/layouts/EmployeeLayout";
 import StaffOfficer from "~/middleware/Staff";
-import Payment from "~/pages/Staff/Payment";
 
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
@@ -20,6 +19,10 @@ const MenuClient = lazy(() => import("~/pages/Client/MenuClient"));
 const TablesManagement = lazy(() => import("~/pages/Admin/Tables"));
 const BookingTable = lazy(() => import("~/pages/Client/BookingTable"));
 const OrderTable = lazy(() => import("~/pages/Staff/OrderTable"));
+const QRCodeScreen = lazy(
+  () => import("~/pages/Admin/Tables/components/QRCode")
+);
+const Payment = lazy(() => import("~/pages/Staff/Payment"));
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
@@ -60,7 +63,7 @@ const RouterComponent = () => {
     // menuLayout
     {
       element: <MenuClient />,
-      path: "/menu-client",
+      path: "/menu-client/:id",
     },
     //Staff layout
     {
@@ -83,6 +86,14 @@ const RouterComponent = () => {
               element: (
                 <StaffOfficer>
                   <Payment />
+                </StaffOfficer>
+              ),
+            },
+            {
+              path: "/qr-code",
+              element: (
+                <StaffOfficer>
+                  <QRCodeScreen />
                 </StaffOfficer>
               ),
             },
