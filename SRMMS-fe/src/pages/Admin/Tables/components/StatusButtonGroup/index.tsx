@@ -50,6 +50,12 @@ const StatusButtonGroup = ({
           Thêm Bàn Mới
         </ButtonComponent>
         <ButtonComponent
+          onClick={() => navigate("/qr-code")}
+          className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2"
+        >
+          QR Code Bàn
+        </ButtonComponent>
+        <ButtonComponent
           className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2"
           onClick={() => navigate("/order-table")}
         >
