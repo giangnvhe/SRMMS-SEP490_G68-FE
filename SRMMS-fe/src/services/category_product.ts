@@ -21,7 +21,7 @@ interface NewCategoryResponse {
   data: CategoryResponse;
 }
 
-interface CategoryResponse {
+export interface CategoryResponse {
   data: CategoryData[];
 }
 
