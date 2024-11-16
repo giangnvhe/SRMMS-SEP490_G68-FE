@@ -1,26 +1,29 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ProtectedRoute } from "./ProtectedRouter";
 import { lazy } from "react";
-import HomePage from "~/pages/HomePage";
-import TablesManagement from "~/pages/Admin/Tables";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AdminOfficer from "~/middleware/Admin";
-import ClientLayout from "~/layouts/ClientLayout";
-import MenuInfor from "~/pages/HomePage/MenuInfor";
-import BookingTable from "~/pages/Client/BookingTable";
-import InvoiceDialog from "~/pages/Invoice";
-import OrderList from "~/pages/Staff/Payment";
-import MenuClient from "~/pages/Client/MenuClient";
+import { ProtectedRoute } from "./ProtectedRouter";
+import EmployeeLayout from "~/layouts/EmployeeLayout";
+import StaffOfficer from "~/middleware/Staff";
+import Payment from "~/pages/Staff/Payment";
 
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
+const ClientLayout = lazy(() => import("~/layouts/ClientLayout"));
 const Dashboard = lazy(() => import("~/pages/Dashboard"));
 const ListEmployee = lazy(() => import("~/pages/Admin/Employees"));
 const Logout = lazy(() => import("~/pages/Logout"));
 const ListProduct = lazy(() => import("~/pages/Admin/Products"));
 const CategoryAdmin = lazy(() => import("~/pages/Admin/Category"));
+const HomePage = lazy(() => import("~/pages/HomePage"));
+const MenuInfor = lazy(() => import("~/pages/HomePage/MenuInfor"));
+const MenuClient = lazy(() => import("~/pages/Client/MenuClient"));
+const TablesManagement = lazy(() => import("~/pages/Admin/Tables"));
+const BookingTable = lazy(() => import("~/pages/Client/BookingTable"));
+const OrderTable = lazy(() => import("~/pages/Staff/OrderTable"));
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
+    //Free layouts
     {
       element: <Login />,
       path: "/login",
@@ -29,6 +32,8 @@ const RouterComponent = () => {
       path: "/logout",
       element: <Logout />,
     },
+
+    //client Layout
     {
       path: "/",
       element: <ClientLayout />,
@@ -51,10 +56,42 @@ const RouterComponent = () => {
         },
       ],
     },
+
+    // menuLayout
     {
       element: <MenuClient />,
       path: "/menu-client",
     },
+    //Staff layout
+    {
+      path: "/",
+      element: <ProtectedRoute />,
+      children: [
+        {
+          element: <EmployeeLayout />,
+          children: [
+            {
+              path: "/order-table",
+              element: (
+                <StaffOfficer>
+                  <OrderTable />
+                </StaffOfficer>
+              ),
+            },
+            {
+              path: "/payment/:id",
+              element: (
+                <StaffOfficer>
+                  <Payment />
+                </StaffOfficer>
+              ),
+            },
+          ],
+        },
+      ],
+    },
+
+    // admin layout
     {
       path: "/",
       element: <ProtectedRoute />,

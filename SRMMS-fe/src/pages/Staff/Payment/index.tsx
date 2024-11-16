@@ -1,10 +1,18 @@
 import { Row, Col, Typography, Card, Table, Button, Divider } from "antd";
 import { TableOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { useParams } from "react-router-dom";
 
 const ORDER_HEIGHT_CONTAINER = "calc(100vh - 64px)";
 const ORDER_TABLE_HEIGHT = "calc(100vh - 64px - 64px - 64px - 150px)";
 
-const OrderList = () => {
+const getTableName = (tableId: number): string => {
+  return `Table ${tableId}`;
+};
+
+const Payment = () => {
+  const { tableId } = useParams<{ tableId: string }>();
+  const tableName = tableId ? getTableName(Number(tableId)) : "N/A";
+
   const data = [
     {
       key: "1",
@@ -157,14 +165,14 @@ const OrderList = () => {
 
   const CONSTANT = {
     order: "order",
-    table: "table",
+    table: "Bàn",
     time: "time",
     payableAmount: "payable amount",
     paymentMethod: "payment method",
     serviceCharge: "service charge",
     total: "total",
-    cancelOrder: "cancel order",
-    payNow: "pay now",
+    cancelOrder: "Hủy order",
+    payNow: "Thanh toán ngay",
     cash: "cash",
     card: "card",
     voucher: "voucher",
@@ -215,7 +223,7 @@ const OrderList = () => {
                 <div>
                   <TableOutlined style={{ marginRight: "8px" }} />
                   <Typography.Text style={{ marginRight: "16px" }}>
-                    {CONSTANT.table.toUpperCase()}
+                    {`TABLE: ${tableName.toUpperCase()}`}
                   </Typography.Text>
                 </div>
                 <div>
@@ -336,4 +344,4 @@ const OrderList = () => {
   );
 };
 
-export default OrderList;
+export default Payment;
