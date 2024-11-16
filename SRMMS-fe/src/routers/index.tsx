@@ -9,6 +9,7 @@ import MenuInfor from "~/pages/HomePage/MenuInfor";
 import BookingTable from "~/pages/Client/BookingTable";
 import InvoiceDialog from "~/pages/Invoice";
 import OrderList from "~/pages/Staff/Payment";
+import MenuClient from "~/pages/Client/MenuClient";
 
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
@@ -49,6 +50,10 @@ const RouterComponent = () => {
           path: "/dat-ban",
         },
       ],
+    },
+    {
+      element: <MenuClient />,
+      path: "/menu-client",
     },
     {
       path: "/",
