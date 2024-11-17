@@ -17,7 +17,7 @@ interface IProps {
   name: string;
   label?: string;
   rules?: Rule[];
-  type?: "password" | "search";
+  type?: "password" | "search" | "file";
   allowClear?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
@@ -32,7 +32,7 @@ interface IProps {
       source?: "clear" | "input";
     }
   ) => void;
-  form: FormInstance;
+  form?: FormInstance;
   prefix?: ReactNode;
 }
 
@@ -55,7 +55,7 @@ const InputComponent = ({
   form,
   prefix,
 }: IProps) => {
-  const value = form.getFieldValue(name);
+  const value = form?.getFieldValue(name);
 
   return (
     <Form.Item

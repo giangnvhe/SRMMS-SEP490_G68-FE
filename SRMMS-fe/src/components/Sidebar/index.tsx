@@ -1,5 +1,6 @@
 import {
   AppstoreOutlined,
+  FolderOpenOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ProductOutlined,
@@ -7,6 +8,9 @@ import {
   TeamOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
+import { faTh } from "@fortawesome/free-solid-svg-icons";
 import { Button, Menu, MenuProps } from "antd";
 import classNames from "classnames";
 import { useState } from "react";
@@ -29,23 +33,40 @@ const items: MenuItem[] = [
   },
   {
     key: "/admin/employees",
-    label: "Employee Management",
+    label: "Quản lý nhân viên",
     icon: <TeamOutlined />,
   },
   {
     key: "/admin/products",
-    label: "Product Management",
+    label: "Quản lý món",
     icon: <ProductOutlined />,
+    children: [
+      {
+        key: "/admin/product",
+        label: "Danh sách món",
+        icon: <FolderOpenOutlined />,
+      },
+      {
+        key: "/admin/category",
+        label: "Danh sách loại món",
+        icon: <ProductOutlined />,
+      },
+    ],
   },
   {
-    key: "/admin/table",
-    label: "Table Management",
+    key: "/admin/tables",
+    label: "Quản lý bàn",
     icon: <TableOutlined />,
   },
   {
-    key: "/admin/role",
-    label: "Role Management",
-    icon: <UserAddOutlined />,
+    key: "/admin/combo",
+    label: "Quản lý combo",
+    icon: <FontAwesomeIcon icon={faTh} />,
+  },
+  {
+    key: "/admin/order",
+    label: "Quản lý Order",
+    icon: <FontAwesomeIcon icon={faClipboardList} />,
   },
 ];
 

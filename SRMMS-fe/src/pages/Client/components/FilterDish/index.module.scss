@@ -1,0 +1,49 @@
+/* Custom tabs container */
+.tabsNav {
+  display: flex;
+  flex-wrap: wrap; /* Allows the tabs to wrap on smaller screens */
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  padding: 8px;
+
+  /* Styling for the tab element */
+  & :global(.tab) {
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    border-radius: 8px;
+    padding: 10px 20px;
+    white-space: nowrap; /* Prevents tab names from wrapping */
+    text-overflow: ellipsis; /* Adds "..." for long names */
+    overflow: hidden; /* Hides overflow content */
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .tabsNav {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tab {
+      font-size: 14px;
+      padding: 12px 20px;
+      width: 100%; 
+      text-align: center;
+    }
+
+   
+    .tab:hover {
+      background-color: #f0f0f0;
+    }
+  }
+
+  & :global(.tabsContent) {
+    padding: 16px;
+    background-color: #f9f9f9;
+    margin-top: 16px;
+  }
+}
