@@ -23,6 +23,9 @@ const QRCodeScreen = lazy(
   () => import("~/pages/Admin/Tables/components/QRCode")
 );
 const Payment = lazy(() => import("~/pages/Staff/Payment"));
+const ProductDetail = lazy(
+  () => import("~/pages/HomePage/components/ProductDetail")
+);
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
@@ -56,6 +59,10 @@ const RouterComponent = () => {
         {
           element: <BookingTable />,
           path: "/dat-ban",
+        },
+        {
+          element: <ProductDetail />,
+          path: "/product/:id",
         },
       ],
     },

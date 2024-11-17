@@ -4,9 +4,7 @@ export const formatPrice = (number: number) => {
 };
 
 export const formatVND = (value?: number) => {
-  if (value === undefined) return "0 ₫"; 
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(value);
+  if (value === undefined) return "0 VNĐ";
+  const formattedValue = new Intl.NumberFormat("vi-VN").format(value);
+  return `${formattedValue} VNĐ`;
 };
