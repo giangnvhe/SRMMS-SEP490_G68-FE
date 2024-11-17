@@ -57,6 +57,8 @@ const MenuClient = () => {
           pageNumber: 1,
           pageSize: 10,
           totalProducts: 0,
+          minPrice,
+          maxPrice,
         });
         const filteredProducts = response.data.products.filter(
           (product) => product.price >= minPrice && product.price <= maxPrice
@@ -94,7 +96,6 @@ const MenuClient = () => {
   };
 
   const handleCheckout = () => {
-    // Xử lý logic thanh toán ở đây
     message.success("Chức năng thanh toán đang được phát triển!");
   };
 

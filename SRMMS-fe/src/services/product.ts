@@ -42,6 +42,8 @@ export interface FormFields {
   pageNumber: number;
   pageSize: number;
   totalProducts: number;
+  minPrice: number;
+  maxPrice: number;
 }
 
 interface NewProductResponse {
