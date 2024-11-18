@@ -11,7 +11,6 @@ const getTableName = (tableId: number): string => {
 
 const Payment = () => {
   const { tableId } = useParams<{ tableId: string }>();
-  const tableName = tableId ? getTableName(Number(tableId)) : "N/A";
 
   const data = [
     {
@@ -223,7 +222,7 @@ const Payment = () => {
                 <div>
                   <TableOutlined style={{ marginRight: "8px" }} />
                   <Typography.Text style={{ marginRight: "16px" }}>
-                    {`TABLE: ${tableName.toUpperCase()}`}
+                    {`TABLE: ${tableId}`}
                   </Typography.Text>
                 </div>
                 <div>
