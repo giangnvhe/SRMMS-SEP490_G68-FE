@@ -84,7 +84,7 @@ const TableProduct = ({
             <InputComponent
               name="name"
               form={form}
-              placeholder="Tìm kiếm theo name"
+              placeholder="Tìm kiếm theo tên"
             />
           </Col>
           <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
@@ -92,7 +92,7 @@ const TableProduct = ({
               name="categoryId"
               options={category || []}
               loading={isLoading}
-              placeholder="Tìm kiếm theo category"
+              placeholder="Tìm kiếm theo danh mục"
             />
           </Col>
           <Col sm={{ span: 4 }} xs={{ span: 24 }}>

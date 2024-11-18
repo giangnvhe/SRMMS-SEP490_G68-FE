@@ -7,7 +7,7 @@ export const TABLE_SIZE = {
 export const tableCategories = [
   { id: 0, displayName: "All", statusValue: "ALL" },
   { id: 1, displayName: "Đang sử dụng", statusValue: "Đang sử dụng" },
-  { id: 2, displayName: "Đã đặt", statusValue: "Đã đặt" },
+  { id: 2, displayName: "Đã đặt bàn", statusValue: "Đã đặt bàn" },
   { id: 3, displayName: "Trống", statusValue: "Trống" },
   { id: 4, displayName: "Đang sửa chữa", statusValue: "Đang sửa chữa" },
 ];

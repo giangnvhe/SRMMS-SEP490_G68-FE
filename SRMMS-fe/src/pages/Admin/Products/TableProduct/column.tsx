@@ -21,16 +21,9 @@ function UseColumn({ onSelected, onOk }: IProps) {
       align: "center",
       width: 20,
     },
+
     {
-      title: "Product Name",
-      dataIndex: "productName",
-      width: 150,
-      render: (name: string) => (
-        <div className="truncate text-sm text-gray-700">{name}</div>
-      ),
-    },
-    {
-      title: "Image",
+      title: "Hình Ảnh",
       dataIndex: "image",
       align: "center",
       width: 100,
@@ -63,22 +56,30 @@ function UseColumn({ onSelected, onOk }: IProps) {
         </>
       ),
     },
+    {
+      title: "Tên Món Ăn",
+      dataIndex: "productName",
+      width: 100,
+      render: (name: string) => (
+        <div className="truncate text-sm text-gray-700">{name}</div>
+      ),
+    },
 
     {
-      title: "Category",
+      title: "Danh Mục",
       dataIndex: "category",
       align: "center",
-      width: 120,
+      width: 80,
     },
     {
-      title: "Price",
+      title: "Giá",
       dataIndex: "price",
       align: "left",
       width: 100,
       render: (price: number) => `${price.toFixed(2)} VNĐ`,
     },
     {
-      title: "Action",
+      title: "Hành Động",
       width: 50,
       fixed: "right",
       align: "center",

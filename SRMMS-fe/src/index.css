@@ -5,3 +5,42 @@
 body {
   overflow: hidden;
 }
+::-webkit-scrollbar {
+  width: 8px; /* Adjust the width */
+  height: 8px; /* Adjust the height */
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    90deg,
+    #b0b0b0,
+    #d0d0d0
+  ); /* Gradient in gray tones for the thumb */
+  border-radius: 4px; /* Fully rounded ends */
+}
+
+/* Hover effect for the scrollbar thumb */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    90deg,
+    #d0d0d0,
+    #b0b0b0
+  ); /* Inverted gradient on hover */
+}
+
+/* Customize the scrollbar track */
+::-webkit-scrollbar-track {
+  background: #e8e8e8; /* Light gray for the track */
+  border-radius: 50px; /* Match the thumb's rounded style */
+}
+
+/* Add smooth scrolling behavior */
+html {
+  scroll-behavior: smooth; /* Smooth scrolling effect */
+}
+
+/* Styling for non-webkit browsers */
+* {
+  scrollbar-width: thin; /* Thin scrollbar */
+  scrollbar-color: #b0b0b0 #e8e8e8; /* Gray tones for thumb and track */
+}
