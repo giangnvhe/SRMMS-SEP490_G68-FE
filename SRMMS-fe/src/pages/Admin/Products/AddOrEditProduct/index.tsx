@@ -191,7 +191,7 @@ const AddOrEditProduct = ({
           <div className="space-y-4">
             <InputComponent
               name="ProductName"
-              label="Product Name"
+              label="Tên Món Ăn"
               rules={[
                 {
                   required: true,
@@ -203,7 +203,7 @@ const AddOrEditProduct = ({
             />
             <InputComponent
               name="Price"
-              label="Price"
+              label="Giá"
               form={form}
               rules={[
                 {
@@ -221,7 +221,7 @@ const AddOrEditProduct = ({
             />
             <SelectComponent
               name="Category"
-              label="Category"
+              label="Danh Mục"
               rules={[
                 {
                   required: true,
@@ -245,7 +245,7 @@ const AddOrEditProduct = ({
             />
             <UploadComponent
               name="Image"
-              label="Image"
+              label="Hình Ảnh"
               form={form}
               rules={[
                 {
@@ -256,7 +256,7 @@ const AddOrEditProduct = ({
               onChange={handleFileChange}
             />
             <TextAreaComponent
-              label="Description"
+              label="Mô Tả"
               name="Description"
               rules={[
                 {
@@ -270,10 +270,10 @@ const AddOrEditProduct = ({
             {isEditProduct && (
               <SwitchComponent
                 name="Status"
-                label="Status"
+                label="Trạng Thái"
                 form={form}
-                checkedChildren="Active"
-                unCheckedChildren="Inactive"
+                checkedChildren="Còn hàng"
+                unCheckedChildren="Hết hàng"
               />
             )}
           </div>

@@ -1,16 +1,14 @@
-import { Card, Col, Row, Spin, Input, Typography, Button, Space } from "antd";
+import { Input, Spin, Typography } from "antd";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import {
-  getStatusColor,
-  HEIGHT_CONTENT_CONTAINER,
-} from "~/pages/Admin/Tables/components/const";
-import LargeTable from "~/pages/Admin/Tables/components/LargeTable";
-import MediumTable from "~/pages/Admin/Tables/components/MediumTable";
-import SmallTable from "~/pages/Admin/Tables/components/SmallTable";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "~/context/authProvider";
+import { HEIGHT_CONTENT_CONTAINER } from "~/pages/Admin/Tables/components/const";
 import { getTables, TableData } from "~/services/table";
 import FooterTableOrder from "./components/FooterTableOrder";
-import { useNavigate } from "react-router-dom";
+import ListTableOrder from "./components/ListTableOrder";
+import { permissionObject } from "~/common/const/permission";
+import ButtonComponent from "~/components/ButtonComponent";
 
 const { Search } = Input;
 const { Title } = Typography;
@@ -19,6 +17,7 @@ const OrderTable = () => {
   const navigate = useNavigate();
   const [selectedTable, setSelectedTable] = useState<TableData | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const { user } = useAuth();
 
   const {
     data: tableData,
@@ -79,57 +78,35 @@ const OrderTable = () => {
           <Title level={2} className="text-center">
             Thanh toán bàn
           </Title>
-          <Search
-            placeholder="Tìm bàn theo tên..."
-            allowClear
-            onSearch={handleSearch}
-            onChange={(e) => handleSearch(e.target.value)}
-            style={{
-              width: "250px", // Đặt chiều rộng ô tìm kiếm
-              borderRadius: "8px",
-              padding: "8px",
-            }}
-            className="bg-gray-100 shadow-inner"
-          />
+          <div className="flex gap-2 justify-center items-center">
+            <Search
+              placeholder="Tìm bàn theo tên..."
+              allowClear
+              onSearch={handleSearch}
+              onChange={(e) => handleSearch(e.target.value)}
+              style={{
+                width: "250px", // Đặt chiều rộng ô tìm kiếm
+                borderRadius: "8px",
+                padding: "8px",
+              }}
+              className="bg-gray-100 shadow-inner"
+            />
+            {user?.roleName === permissionObject.ADMIN && (
+              <ButtonComponent btnType="back" onClick={() => navigate(-1)}>
+                Back
+              </ButtonComponent>
+            )}
+          </div>
         </div>
       </div>
       <div
         className="p-4 bg-white shadow-md rounded-lg overflow-y-auto"
         style={{ height: HEIGHT_CONTENT_CONTAINER }}
       >
-        <Row gutter={[16, 16]}>
-          {filteredTables.length > 0 ? (
-            filteredTables.map((table) => (
-              <Col xs={24} sm={12} md={8} lg={6} key={table.tableId}>
-                <Card
-                  onClick={() => handleTableSelection(table.tableName)}
-                  className="flex flex-col justify-center items-center bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-200 ease-in-out cursor-pointer relative h-[200px]"
-                >
-                  <div>
-                    {table.tableOfPeople != null &&
-                      table.tableOfPeople <= 2 && <SmallTable table={table} />}
-                    {table.tableOfPeople != null &&
-                      table.tableOfPeople > 2 &&
-                      table.tableOfPeople <= 4 && <MediumTable table={table} />}
-                    {table.tableOfPeople != null &&
-                      table.tableOfPeople > 4 &&
-                      table.tableOfPeople <= 6 && <LargeTable table={table} />}
-                  </div>
-                  <div
-                    className="absolute bottom-0 left-0 right-0 h-2"
-                    style={{
-                      backgroundColor: getStatusColor(table.statusName),
-                    }}
-                  />
-                </Card>
-              </Col>
-            ))
-          ) : (
-            <div className="text-center w-full text-gray-500 text-lg">
-              No tables available
-            </div>
-          )}
-        </Row>
+        <ListTableOrder
+          table={filteredTables}
+          onSelect={handleTableSelection}
+        />
       </div>
       <FooterTableOrder
         selectedTable={selectedTable}

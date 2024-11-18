@@ -96,14 +96,6 @@ const RouterComponent = () => {
                 </StaffOfficer>
               ),
             },
-            {
-              path: "/qr-code",
-              element: (
-                <StaffOfficer>
-                  <QRCodeScreen />
-                </StaffOfficer>
-              ),
-            },
           ],
         },
       ],
@@ -116,7 +108,7 @@ const RouterComponent = () => {
       children: [
         {
           element: <AdminLayout />,
-          path: "/admin",
+          path: "/",
           children: [
             {
               path: "/admin/dashboard",
@@ -161,6 +153,14 @@ const RouterComponent = () => {
             {
               path: "/admin/logout",
               element: <Logout />,
+            },
+            {
+              path: "/qr-code",
+              element: (
+                <StaffOfficer>
+                  <QRCodeScreen />
+                </StaffOfficer>
+              ),
             },
           ],
         },

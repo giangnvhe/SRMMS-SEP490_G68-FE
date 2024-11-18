@@ -59,7 +59,7 @@ const TablesManagement = () => {
           case TABLE_STATUS.BOOKED:
             message = NOTIFICATION_TABLE.BOOKED;
             Modal.warning({
-              title: "Table Status",
+              title: "Cảnh Báo",
               content: message,
               style: { top: 20 },
               okText: "Got it",
@@ -69,7 +69,7 @@ const TablesManagement = () => {
           case TABLE_STATUS.IN_USE:
             message = NOTIFICATION_TABLE.IN_USE;
             Modal.warning({
-              title: "Table Status",
+              title: "Cảnh Báo",
               content: message,
               style: { top: 20 },
               okText: "Got it",
@@ -79,7 +79,7 @@ const TablesManagement = () => {
           case TABLE_STATUS.UNDER_REPAIR:
             message = NOTIFICATION_TABLE.UNDER_REPAIR;
             Modal.error({
-              title: "Table Status",
+              title: "Cảnh Báo",
               content: message,
               style: { top: 20 },
               okText: "Got it",
