@@ -4,6 +4,7 @@ import AdminOfficer from "~/middleware/Admin";
 import { ProtectedRoute } from "./ProtectedRouter";
 import EmployeeLayout from "~/layouts/EmployeeLayout";
 import StaffOfficer from "~/middleware/Staff";
+import InvoiceDialog from "~/pages/Invoice";
 
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
@@ -38,7 +39,7 @@ const RouterComponent = () => {
       path: "/logout",
       element: <Logout />,
     },
-
+    
     //client Layout
     {
       path: "/",
@@ -71,6 +72,10 @@ const RouterComponent = () => {
     {
       element: <MenuClient />,
       path: "/menu-client/:id",
+    },
+    {
+      element: <InvoiceDialog />,
+      path: "/invoice",
     },
     //Staff layout
     {

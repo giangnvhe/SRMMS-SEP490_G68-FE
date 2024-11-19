@@ -1,4 +1,5 @@
 import { Input, Row, Col } from "antd";
+import InputComponent from "~/components/InputComponent";
 
 interface IProps {
   minPrice: number;
@@ -14,11 +15,12 @@ const FilterPrice = ({
   onMaxPriceChange,
 }: IProps) => {
   return (
-    <div className="mb-6 w-full max-w-md flex gap-2 mt-2">
-      <h3 className="text-sm font-medium text-gray-800 mb-3 flex items-center">
-        GIá:{" "}
-      </h3>
+    <div className="mb-6 w-full flex gap-2 mt-2">
+     
       <Row gutter={[12, 12]} className="flex items-center">
+        <h3 className="text-sm font-medium text-gray-800 mb-3 flex items-center">
+          GIá:{" "}
+        </h3>
         <Col xs={10} sm={8} className="w-full">
           <Input
             type="number"
