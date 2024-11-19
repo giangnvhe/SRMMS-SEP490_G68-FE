@@ -5,13 +5,8 @@ import { useParams } from "react-router-dom";
 const ORDER_HEIGHT_CONTAINER = "calc(100vh - 64px)";
 const ORDER_TABLE_HEIGHT = "calc(100vh - 64px - 64px - 64px - 150px)";
 
-const getTableName = (tableId: number): string => {
-  return `Table ${tableId}`;
-};
-
 const Payment = () => {
-  const { tableId } = useParams<{ tableId: string }>();
-
+  const { id } = useParams();
   const data = [
     {
       key: "1",
@@ -222,7 +217,7 @@ const Payment = () => {
                 <div>
                   <TableOutlined style={{ marginRight: "8px" }} />
                   <Typography.Text style={{ marginRight: "16px" }}>
-                    {`TABLE: ${tableId}`}
+                    {`Bàn: ${id}`}
                   </Typography.Text>
                 </div>
                 <div>
