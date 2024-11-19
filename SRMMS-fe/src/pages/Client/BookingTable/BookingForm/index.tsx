@@ -6,38 +6,60 @@ import {
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  TimePicker
-} from "antd";
+import { Button, DatePicker, Form, Input, InputNumber, TimePicker } from "antd";
+import { AxiosError, AxiosResponse } from "axios";
 import moment from "moment";
+import { useMutation } from "react-query";
+import ButtonComponent from "~/components/ButtonComponent";
+import DatePickerComponent from "~/components/DatePickerComponent";
+import InputComponent from "~/components/InputComponent";
+import useNotification from "~/hooks/useNotification";
+import { Booking, BookingRequest } from "~/services/booking";
 
 const BookingForm = () => {
   const [form] = Form.useForm();
+  const { successMessage, errorMessage } = useNotification();
 
-  const onFinish = (values: any) => {
-    console.log("Booking details:", values);
-    // Handle submission, e.g., send data to an API
+  const bookingMutation = useMutation(Booking, {
+    onSuccess: (success: AxiosResponse<{ message: string }>) => {
+      successMessage({
+        description: success?.data?.message || "Đã đặt bàn thành công",
+      });
+      form.resetFields();
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      errorMessage({
+        description:
+          (error as AxiosError).message ||
+          "Đã có lỗi xảy ra, Đặt bàn thất bại!!",
+      });
+    },
+  });
+
+  const onFinish = (values: {
+    nameBooking: string;
+    phoneBooking: string;
+    dayBooking: moment.Moment;
+    hourBooking: moment.Moment;
+    numberOfPeople: number;
+  }) => {
+    const bookingData: BookingRequest = {
+      nameBooking: values.nameBooking,
+      phoneBooking: values.phoneBooking,
+      dayBooking: values.dayBooking,
+      hourBooking: values.hourBooking,
+      numberOfPeople: values.numberOfPeople,
+    };
+    console.log("🚀 ~ BookingForm ~ bookingData:", bookingData);
+    bookingMutation.mutate(bookingData);
   };
 
   return (
-    <div
-      style={{
-        maxWidth: 600,
-        margin: "auto",
-        padding: "20px",
-        background: "#f7f9fc",
-        borderRadius: "8px",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-      }}
-    >
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center border-b-2 border-gray-300 pb-2">
-        Đặt Bàn
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">
+        Đặt Bàn Ngay
       </h2>
+
       <Form
         form={form}
         layout="vertical"
@@ -45,52 +67,39 @@ const BookingForm = () => {
         initialValues={{
           date: moment(),
         }}
+        className="space-y-4"
       >
-        <Form.Item
-          label="Họ tên"
-          name="name"
+        <InputComponent
+          label="Họ và Tên"
+          name="nameBooking"
+          placeholder="Nhập họ tên"
+          form={form}
           rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
-          tooltip="Nhập họ tên của bạn"
-        >
-          <Input placeholder="Nhập họ tên" prefix={<UserOutlined />} />
-        </Form.Item>
-
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            { required: true, message: "Vui lòng nhập email!" },
-            { type: "email", message: "Email không hợp lệ!" },
-          ]}
-          tooltip="Nhập địa chỉ email của bạn"
-        >
-          <Input placeholder="Nhập email" prefix={<MailOutlined />} />
-        </Form.Item>
-
-        <Form.Item
+          prefix={<UserOutlined />}
+        />
+        <InputComponent
           label="Số điện thoại"
-          name="phone"
+          name="phoneBooking"
+          placeholder="Nhập số điện thoại"
           rules={[
             { required: true, message: "Vui lòng nhập số điện thoại!" },
             { pattern: /^\d+$/, message: "Số điện thoại không hợp lệ!" },
           ]}
-          tooltip="Nhập số điện thoại của bạn"
-        >
-          <Input placeholder="Nhập số điện thoại" prefix={<PhoneOutlined />} />
-        </Form.Item>
+          prefix={<PhoneOutlined />}
+        />
 
-        <Form.Item
+        <DatePickerComponent
           label="Ngày"
-          name="date"
+          name="dayBooking"
+          form={form}
           rules={[{ required: true, message: "Vui lòng chọn ngày!" }]}
-          tooltip="Chọn ngày đặt bàn"
-        >
-          <DatePicker style={{ width: "100%" }} prefix={<CalendarOutlined />} />
-        </Form.Item>
+          style={{ width: "100%" }}
+          prefix={<CalendarOutlined />}
+        />
 
         <Form.Item
           label="Thời gian"
-          name="time"
+          name="hourBooking"
           rules={[{ required: true, message: "Vui lòng chọn thời gian!" }]}
           tooltip="Chọn giờ đặt bàn"
         >
@@ -103,7 +112,7 @@ const BookingForm = () => {
 
         <Form.Item
           label="Số lượng người"
-          name="people"
+          name="numberOfPeople"
           rules={[{ required: true, message: "Vui lòng nhập số lượng người!" }]}
           tooltip="Nhập số lượng người tham gia"
         >
@@ -116,7 +125,7 @@ const BookingForm = () => {
           />
         </Form.Item>
 
-        <Form.Item>
+        {/* <Form.Item>
           <Button
             type="primary"
             htmlType="submit"
@@ -129,7 +138,8 @@ const BookingForm = () => {
           >
             Đặt Bàn
           </Button>
-        </Form.Item>
+        </Form.Item> */}
+        <ButtonComponent htmlType="submit" className="w-full">Xác Nhận Đặt Bàn</ButtonComponent>
       </Form>
     </div>
   );
