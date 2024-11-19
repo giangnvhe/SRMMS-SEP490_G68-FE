@@ -11,6 +11,7 @@ export interface ProductData {
   description: string;
   price: number;
   category: string;
+  quantity: number;
   image: string;
   calories: string;
   status: boolean;
