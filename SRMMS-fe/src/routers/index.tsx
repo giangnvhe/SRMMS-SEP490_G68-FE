@@ -1,14 +1,15 @@
 import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AdminOfficer from "~/middleware/Admin";
 import { ProtectedRoute } from "./ProtectedRouter";
-import EmployeeLayout from "~/layouts/EmployeeLayout";
-import StaffOfficer from "~/middleware/Staff";
-import InvoiceDialog from "~/pages/Invoice";
+import ClientLayout from "~/layouts/ClientLayout";
 
+const AdminOfficer = lazy(() => import("~/middleware/Admin"));
+const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
+const StaffOfficer = lazy(() => import("~/middleware/Staff"));
+const InvoiceDialog = lazy(() => import("~/pages/Invoice"));
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
-const ClientLayout = lazy(() => import("~/layouts/ClientLayout"));
+const PublicLayout = lazy(() => import("~/layouts/PublicLayout"));
 const Dashboard = lazy(() => import("~/pages/Dashboard"));
 const ListEmployee = lazy(() => import("~/pages/Admin/Employees"));
 const Logout = lazy(() => import("~/pages/Logout"));
@@ -39,11 +40,11 @@ const RouterComponent = () => {
       path: "/logout",
       element: <Logout />,
     },
-    
-    //client Layout
+
+    //Public Layout
     {
       path: "/",
-      element: <ClientLayout />,
+      element: <PublicLayout />,
       children: [
         {
           element: <HomePage />,
@@ -68,14 +69,31 @@ const RouterComponent = () => {
       ],
     },
 
-    // menuLayout
+    //Client Layout
+
     {
-      element: <MenuClient />,
-      path: "/menu-client/:id",
-    },
-    {
-      element: <InvoiceDialog />,
-      path: "/invoice",
+      path: "/",
+      element: <ClientLayout />,
+      children: [
+        {
+          element: <MenuClient />,
+          path: "/menu-client/:id",
+        },
+        {
+          path: "/",
+          element: <ProtectedRoute />,
+          children: [
+            {
+              element: (
+                <StaffOfficer>
+                  <InvoiceDialog />
+                </StaffOfficer>
+              ),
+              path: "/invoice",
+            },
+          ],
+        },
+      ],
     },
     //Staff layout
     {

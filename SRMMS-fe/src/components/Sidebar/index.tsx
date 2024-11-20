@@ -5,12 +5,10 @@ import {
   MenuUnfoldOutlined,
   ProductOutlined,
   TableOutlined,
-  TeamOutlined,
-  UserAddOutlined,
+  TeamOutlined
 } from "@ant-design/icons";
+import { faClipboardList, faTh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
-import { faTh } from "@fortawesome/free-solid-svg-icons";
 import { Button, Menu, MenuProps } from "antd";
 import classNames from "classnames";
 import { useState } from "react";

@@ -1,35 +1,45 @@
 import { Modal, Spin } from "antd";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { getTables, TableData } from "~/services/table";
-import {
-  HEIGHT_CONTENT_CONTAINER,
-  NOTIFICATION_TABLE,
-  TABLE_STATUS,
-} from "./components/const";
+import { getTables, TableData, TableResponse } from "~/services/table";
+import { HEIGHT_CONTENT_CONTAINER } from "./components/const";
 import FooterTable from "./components/FooterTable";
 import ListTable from "./components/ListTable";
 import StatusButtonGroup from "./components/StatusButtonGroup";
+import AddTable from "./AddTable";
 
 const TablesManagement = () => {
-
-  const [selectedTable, setSelectedTable] = useState<TableData | null>(null);
+  const [selectedTable, setSelectedTable] = useState<TableData | undefined>(
+    undefined
+  );
   const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
+  const [openModal, setOpenModal] = useState(false);
+
+  const onCancel = () => {
+    setOpenModal(false);
+  };
+
+  const onSelected = (id: TableData | undefined) => {
+    setSelectedTable(id);
+    setOpenModal(true);
+  };
+
   const {
-    data: tableData,
+    data: tableResponse,
     isLoading,
     isError,
     error,
     refetch,
-  } = useQuery<TableData[]>(["tables"], async () => {
-    const response = await getTables();
-    return response.data;
+  } = useQuery<TableResponse>(["tables"], async () => {
+    return await getTables();
   });
+
+  const tableData = tableResponse?.data || [];
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Spin size="large" tip="Loading..." />
+        <Spin size="large" />
       </div>
     );
   }
@@ -50,50 +60,8 @@ const TablesManagement = () => {
     );
 
     if (chosenTable) {
-      if (chosenTable.statusName === TABLE_STATUS.AVAILABLE) {
+      if (chosenTable.statusName) {
         setSelectedTable(chosenTable);
-      } else {
-        let message = "";
-
-        switch (chosenTable.statusName) {
-          case TABLE_STATUS.BOOKED:
-            message = NOTIFICATION_TABLE.BOOKED;
-            Modal.warning({
-              title: "Cảnh Báo",
-              content: message,
-              style: { top: 20 },
-              okText: "Got it",
-            });
-            break;
-
-          case TABLE_STATUS.IN_USE:
-            message = NOTIFICATION_TABLE.IN_USE;
-            Modal.warning({
-              title: "Cảnh Báo",
-              content: message,
-              style: { top: 20 },
-              okText: "Got it",
-            });
-            break;
-
-          case TABLE_STATUS.UNDER_REPAIR:
-            message = NOTIFICATION_TABLE.UNDER_REPAIR;
-            Modal.error({
-              title: "Cảnh Báo",
-              content: message,
-              style: { top: 20 },
-              okText: "Got it",
-            });
-            break;
-
-          default:
-            Modal.info({
-              title: "Table Status",
-              content: "Status not recognized.",
-              style: { top: 20 },
-              okText: "Got it",
-            });
-        }
       }
     }
   };
@@ -115,7 +83,9 @@ const TablesManagement = () => {
       <StatusButtonGroup
         selectedStatus={selectedStatus}
         onStatusChange={setSelectedStatus}
-        refetch = {refetch}
+        refetch={refetch}
+        setOpenModal={setOpenModal}
+        setSelectedTable={setSelectedTable}
       />
       <div
         className="p-4 bg-white shadow-md rounded-lg overflow-y-auto"
@@ -126,7 +96,39 @@ const TablesManagement = () => {
           onSelect={handleTableSelection}
         />
       </div>
-      <FooterTable selectedTable={selectedTable} />
+      <FooterTable
+        selectedTable={selectedTable}
+        refetch={refetch}
+        onSelected={onSelected}
+      />
+      <Modal
+        footer={null}
+        width={900}
+        onCancel={onCancel}
+        title={
+          <span
+            style={{
+              fontSize: "24px",
+              fontWeight: "600",
+              color: "#fff",
+              background: "linear-gradient(90deg, #4A90E2, #50E3C2)",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+              display: "inline-block",
+            }}
+          >
+            {selectedTable === undefined ? "✨ Thêm Bàn Mới" : "🛠️ Chỉnh Sửa"}
+          </span>
+        }
+        open={openModal}
+      >
+        <AddTable
+          refetch={refetch}
+          onCancel={onCancel}
+          tableData={selectedTable}
+        />
+      </Modal>
     </div>
   );
 };
