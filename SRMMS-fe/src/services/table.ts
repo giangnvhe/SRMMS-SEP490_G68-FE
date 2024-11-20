@@ -11,6 +11,14 @@ export interface TableData {
   tableOfPeople: number | null;
 }
 
+export interface TableStatusData {
+  statusId: number;
+  statusName: string;
+}
+
+export interface TableStatusResponse {
+  data: TableStatusData[];
+}
 export interface TableResponse {
   data: TableData[];
 }
@@ -58,4 +66,9 @@ export const updateTable = async (id: number, tableData: TableRequest) => {
     tableData
   );
   return result.data;
+};
+
+export const getListStatus = async (): Promise<TableStatusResponse> => {
+  const result = await axiosInstance.get(getApi("api", "status/list"));
+  return result;
 };
