@@ -1,96 +1,111 @@
-import CardDashboard from "./CardDashboard";
+import { useEffect, useState } from "react";
+import { Row, Col, Button, Divider } from "antd";
 import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ChartOptions,
-} from "chart.js";
-import { _DeepPartialObject } from "node_modules/chart.js/dist/types/utils";
-import { Bar, Doughnut } from "react-chartjs-2";
-import styles from "./index.module.scss";
-import classNames from "classnames";
-
-const cx = classNames.bind(styles);
-
-// Register Chart.js components
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title,
-  CategoryScale,
-  LinearScale,
-  BarElement
-);
+  DownloadOutlined,
+  UserAddOutlined,
+  DollarOutlined,
+  ShoppingCartOutlined,
+  DatabaseOutlined,
+} from "@ant-design/icons";
 
 const Dashboard = () => {
-  // Bar Chart Data
-  const barData = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        label: "New Users",
-        data: [50, 100, 200, 400, 350, 600],
-        backgroundColor: "#4a90e2",
-      },
-    ],
-  };
+  const [orders, setOrders] = useState([]);
+  const [menuItemsSold, setMenuItemsSold] = useState(523); // Mock data
+  const [staffHired, setStaffHired] = useState(12); // Mock data
+  const [dishesServed, setDishesServed] = useState(340); // Mock data
+  const [revenueGenerated, setRevenueGenerated] = useState(0);
 
-  const barOptions: _DeepPartialObject<ChartOptions<"bar">> = {
-    responsive: true,
-    plugins: {
-      legend: { display: true, position: "top" },
-      title: { display: true, text: "Monthly New Users" },
-    },
-  };
+  useEffect(() => {
+    // Mock data for orders
+    const mockOrders = [
+      { id: 1, totalPrice: 100 },
+      { id: 2, totalPrice: 150 },
+      { id: 3, totalPrice: 200 },
+    ];
+    setOrders(mockOrders);
 
-  const doughnutData = {
-    labels: ["Active", "Inactive", "New"],
-    datasets: [
-      {
-        label: "User Types",
-        data: [300, 100, 50],
-        backgroundColor: ["#4caf50", "#f44336", "#ff9800"],
-      },
-    ],
-  };
+    // Simulate fetching staff count and dishes served
+    setStaffHired(12); // Example number for staff hired
+    setDishesServed(340); // Example number for dishes served
+  }, []);
 
-  const doughnutOptions: _DeepPartialObject<ChartOptions<"doughnut">> = {
-    responsive: true,
-    plugins: {
-      legend: { display: true, position: "right" },
-      title: { display: true },
-    },
-  };
+  useEffect(() => {
+    // Calculate total revenue based on mock orders
+    const totalRevenue = orders.reduce(
+      (acc, order) => acc + order.totalPrice,
+      0
+    );
+    setRevenueGenerated(totalRevenue);
+  }, [orders]);
 
   return (
-    <div className="bg-slate-100 h-[700px] w-full overflow-auto">
-      <div className="p-8">
-        <p className="font-bold text-3xl">Dashboard</p>
-        <div className="mt-5">
-          <CardDashboard />
-        </div>
-        <div className={cx(styles["chart-container"])}>
-          <div className={cx("bar-chart")}>
-            <p className="font-bold text-xl mb-4">User Growth (Bar Chart)</p>
-            <Bar data={barData} options={barOptions} />
-          </div>
+    <div style={{ margin: "20px" }}>
+      {/* HEADER */}
+      <Row justify="space-between" align="middle">
+        <Col>
+          <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        </Col>
+        <Col>
+          <Button type="primary" icon={<DownloadOutlined />}>
+            Download Reports
+          </Button>
+        </Col>
+      </Row>
 
-          <div className={cx("doughnut-chart")}>
-            <p className="font-bold text-xl mb-4">
-              User Types (Doughnut Chart)
-            </p>
-            <div className="w-[500px] h-[300px] mx-auto">
-              <Doughnut data={doughnutData} options={doughnutOptions} />
-            </div>
+      <Divider />
+      {/* GRID & CHARTS */}
+      <Row gutter={[20, 20]}>
+        {/* ROW 1 */}
+        <Col span={6}>
+          <CardWithIcon
+            icon={ShoppingCartOutlined}
+            to="/orders"
+            title="Orders Received"
+            subtitle={orders.length}
+          />
+        </Col>
+        <Col span={6}>
+          <CardWithIcon
+            icon={DollarOutlined}
+            to="/orders"
+            title="Menu Items Sold"
+            subtitle={menuItemsSold}
+          />
+        </Col>
+        <Col span={6}>
+          <CardWithIcon
+            icon={UserAddOutlined}
+            to="/users"
+            title="Staff Hired"
+            subtitle={staffHired}
+          />
+        </Col>
+        <Col span={6}>
+          <CardWithIcon
+            icon={DatabaseOutlined}
+            to="/menu"
+            title="Dishes Served"
+            subtitle={dishesServed}
+          />
+        </Col>
+
+        {/* ROW 2 */}
+        <Col span={24}>
+          <RevenueChart />
+        </Col>
+        {/* Here you can add more components such as RevenueChart or RecentOrder if desired */}
+        <Col span={24}>
+          <div
+            style={{
+              padding: "20px",
+              background: "#f0f2f5",
+              borderRadius: "8px",
+            }}
+          >
+            <h3>Total Revenue Generated: ${revenueGenerated}</h3>
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </div>
   );
 };
