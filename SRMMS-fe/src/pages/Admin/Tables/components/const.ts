@@ -32,7 +32,7 @@ export const TABLE_STATUS = {
   AVAILABLE: "Trống",
   IN_USE: "Đang sử dụng",
   UNDER_REPAIR: "Đang sửa chữa",
-  BOOKED: "Đã đặt",
+  BOOKED: "Đã đặt bàn",
 };
 
 export const getStatusColor = (status: any) => {

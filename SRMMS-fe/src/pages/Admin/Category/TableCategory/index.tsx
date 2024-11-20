@@ -53,7 +53,13 @@ function TableCategory({
       align: "center",
       render: (_, record) => (
         <Space size="middle">
-          <EditOutlined onClick={() => onSelected(record)} />
+          <EditOutlined
+            onClick={() => {
+              console.log("🚀 ~ record:", record);
+
+              onSelected(record);
+            }}
+          />
           <DeleteOutlined
             onClick={() =>
               comfirmMessage({

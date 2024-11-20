@@ -94,6 +94,8 @@ const AddOrEditCategory = ({ onCancel, categoryData, refetch }: IProps) => {
   );
 
   useEffect(() => {
+    console.log("🚀 ~ useEffect ~ categoryData:", categoryData)
+
     isEditCategory
       ? form.setFieldsValue({
           catName: categoryData?.catName,

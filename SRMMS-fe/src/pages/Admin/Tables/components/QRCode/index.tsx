@@ -1,9 +1,9 @@
-import { Col, Row, Spin, Card, Button, QRCode } from "antd"; // Import from Ant Design
+import { Card, Col, QRCode, Row, Spin } from "antd"; // Import from Ant Design
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import ButtonComponent from "~/components/ButtonComponent";
 import { getTables, TableData } from "~/services/table";
 import { HEIGHT_CONTENT_CONTAINER } from "../const";
-import ButtonComponent from "~/components/ButtonComponent";
 
 const QRCodeScreen = () => {
   const navigate = useNavigate();
@@ -61,29 +61,35 @@ const QRCodeScreen = () => {
           style={{ height: HEIGHT_CONTENT_CONTAINER }}
         >
           <Row gutter={[24, 24]}>
-            {tableData.map((table) => {
-              const qrValue = `${baseUrl}?tableId=${table.tableId}`;
-              return (
-                <Col xs={24} sm={12} md={8} lg={6} key={table.tableId}>
-                  <Card
-                    hoverable
-                    className="flex flex-col items-center justify-center p-6 rounded-lg shadow-lg"
-                    style={{
-                      backgroundColor: "#f9f9f9",
-                      borderColor: "#ddd",
-                    }}
-                  >
-                    <h3 className="text-lg font-semibold mb-4 text-center">
-                      {table.tableName}
-                    </h3>
-                    <QRCode value={qrValue} size={128} />
-                    <p className="mt-4 text-gray-500 text-sm text-center">
-                      Quét mã để xem menu
-                    </p>
-                  </Card>
-                </Col>
-              );
-            })}
+            {Array.isArray(tableData) && tableData.length > 0 ? (
+              tableData.map((table) => {
+                const qrValue = `${baseUrl}?tableId=${table.tableId}`;
+                return (
+                  <Col xs={24} sm={12} md={8} lg={6} key={table.tableId}>
+                    <Card
+                      hoverable
+                      className="flex flex-col items-center justify-center p-6 rounded-lg shadow-lg"
+                      style={{
+                        backgroundColor: "#f9f9f9",
+                        borderColor: "#ddd",
+                      }}
+                    >
+                      <h3 className="text-lg font-semibold mb-4 text-center">
+                        {table.tableName}
+                      </h3>
+                      <QRCode value={qrValue} size={128} />
+                      <p className="mt-4 text-gray-500 text-sm text-center">
+                        Quét mã để xem menu
+                      </p>
+                    </Card>
+                  </Col>
+                );
+              })
+            ) : (
+              <div className="text-center text-gray-500">
+                No tables available
+              </div>
+            )}
           </Row>
         </div>
       </div>

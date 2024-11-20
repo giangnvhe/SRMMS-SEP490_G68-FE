@@ -3,7 +3,10 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "~/context/authProvider";
-import { HEIGHT_CONTENT_CONTAINER } from "~/pages/Admin/Tables/components/const";
+import {
+  HEIGHT_CONTENT_CONTAINER,
+  TABLE_STATUS,
+} from "~/pages/Admin/Tables/components/const";
 import { getTables, TableData } from "~/services/table";
 import FooterTableOrder from "./components/FooterTableOrder";
 import ListTableOrder from "./components/ListTableOrder";
@@ -62,9 +65,13 @@ const OrderTable = () => {
     setSearchTerm(value.toLowerCase());
   };
 
-  const filteredTables = (tableData || []).filter((table) =>
-    table.tableName.toLowerCase().includes(searchTerm)
-  );
+  const filteredTables = Array.isArray(tableData)
+    ? tableData.filter(
+        (table) =>
+          table.tableName.toLowerCase().includes(searchTerm) &&
+          table.statusName === TABLE_STATUS.IN_USE
+      )
+    : [];
 
   const handleCheckout = (tableId: number) => {
     navigate(`/payment/${tableId}`);
@@ -92,7 +99,10 @@ const OrderTable = () => {
               className="bg-gray-100 shadow-inner"
             />
             {user?.roleName === permissionObject.ADMIN && (
-              <ButtonComponent btnType="back" onClick={() => navigate(-1)}>
+              <ButtonComponent
+                btnType="back"
+                onClick={() => navigate("/admin/tables")}
+              >
                 Back
               </ButtonComponent>
             )}
