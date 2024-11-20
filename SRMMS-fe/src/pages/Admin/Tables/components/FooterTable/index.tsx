@@ -1,14 +1,17 @@
-import { Tooltip, Typography } from "antd";
-import { TableData } from "~/services/table";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { Tooltip, Typography } from "antd";
 import formatter from "~/common/utils/formatter";
-import { CONSTANT_TABLE, TABLE_STATUS } from "../const";
+import ButtonComponent from "~/components/ButtonComponent";
+import { TableData } from "~/services/table";
+import { TABLE_STATUS } from "../const";
 
 interface IProps {
-  selectedTable: TableData | null;
+  selectedTable: TableData | undefined;
+  refetch: () => void;
+  onSelected: (id: TableData | undefined) => void;
 }
 
-const FooterTable = ({ selectedTable }: IProps) => {
+const FooterTable = ({ selectedTable, onSelected }: IProps) => {
   return (
     <div
       style={{
@@ -35,8 +38,15 @@ const FooterTable = ({ selectedTable }: IProps) => {
       </div>
       <div style={{ gap: "16px", display: "flex", alignItems: "center" }}>
         <Typography.Title level={4} style={{ margin: 0 }}>
-          {CONSTANT_TABLE.TABLE} {selectedTable?.tableName || "N/A"}
+          Đang chọn : {selectedTable?.tableName || "N/A"}
         </Typography.Title>
+        <ButtonComponent
+          className="rounded-lg"
+          disabled={!selectedTable}
+          onClick={() => onSelected(selectedTable)}
+        >
+          Cập nhật
+        </ButtonComponent>
       </div>
     </div>
   );
