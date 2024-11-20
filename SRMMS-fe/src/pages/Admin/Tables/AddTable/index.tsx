@@ -2,14 +2,17 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Form, Spin } from "antd";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useMemo, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import ButtonComponent from "~/components/ButtonComponent";
 import InputComponent from "~/components/InputComponent";
+import SelectComponent, { Option } from "~/components/SelectComponent";
 import useNotification from "~/hooks/useNotification";
 import {
   CreateTable,
+  getListStatus,
   RequestTable,
   TableData,
+  TableStatusData,
   updateTable,
 } from "~/services/table";
 
@@ -34,6 +37,27 @@ const AddTable = ({ onCancel, refetch, tableData }: IProps) => {
   const { errorMessage, successMessage } = useNotification();
   const [formValues, setFormValues] = useState(initialFormValues);
   const isEditTable = useMemo(() => !!tableData, [tableData]);
+  const [tableStatus, setTableStatus] = useState<Option[] | []>([]);
+
+  const { isLoading, isError, error } = useQuery("tableStatus", getListStatus, {
+    onSuccess: (result) => {
+      console.log("🚀 ~ AddTable ~ result:", result);
+      setTableStatus(
+        result.data.map((value: TableStatusData) => ({
+          label: value.statusName,
+          value: `${value.statusId}`,
+        }))
+      );
+    },
+  });
+
+  useEffect(() => {
+    if (isError) {
+      errorMessage({
+        description: (error as AxiosError)?.message || "API Failed",
+      });
+    }
+  }, [isError, error]);
 
   const handleCreateTable = useMutation(
     ({ data }: { data: RequestTable }) => CreateTable(data),
@@ -101,25 +125,31 @@ const AddTable = ({ onCancel, refetch, tableData }: IProps) => {
   //   }
   // };
 
-  const isLoading = useMemo(
+  const isLoadings = useMemo(
     () => handleCreateTable.isLoading || handleUpdateTable.isLoading,
     [handleCreateTable.isLoading, handleUpdateTable.isLoading]
   );
 
   useEffect(() => {
-    console.log("tableData:", tableData);
-    isEditTable
-      ? form.setFieldsValue({
+    if (tableData && tableStatus.length > 0) {
+      const status = tableStatus.find(
+        (status) => status.value === `${tableData.statusId}`
+      );
+
+      if (isEditTable) {
+        form.setFieldsValue({
           table_Name: tableData?.tableName,
-          statusId: tableData?.statusId,
+          statusId: status ? status.value : null,
           tableOfPeople: tableData?.tableOfPeople,
-        })
-      : form.resetFields();
-  }, [tableData]);
-  console.log("🚀 ~ useEffect ~ tableData:", tableData?.statusId);
+        });
+      } else {
+        form.resetFields();
+      }
+    }
+  }, [tableData, tableStatus, isEditTable, form]);
 
   return (
-    <Spin spinning={isLoading} indicator={<LoadingOutlined spin />}>
+    <Spin spinning={isLoadings} indicator={<LoadingOutlined spin />}>
       <div className="p-6 bg-gray-50 shadow-lg rounded-lg">
         <Form
           layout="vertical"
@@ -154,6 +184,21 @@ const AddTable = ({ onCancel, refetch, tableData }: IProps) => {
             placeholder="số lượng người của bàn"
             //onChange={handleTableOfPeopleChange}
           />
+          {isEditTable && (
+            <SelectComponent
+              name="statusId"
+              label="Trạng thái bàn"
+              rules={[
+                {
+                  required: true,
+                  message: "Danh mục không được để trống",
+                },
+              ]}
+              options={tableStatus || []}
+              loading={isLoading}
+            />
+          )}
+
           <div className="mt-6 flex justify-end space-x-3">
             <ButtonComponent className="px-5 py-2 rounded-md" htmlType="submit">
               {tableData ? "Lưu" : "Tạo Mới"}

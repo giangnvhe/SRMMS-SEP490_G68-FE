@@ -1,4 +1,5 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { startTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "~/components/ButtonComponent";
 import { TableData } from "~/services/table";
@@ -49,14 +50,22 @@ const StatusButtonGroup = ({
           Thêm Bàn Mới
         </ButtonComponent>
         <ButtonComponent
-          onClick={() => navigate("/qr-code")}
+          onClick={() => {
+            startTransition(() => {
+              navigate("/qr-code");
+            });
+          }}
           className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
         >
           QR Code Bàn
         </ButtonComponent>
         <ButtonComponent
           className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
-          onClick={() => navigate("/order-table")}
+          onClick={() => {
+            startTransition(() => {
+              navigate("/order-table");
+            });
+          }}
         >
           Thanh Toán
         </ButtonComponent>
