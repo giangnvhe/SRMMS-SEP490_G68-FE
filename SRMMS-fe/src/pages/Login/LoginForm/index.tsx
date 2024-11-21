@@ -81,20 +81,13 @@ const LoginForm = () => {
         <InputComponent
           form={form}
           name="email"
-          label="Email"
-          rules={[
-            { required: true, message: "Vui lòng nhập email của bạn." },
-            { type: "email", message: "Email không hợp lệ." },
-          ]}
+          label="Email :"
           placeholder="Nhập email..."
         />
         <InputComponent
           form={form}
           name="password"
-          label="Password"
-          rules={[
-            { required: true, message: "Vui lòng nhập password của bạn." },
-          ]}
+          label="Password :"
           type="password"
           placeholder="Nhận password..."
         />
@@ -109,13 +102,16 @@ const LoginForm = () => {
         <div className="mt-2 flex cursor-pointer justify-between text-sm">
           <p>
             Do you have a account?{" "}
-            <span className="text-blue-500 hover:text-blue-700 font-medium ml-1">
+            <span
+              className="text-blue-500 hover:text-blue-700 font-medium ml-1"
+              onClick={() => navigate("/register")}
+            >
               Đăng kí
             </span>
           </p>
-          <span className="text-blue-500 hover:text-blue-700 font-medium">
-            Quên mật khẩu?
-          </span>
+        </div>
+        <div className="text-blue-500 hover:text-blue-700 font-medium">
+          Quên mật khẩu?
         </div>
       </Form>
     </div>
