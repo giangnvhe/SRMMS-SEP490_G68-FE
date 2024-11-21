@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
+import Register from "~/pages/Register";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -39,6 +40,10 @@ const RouterComponent = () => {
     {
       path: "/logout",
       element: <Logout />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
     },
 
     //Public Layout
