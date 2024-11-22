@@ -15,7 +15,7 @@ const Register = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [phoneNumberOtp, setPhoneNumberOtp] = useState("");
   const [isTimerActive, setIsTimerActive] = useState(false);
-  const [countdown, setCountdown] = useState(300); 
+  const [countdown, setCountdown] = useState(10);
   const [isOtpLoadings, setIsOtpLoadings] = useState(false);
   const navigate = useNavigate();
 
@@ -59,6 +59,7 @@ const Register = () => {
           message: "Đăng ký thất bại",
           description: error.message || "Có lỗi xảy ra. Vui lòng thử lại.",
         });
+        setIsRegistered(false);
       },
     }
   );
@@ -83,7 +84,7 @@ const Register = () => {
     setPhoneNumberOtp(phoneNumber);
     try {
       await registerUser({ fullName, email, phoneNumber, password });
-      startCountdown(); 
+      startCountdown();
       setIsRegistered(true);
     } catch (error) {
       console.log(error);
@@ -209,8 +210,9 @@ const Register = () => {
                 htmlType="submit"
                 className="w-full mt-6 bg-gold-600 hover:bg-gold-700 text-white py-3 rounded-xl transition-all duration-300 ease-in-out transform hover:scale-105"
                 loading={isRegisterLoading}
+                disabled={isRegisterLoading}
               >
-                Đăng Ký Ngay
+                {isRegisterLoading ? "Đang xử lý..." : "Đăng Ký Ngay"}
               </ButtonComponent>
             </Form>
           )}
@@ -222,19 +224,31 @@ const Register = () => {
             </a>
           </p>
           {isRegistered && (
-            <Form
-              layout="vertical"
-              className="otp-section"
-              form={form}
-            >
-              <h3 className="text-center text-xl mb-4">
+            <Form layout="vertical" className="otp-section" form={form}>
+              <h3 className="text-center text-xl mb-4 font-semibold">
                 Nhập mã OTP đã gửi đến số điện thoại của bạn
               </h3>
+
+              <p className="text-center text-gray-600 text-sm mb-2">
+                Mã OTP gồm <strong>6 chữ số</strong> được gửi qua tin nhắn SMS
+                đến số điện thoại mà bạn đã đăng ký. Vui lòng nhập mã để hoàn
+                tất xác thực.
+              </p>
+
               {isTimerActive && (
-                <p className="text-center mt-2 text-red-600">
-                  Thời gian còn lại: {formatTime(countdown)}
+                <p className="text-center text-red-600 text-sm mt-2">
+                  Thời gian còn lại để sử dụng mã OTP:{" "}
+                  <strong>{formatTime(countdown)}</strong>
                 </p>
               )}
+
+              {!isTimerActive && (
+                <p className="text-center text-gray-500 text-sm mt-2">
+                  Mã OTP đã hết hạn. Vui lòng nhấn{" "}
+                  <strong>"Gửi lại mã OTP"</strong> để nhận mã mới.
+                </p>
+              )}
+
               <div>
                 <InputComponent
                   name="verificationCode"
@@ -245,6 +259,7 @@ const Register = () => {
                   rules={[{ required: true, message: "Vui lòng nhập mã OTP!" }]}
                 />
               </div>
+
               <Button
                 onClick={handleVerifyOtp}
                 className="mt-4 w-full bg-gold-600 hover:bg-gold-700 py-3 rounded-xl"
@@ -253,6 +268,32 @@ const Register = () => {
               >
                 Xác thực OTP
               </Button>
+
+              {countdown <= 0 && (
+                <Button
+                  onClick={() => {
+                    setCountdown(300);
+                    startCountdown();
+                    notification.info({
+                      message: "Đã gửi lại mã OTP!",
+                      description: "Vui lòng kiểm tra số điện thoại của bạn.",
+                    });
+                  }}
+                  className="mt-4 w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl"
+                  disabled={isTimerActive}
+                >
+                  Gửi lại mã OTP
+                </Button>
+              )}
+
+              <p className="text-center text-sm text-gray-500 mt-4">
+                Nếu bạn không nhận được mã OTP, vui lòng kiểm tra tin nhắn SMS
+                hoặc liên hệ bộ phận hỗ trợ qua
+                <a href="tel:0845280902" className="text-blue-600 underline">
+                  {" "}
+                  số điện thoại hỗ trợ.
+                </a>
+              </p>
             </Form>
           )}
         </div>

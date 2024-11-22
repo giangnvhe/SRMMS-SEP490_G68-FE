@@ -5,6 +5,7 @@
   min-height: 100vh;
   background: white;
   padding: 1rem;
+  overflow-y: auto;
   & :global(.wrapper) {
     display: flex;
     flex-direction: column;
@@ -26,9 +27,8 @@
       background-color: rgba(0, 0, 0, 0.5);
     }
     & :global(.formSection) {
-      padding: 1.5rem;
-      width: 100%;
-      max-height: 100vh;
+      padding: 2.5rem;
+      max-height: 80vh;
       overflow-y: auto;
 
       & :global(.formTitle) {
@@ -44,11 +44,20 @@
       color: #6b7280;
       margin-top: 1.5rem;
       text-align: center;
-      & :globale(.loginLink a) {
+      & a {
         color: #d4a500;
         text-decoration: underline;
       }
     }
 
   }
+  @media (max-width: 375px) { /* Thay đổi cho màn hình <= 375px */
+    .container-register {
+      min-height: auto; /* Bỏ ràng buộc chiều cao */
+      height: 100vh; /* Đặt chiều cao cụ thể */
+      overflow-y: scroll; /* Bật thanh cuộn */
+      color: #d4a500;
+    }
+  }
 }
+

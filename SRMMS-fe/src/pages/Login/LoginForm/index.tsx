@@ -82,6 +82,12 @@ const LoginForm = () => {
           form={form}
           name="email"
           label="Email :"
+          rules={[
+            {
+              required: true,
+              message: "Email không được để trống",
+            },
+          ]}
           placeholder="Nhập email..."
         />
         <InputComponent
@@ -89,6 +95,12 @@ const LoginForm = () => {
           name="password"
           label="Password :"
           type="password"
+          rules={[
+            {
+              required: true,
+              message: "Password không được để trống",
+            },
+          ]}
           placeholder="Nhận password..."
         />
 
