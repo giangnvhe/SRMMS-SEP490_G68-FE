@@ -14,7 +14,7 @@ import styles from "./index.module.scss";
 const cx = classNames.bind(styles);
 
 interface FormFields {
-  email: string;
+  phone: string;
   password: string;
 }
 
@@ -30,7 +30,7 @@ const LoginForm = () => {
       if (result.status === 200) {
         setToken(result.data.token);
         setUser({
-          email: result.data.email,
+          phone: result.data.phone,
           fullName: result.data.fullName,
           roleName: result.data.roleName,
         });
@@ -80,15 +80,12 @@ const LoginForm = () => {
       >
         <InputComponent
           form={form}
-          name="email"
-          label="Email :"
+          name="phone"
+          label="Số điện thoại: "
           rules={[
-            {
-              required: true,
-              message: "Email không được để trống",
-            },
+            { required: true, message: "Vui lòng nhập số điện thoại của bạn." },
           ]}
-          placeholder="Nhập email..."
+          placeholder="Nhập số điện thoại"
         />
         <InputComponent
           form={form}

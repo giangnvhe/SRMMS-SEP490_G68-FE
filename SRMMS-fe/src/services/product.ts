@@ -17,6 +17,14 @@ export interface ProductData {
   status: boolean;
 }
 
+export interface ComboData {
+  key: React.Key;
+  index: number;
+  comboId?: number;
+  comboMoney: number;
+  quantity: number;
+}
+
 export interface NewProductRequest {
   ProductName: string;
   Description: string;

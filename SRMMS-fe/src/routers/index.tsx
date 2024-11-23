@@ -29,6 +29,7 @@ const Payment = lazy(() => import("~/pages/Staff/Payment"));
 const ProductDetail = lazy(
   () => import("~/pages/HomePage/components/ProductDetail")
 );
+const OrderManager = lazy(() => import("~/pages/Admin/OrderMana"));
 
 const RouterComponent = () => {
   const router = createBrowserRouter([
@@ -175,6 +176,14 @@ const RouterComponent = () => {
               element: (
                 <AdminOfficer>
                   <TablesManagement />
+                </AdminOfficer>
+              ),
+            },
+            {
+              path: "/admin/order-list",
+              element: (
+                <AdminOfficer>
+                  <OrderManager />
                 </AdminOfficer>
               ),
             },

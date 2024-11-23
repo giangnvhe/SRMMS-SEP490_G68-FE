@@ -2,13 +2,13 @@ import { AxiosResponse } from "axios";
 import axiosInstance from "../configs/axiosConfig";
 import { getApi } from "../common/utils";
 interface LoginRequest {
-  email: string;
+  phone: string;
   password: string;
 }
 
 interface LoginResponse {
   roleName: string;
-  email: string;
+  phone: string;
   fullName: string;
   token: string;
 }

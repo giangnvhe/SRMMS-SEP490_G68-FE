@@ -1,6 +1,43 @@
 import { AxiosResponse } from "axios";
 import { getApi } from "../common/utils";
 import axiosInstance from "../configs/axiosConfig";
+import { FormFields } from "~/pages/Admin/OrderMana/components/conts";
+
+export interface OrderData {
+  key: React.Key;
+  index: number;
+  orderId: number;
+  orderDate: string;
+  totalMoney: number;
+  status: boolean;
+  tableId: number;
+  tableName: string;
+  products: [
+    {
+      productId: number;
+      proName: string;
+      quantity: number;
+      price: number;
+    }
+  ];
+  combos: [
+    {
+      comboId: number;
+      comboName: string;
+      quantity: number;
+      price: number;
+    }
+  ];
+}
+
+interface OrderDataResponse {
+  data: {
+    orders: OrderData[];
+    pageNumber: number;
+    pageSize: number;
+    totalOrders: number;
+  };
+}
 
 interface AddToOrderRequest {
   tableId: number;
@@ -8,8 +45,13 @@ interface AddToOrderRequest {
   totalMoney: number;
   status?: boolean;
   codeId?: number;
-  orderDetails: {
+  productDetails?: {
     proId: number;
+    quantity: number;
+    price: number;
+  }[];
+  comboDetails?: {
+    comboId?: number;
     quantity: number;
     price: number;
   }[];
@@ -27,5 +69,14 @@ export const AddToOrder = async (
     getApi("api", "Order/AddOrder"),
     data
   );
+  return result;
+};
+
+export const getListOrder = async (
+  params: FormFields
+): Promise<OrderDataResponse> => {
+  const result = await axiosInstance.get(getApi("api", "Order/list"), {
+    params,
+  });
   return result;
 };
