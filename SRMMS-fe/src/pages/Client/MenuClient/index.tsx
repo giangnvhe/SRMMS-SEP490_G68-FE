@@ -2,7 +2,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Button, Layout, message, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { CategoryData, getListCategory } from "~/services/category_product";
-import { getListProduct, ProductData } from "~/services/product";
+import { ComboData, getListProduct, ProductData } from "~/services/product";
 import FilterDish from "../components/FilterDish";
 import FilterPrice from "../components/FilterPrice";
 import MenuContent from "../components/MenuContent";
@@ -26,6 +26,7 @@ const MenuClient = () => {
     undefined
   );
   const [cart, setCart] = useState<ProductData[]>([]);
+  const [cartCombo, setCartCombo] = useState<ComboData[]>([]);
   const [loading, setLoading] = useState(false);
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(1000000);
@@ -85,6 +86,7 @@ const MenuClient = () => {
           "Gọi món thành công. Món ăn đã được chuyển tới bếp",
       });
       setCart([]);
+      setCartCombo([]);
       setCartVisible(false);
     },
     onError: (error: AxiosError<{ message: string }>) => {
@@ -136,10 +138,15 @@ const MenuClient = () => {
   };
 
   const handleCheckout = () => {
-    const orderDetails = cart.map((item) => ({
+    const productDetails = cart.map((item) => ({
       proId: item.productId,
       quantity: item.quantity,
       price: item.price,
+    }));
+    const comboDetails = cartCombo.map((item) => ({
+      comboId: item.comboId,
+      quantity: item.quantity,
+      price: item.comboMoney,
     }));
 
     const totalMoney = cart.reduce(
@@ -151,8 +158,9 @@ const MenuClient = () => {
       tableId: Number(id),
       orderDate: new Date().toISOString(),
       totalMoney,
-      status: true,
-      orderDetails: orderDetails,
+      status: false,
+      productDetails: productDetails,
+      comboDetails: comboDetails,
     });
   };
 

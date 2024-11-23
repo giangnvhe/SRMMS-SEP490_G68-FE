@@ -6,7 +6,7 @@ import {
 } from "~/configs/accessToken";
 import { getUserW, removeUserW, setUserW } from "../configs/user";
 export type UserInformation = {
-  email: string;
+  phone: string;
   roleName: string;
   fullName: string;
 };

@@ -5,7 +5,7 @@ import {
   MenuUnfoldOutlined,
   ProductOutlined,
   TableOutlined,
-  TeamOutlined
+  TeamOutlined,
 } from "@ant-design/icons";
 import { faClipboardList, faTh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -62,7 +62,7 @@ const items: MenuItem[] = [
     icon: <FontAwesomeIcon icon={faTh} />,
   },
   {
-    key: "/admin/order",
+    key: "/admin/order-list",
     label: "Quản lý Order",
     icon: <FontAwesomeIcon icon={faClipboardList} />,
   },
