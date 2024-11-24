@@ -14,7 +14,6 @@ interface IProps {
   refetch: () => void;
   loading: boolean;
   form: FormInstance;
-  onSelected: (id: OrderData | undefined) => void;
 }
 
 const initialValue = {
@@ -24,14 +23,8 @@ const initialValue = {
   pageSize: PAGE_SIZE,
 };
 
-const TableOrder = ({
-  dataTable,
-  refetch,
-  loading,
-  onSelected,
-  form,
-}: IProps) => {
-  const columns = UseColumn({ onSelected });
+const TableOrder = ({ dataTable, refetch, loading, form }: IProps) => {
+  const columns = UseColumn();
 
   const handleTableChange: TableProps["onChange"] = (pagination) => {
     form.setFieldValue("pageSize", pagination.pageSize);
@@ -48,30 +41,28 @@ const TableOrder = ({
   return (
     <div>
       <Form form={form} onFinish={onSubmitTable} initialValues={initialValue}>
-        <Row gutter={8} className={cx("product-search-table")}>
-          <Col md={{ span: 3 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+        <div className={cx(styles["order-search-table"])}>
+          <div className="flex items-center w-96">
             <DatePickerComponent
               name="fromDate"
               form={form}
               placeholder="Ngày bắt đầu"
+              className="w-96"
             />
-          </Col>
-          <Col md={{ span: 3 }} sm={{ span: 10 }} xs={{ span: 24 }}>
-            <div> ~ </div>
-          </Col>
-          <Col md={{ span: 3 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <span className="mr-3 mb-6">~</span>
             <DatePickerComponent
               name="toDate"
               form={form}
               placeholder="Ngày kết thúc"
+              className="w-96"
             />
-          </Col>
-          <Col sm={{ span: 4 }} xs={{ span: 24 }}>
-            <ButtonComponent onClick={() => form.submit()}>
+          </div>
+          <div>
+            <ButtonComponent onClick={() => form.submit()} className="mb-2">
               Tìm Kiếm
             </ButtonComponent>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Form>
 
       <TableComponent

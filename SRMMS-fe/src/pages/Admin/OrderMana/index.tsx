@@ -10,18 +10,12 @@ import { AxiosError } from "axios";
 const OrderManager = () => {
   const [form] = Form.useForm<FormFields>();
   const [dataTable, setDataTable] = useState<OrderData[]>([]);
-  const [selectedTable, setSelectedTable] = useState<OrderData | undefined>(
-    undefined
-  );
+
   const { errorMessage } = useNotification();
 
   const getListOrders = useQuery("getListOrders", () =>
     getListOrder(form.getFieldsValue(true))
   );
-
-  const onSelected = (id: OrderData | undefined) => {
-    setSelectedTable(id);
-  };
 
   useEffect(() => {
     if (getListOrders.isError) {
@@ -59,7 +53,6 @@ const OrderManager = () => {
       <div className="mt-5 px-10">
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <TableOrder
-            onSelected={onSelected}
             dataTable={dataTable}
             refetch={getListOrders.refetch}
             loading={getListOrders.isLoading || getListOrders.isFetching}
