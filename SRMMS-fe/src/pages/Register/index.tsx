@@ -5,7 +5,7 @@ import LoginImage from "../../assets/images/background.jpg";
 import styles from "./index.module.scss";
 import classNames from "classnames";
 import { useMutation } from "react-query";
-import { register, verifyOtp } from "~/services/auth";
+import { register, resendOtp, verifyOtp } from "~/services/auth";
 import { startTransition, useState } from "react";
 import { useNavigate } from "react-router";
 const cx = classNames.bind(styles);
@@ -15,8 +15,9 @@ const Register = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [phoneNumberOtp, setPhoneNumberOtp] = useState("");
   const [isTimerActive, setIsTimerActive] = useState(false);
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(180);
   const [isOtpLoadings, setIsOtpLoadings] = useState(false);
+  const [apiErrorMessage, setApiErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const startCountdown = () => {
@@ -52,9 +53,16 @@ const Register = () => {
             "Vui lòng kiểm tra số điện thoại để xác nhận mã OTP kích hoạt tài khoản.",
         });
         setIsRegistered(true);
+        setApiErrorMessage(null);
       },
 
       onError: (error: any) => {
+        let apiMessage = "";
+        const responseMessage = error.response?.data;
+        if (responseMessage === "Email is already registered.") {
+          apiMessage = "Email đã tồn tại.";
+        }
+        setApiErrorMessage(apiMessage);
         notification.error({
           message: "Đăng ký thất bại",
           description: error.message || "Có lỗi xảy ra. Vui lòng thử lại.",
@@ -64,20 +72,45 @@ const Register = () => {
     }
   );
 
+  //api resend verifyUserOtp
   const { mutate: verifyUserOtp } = useMutation(verifyOtp, {
     onSuccess: () => {
       notification.success({
         message: "Xác thực OTP thành công!",
         description: "Chúc mừng bạn đã đăng ký thành công!",
       });
+      startTransition(() => {
+        navigate("/login");
+      });
     },
     onError: (error: any) => {
       notification.error({
         message: "Xác thực OTP thất bại",
-        description: error.message || "Mã OTP không hợp lệ. Vui lòng thử lại.",
+        description:
+          "Mã OTP không chính xác hoặc đã hết hạn. Vui lòng thử lại.",
       });
     },
   });
+
+  //api resend otp
+  const { mutate: resendOtpMutate, isLoading: isResendOtpLoading } =
+    useMutation(resendOtp, {
+      onSuccess: (data) => {
+        notification.success({
+          message: "Gửi lại mã OTP thành công!",
+          description:
+            data?.data?.message || "Vui lòng kiểm tra tin nhắn để nhận mã OTP.",
+        });
+        setCountdown(100);
+        startCountdown();
+      },
+      onError: (error: any) => {
+        notification.error({
+          message: "Gửi lại mã OTP thất bại",
+          description: "Có lỗi xảy ra. Vui lòng thử lại.",
+        });
+      },
+    });
 
   const handleSubmit = async (values: any) => {
     const { fullName, email, phoneNumber, password } = values;
@@ -85,14 +118,15 @@ const Register = () => {
     try {
       await registerUser({ fullName, email, phoneNumber, password });
       startCountdown();
-      setIsRegistered(true);
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleVerifyOtp = async () => {
-    const otpCode = form.getFieldValue("verificationCode");
+    const values = await form.validateFields();
+
+    const otpCode = values.verificationCode;
 
     const payload = {
       phoneNumber: phoneNumberOtp,
@@ -103,13 +137,6 @@ const Register = () => {
     try {
       await verifyUserOtp(payload);
       setIsOtpLoadings(false);
-      notification.success({
-        message: "Xác thực OTP thành công!",
-        description: "Chúc mừng bạn đã đăng ký thành công!",
-      });
-      startTransition(() => {
-        navigate("/login");
-      });
     } catch (error) {
       setIsOtpLoadings(false);
       notification.error({
@@ -118,6 +145,11 @@ const Register = () => {
       });
     }
   };
+
+  const handleResendOtp = () => {
+    resendOtpMutate({ phoneNumber: phoneNumberOtp });
+  };
+
   return (
     <div className={cx(styles["container-register"])}>
       <div className={cx("wrapper")}>
@@ -132,6 +164,10 @@ const Register = () => {
             </h2>
           </div>
         </div>
+
+        {apiErrorMessage && (
+          <p className="text-red-500 text-center mt-4">{apiErrorMessage}</p>
+        )}
 
         {/* Form Section */}
         <div className={cx("formSection")}>
@@ -223,7 +259,7 @@ const Register = () => {
               Đăng nhập
             </a>
           </p>
-          {isRegistered && (
+          {!isRegistered && (
             <Form layout="vertical" className="otp-section" form={form}>
               <h3 className="text-center text-xl mb-4 font-semibold">
                 Nhập mã OTP đã gửi đến số điện thoại của bạn
@@ -271,16 +307,10 @@ const Register = () => {
 
               {countdown <= 0 && (
                 <Button
-                  onClick={() => {
-                    setCountdown(300);
-                    startCountdown();
-                    notification.info({
-                      message: "Đã gửi lại mã OTP!",
-                      description: "Vui lòng kiểm tra số điện thoại của bạn.",
-                    });
-                  }}
+                  onClick={handleResendOtp}
                   className="mt-4 w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl"
                   disabled={isTimerActive}
+                  loading={isResendOtpLoading}
                 >
                   Gửi lại mã OTP
                 </Button>

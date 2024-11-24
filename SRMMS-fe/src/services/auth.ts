@@ -30,6 +30,10 @@ interface VerificationOTP {
   verificationCode: string;
 }
 
+interface ResendOTP {
+  phoneNumber: string;
+}
+
 export const login = async (params: LoginRequest) => {
   const result = await axiosInstance.post<
     LoginRequest,
@@ -53,6 +57,15 @@ export const verifyOtp = async (params: VerificationOTP) => {
     VerificationOTP,
     AxiosResponse<RegisterResponse>
   >(getApi("api", "verify-otp"), params);
+
+  return result;
+};
+
+export const resendOtp = async (params: ResendOTP) => {
+  const result = await axiosInstance.post<
+    ResendOTP,
+    AxiosResponse<RegisterResponse>
+  >(getApi("api", "resend-otp"), params);
 
   return result;
 };
