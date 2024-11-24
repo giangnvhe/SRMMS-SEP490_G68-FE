@@ -20,12 +20,29 @@ export interface OrderData {
       price: number;
     }
   ];
-  combos: [
+  combos?: [
     {
       comboId: number;
       comboName: string;
       quantity: number;
       price: number;
+    }
+  ];
+  customers?: [
+    {
+      customerId: number;
+      customerName: string;
+      customerAddress: string;
+      customerPhone: string;
+    }
+  ];
+  discountId?: number;
+  discountValue: number;
+  pointIds?: [
+    {
+      pointId: number;
+      pointName: string;
+      pointValue: number;
     }
   ];
 }
@@ -78,5 +95,12 @@ export const getListOrder = async (
   const result = await axiosInstance.get(getApi("api", "Order/list"), {
     params,
   });
+  return result;
+};
+
+export const getOrderById = async (
+  id: number
+): Promise<AxiosResponse<OrderData>> => {
+  const result = await axiosInstance.get(getApi("api", `Order/order/${id}`));
   return result;
 };

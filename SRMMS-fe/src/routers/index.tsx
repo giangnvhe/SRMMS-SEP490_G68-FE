@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
 import Register from "~/pages/Register";
+import OrderDetails from "~/pages/Admin/OrderMana/components/OrderDetail";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -184,6 +185,14 @@ const RouterComponent = () => {
               element: (
                 <AdminOfficer>
                   <OrderManager />
+                </AdminOfficer>
+              ),
+            },
+            {
+              path: "/admin/order/:id",
+              element: (
+                <AdminOfficer>
+                  <OrderDetails />
                 </AdminOfficer>
               ),
             },

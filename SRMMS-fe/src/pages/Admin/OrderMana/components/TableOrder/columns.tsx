@@ -1,13 +1,11 @@
 import { EyeOutlined } from "@ant-design/icons";
 import { Space, TableColumnsType, Tooltip } from "antd";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 import { OrderData } from "~/services/order";
 
-interface IProps {
-  onSelected: (id: OrderData | undefined) => void;
-}
-
-const UseColumn = ({ onSelected }: IProps) => {
+const UseColumn = () => {
+  const navigate = useNavigate();
   const columns: TableColumnsType<OrderData> = [
     {
       title: "STT",
@@ -20,7 +18,7 @@ const UseColumn = ({ onSelected }: IProps) => {
       dataIndex: "tableName",
       width: "120px",
       render: (tableName) => (
-        <div className="text-sm text-gray-700">{tableName}</div>
+        <div className="text-sm text-gray-700 font-medium">{tableName}</div>
       ),
     },
     {
@@ -31,19 +29,21 @@ const UseColumn = ({ onSelected }: IProps) => {
           ? moment(record.orderDate).format("YYYY-MM-DD HH:mm:ss")
           : "N/A";
         return (
-          <div className="truncate w-32 text-sm font-semibold">
+          <div className="truncate w-32 text-sm font-semibold text-gray-600">
             {formattedDate}
           </div>
         );
       },
-      width: "120px",
+      width: "160px", // Adjusted width for better readability
     },
     {
       title: "Tổng số tiền",
       dataIndex: "totalMoney",
       width: "150px",
       render: (totalMoney) => (
-        <div className="truncate text-sm text-gray-700">{totalMoney} VND</div>
+        <div className="truncate text-sm text-gray-700 font-medium">
+          {totalMoney} VND
+        </div>
       ),
     },
 
@@ -51,7 +51,11 @@ const UseColumn = ({ onSelected }: IProps) => {
       title: "Trạng thái",
       dataIndex: "status",
       render: (status) => (
-        <div className="text-sm text-gray-700">
+        <div
+          className={`text-sm text-gray-700 font-semibold ${
+            status ? "text-green-500" : "text-red-500"
+          }`}
+        >
           {status ? "Đã thanh toán" : "Chưa thanh toán"}
         </div>
       ),
@@ -59,8 +63,8 @@ const UseColumn = ({ onSelected }: IProps) => {
       align: "center",
     },
     {
-      title: "Action",
-      width: "50px",
+      title: "Hành động",
+      width: "60px",
       fixed: "right",
       align: "center",
       render: (_, record) => (
@@ -68,7 +72,7 @@ const UseColumn = ({ onSelected }: IProps) => {
           <Tooltip title="Xem chi tiết">
             <EyeOutlined
               className="text-blue-500 cursor-pointer"
-              onClick={() => onSelected(record)} // Hàm này có thể dùng để chọn bản ghi
+              onClick={() => navigate(`/admin/order/${record.orderId}`)} // Hàm này có thể dùng để chọn bản ghi
             />
           </Tooltip>
         </Space>
