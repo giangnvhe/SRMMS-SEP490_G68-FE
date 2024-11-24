@@ -259,7 +259,7 @@ const Register = () => {
               Đăng nhập
             </a>
           </p>
-          {!isRegistered && (
+          {isRegistered && (
             <Form layout="vertical" className="otp-section" form={form}>
               <h3 className="text-center text-xl mb-4 font-semibold">
                 Nhập mã OTP đã gửi đến số điện thoại của bạn
