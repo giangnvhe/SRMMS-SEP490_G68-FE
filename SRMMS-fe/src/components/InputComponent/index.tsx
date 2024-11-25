@@ -34,6 +34,9 @@ interface IProps {
   ) => void;
   form?: FormInstance;
   prefix?: ReactNode;
+  readOnly?: boolean;
+  value?: string;
+  onClick?: () => void;
 }
 
 const InputComponent = ({
@@ -54,6 +57,8 @@ const InputComponent = ({
   onSearch,
   form,
   prefix,
+  readOnly,
+  onClick,
 }: IProps) => {
   const value = form?.getFieldValue(name);
 
@@ -113,6 +118,8 @@ const InputComponent = ({
           prefix={prefix}
           size={"large"}
           name={name}
+          readOnly={readOnly}
+          onClick={onClick}
         />
       )}
     </Form.Item>

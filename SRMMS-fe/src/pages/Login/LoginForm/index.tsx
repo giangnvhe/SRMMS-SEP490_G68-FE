@@ -39,7 +39,7 @@ const LoginForm = () => {
         title: "Đăng Nhập",
         description: "Đăng nhập thành công",
       });
-      if (result.data.roleName === "Customer") {
+      if (result.data.roleName === "Khách hàng") {
         navigate("/home");
       } else {
         navigate("/admin/dashboard");
