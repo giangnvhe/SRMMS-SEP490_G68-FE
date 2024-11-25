@@ -4,10 +4,10 @@ import {
   DollarOutlined,
   GiftOutlined,
   PercentageOutlined,
-  ShoppingOutlined,
   TrophyOutlined,
-  UserOutlined,
+  UserOutlined
 } from "@ant-design/icons";
+import { faBowlFood, faTable } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
@@ -25,8 +25,6 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getOrderById, OrderData } from "~/services/order";
-import { faTable } from "@fortawesome/free-solid-svg-icons";
-import { faBowlFood } from "@fortawesome/free-solid-svg-icons";
 
 const { Title } = Typography;
 

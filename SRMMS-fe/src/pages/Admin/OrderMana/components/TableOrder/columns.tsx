@@ -27,7 +27,7 @@ const UseColumn = () => {
       render: (_, record) => {
         const formattedDate = record.orderDate
           ? moment(record.orderDate).format("YYYY-MM-DD HH:mm:ss")
-          : "N/A";
+          : "";
         return (
           <div className="truncate w-32 text-sm font-semibold text-gray-600">
             {formattedDate}

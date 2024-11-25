@@ -47,7 +47,6 @@ interface ProductResponse {
 export interface FormFields {
   name: string;
   categoryId: number | undefined;
-  pagination: { pageNumber: number; pageSize: number };
   pageNumber: number;
   pageSize: number;
   totalProducts: number;
@@ -125,4 +124,14 @@ export const deleteProduct = async (
     getApi("api", `product/delete/${id}`)
   );
   return result.data;
+};
+
+
+export const getListProducts = async (
+  params: FormFields
+): Promise<ProductResponse> => {
+  const { data } = await axiosInstance.get(getApi("api", "product/list"), {
+    params,
+  });
+  return data;
 };

@@ -55,8 +55,6 @@ function TableCategory({
         <Space size="middle">
           <EditOutlined
             onClick={() => {
-              console.log("🚀 ~ record:", record);
-
               onSelected(record);
             }}
           />

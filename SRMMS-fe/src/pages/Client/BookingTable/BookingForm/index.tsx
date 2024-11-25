@@ -50,7 +50,6 @@ const BookingForm = () => {
       hourBooking: values.hourBooking,
       numberOfPeople: values.numberOfPeople,
     };
-    console.log("🚀 ~ BookingForm ~ bookingData:", bookingData);
     bookingMutation.mutate(bookingData);
   };
 

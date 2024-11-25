@@ -41,7 +41,6 @@ const AddTable = ({ onCancel, refetch, tableData }: IProps) => {
 
   const { isLoading, isError, error } = useQuery("tableStatus", getListStatus, {
     onSuccess: (result) => {
-      console.log("🚀 ~ AddTable ~ result:", result);
       setTableStatus(
         result.data.map((value: TableStatusData) => ({
           label: value.statusName,

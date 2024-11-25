@@ -57,7 +57,7 @@ const items: MenuItem[] = [
     icon: <TableOutlined />,
   },
   {
-    key: "/admin/combo",
+    key: "/admin/combos-list",
     label: "Quản lý combo",
     icon: <FontAwesomeIcon icon={faTh} />,
   },

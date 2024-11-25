@@ -4,6 +4,8 @@ import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
 import Register from "~/pages/Register";
 import OrderDetails from "~/pages/Admin/OrderMana/components/OrderDetail";
+import CombosManager from "~/pages/Admin/CombosManager";
+import { AdminRouter } from "~/middleware/Staff";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -137,7 +139,11 @@ const RouterComponent = () => {
       element: <ProtectedRoute />,
       children: [
         {
-          element: <AdminLayout />,
+          element: (
+            <AdminRouter>
+              <AdminLayout />
+            </AdminRouter>
+          ),
           path: "/",
           children: [
             {
@@ -161,6 +167,14 @@ const RouterComponent = () => {
               element: (
                 <AdminOfficer>
                   <ListProduct />
+                </AdminOfficer>
+              ),
+            },
+            {
+              path: "/admin/combos-list",
+              element: (
+                <AdminOfficer>
+                  <CombosManager />
                 </AdminOfficer>
               ),
             },

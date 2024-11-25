@@ -30,7 +30,6 @@ const UploadComponent = ({
   onChange,
 }: IProps) => {
   const handleChange = (info: UploadChangeParam<UploadFile>) => {
-    console.log("UploadComponent received file:", info.file);
     if (onChange) {
       onChange(info);
     }
