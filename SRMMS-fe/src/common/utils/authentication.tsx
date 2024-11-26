@@ -2,7 +2,7 @@ import { hasAccessToken } from "../../configs/accessToken";
 
 export const checkAuthentication = () => {
   if (!hasAccessToken()) {
-    window.location.href = "/login";
+    window.location.href = "/";
   }
 };
 

@@ -1,4 +1,4 @@
-import { ClockCircleOutlined, TableOutlined } from "@ant-design/icons";
+import { TableOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -15,6 +15,8 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatVND } from "~/common/utils/formatPrice";
 import { getOrderTable, TableOrderData } from "~/services/orderTable";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const ORDER_HEIGHT_CONTAINER = "calc(100vh - 64px)";
 const ORDER_TABLE_HEIGHT = "calc(100vh - 64px - 64px - 64px - 150px)";
@@ -139,7 +141,19 @@ const Payment = () => {
               }}
             >
               <Typography.Title style={{ margin: 0 }} level={4}>
-                {CONSTANT.order.toUpperCase()}
+                <div className="flex">
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => navigate("/order-table")}
+                  >
+                    <FontAwesomeIcon
+                      icon={faArrowLeft}
+                      size="1x"
+                      className="mr-4"
+                    />
+                  </div>
+                  {CONSTANT.order.toUpperCase()}
+                </div>
               </Typography.Title>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
