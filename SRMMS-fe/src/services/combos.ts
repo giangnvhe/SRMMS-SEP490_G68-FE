@@ -99,15 +99,19 @@ interface dataProduct {
 }
 
 interface ProductResponse {
-  data: {
-    products: dataProduct[];
-  };
+  data: dataProduct[];
 }
 
 export const getListProduct = async (): Promise<ProductResponse> => {
-  const result = await axiosInstance.get(
-    getApi("api", "product/product/list"),
-    {}
-  );
+  const result = await axiosInstance.get(getApi("api", "product/list-combo"));
   return result;
+};
+
+interface comboCount {
+  totalCount: number;
+}
+
+export const getComboProduct = async (): Promise<comboCount> => {
+  const result = await axiosInstance.get(getApi("api", "comboProduct/count"));
+  return result.data;
 };
