@@ -88,20 +88,6 @@ const RouterComponent = () => {
           element: <MenuClient />,
           path: "/menu-client/:id",
         },
-        {
-          path: "/",
-          element: <ProtectedRoute />,
-          children: [
-            {
-              element: (
-                <StaffOfficer>
-                  <InvoiceDialog />
-                </StaffOfficer>
-              ),
-              path: "/invoice",
-            },
-          ],
-        },
       ],
     },
     //Staff layout
@@ -125,6 +111,14 @@ const RouterComponent = () => {
               element: (
                 <StaffOfficer>
                   <Payment />
+                </StaffOfficer>
+              ),
+            },
+            {
+              path: "/invoice",
+              element: (
+                <StaffOfficer>
+                  <InvoiceDialog />
                 </StaffOfficer>
               ),
             },
