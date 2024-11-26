@@ -206,13 +206,10 @@ const Payment = () => {
               }}
             >
               <Typography.Title style={{ margin: 0 }} level={4}>
-                {CONSTANT.payableAmount.toUpperCase()}
+                {CONSTANT.paymentMethod.toUpperCase()}
               </Typography.Title>
             </div>
             <Divider />
-            <Typography.Text style={{ display: "block" }}>
-              {CONSTANT.paymentMethod.toUpperCase()}
-            </Typography.Text>
             <Row gutter={[16, 16]} style={{ margin: "20px 0 0 0" }}>
               <Col xs={24} sm={8} md={8} lg={8}>
                 <Button
