@@ -39,6 +39,10 @@ const RouterComponent = () => {
     //Free layouts
     {
       element: <Login />,
+      path: "/",
+    },
+    {
+      element: <Login />,
       path: "/login",
     },
     {
@@ -58,10 +62,6 @@ const RouterComponent = () => {
         {
           element: <HomePage />,
           path: "/home",
-        },
-        {
-          element: <HomePage />,
-          path: "/",
         },
         {
           element: <MenuInfor />,
