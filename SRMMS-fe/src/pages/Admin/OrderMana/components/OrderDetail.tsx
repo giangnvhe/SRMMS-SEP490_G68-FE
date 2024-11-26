@@ -5,7 +5,7 @@ import {
   GiftOutlined,
   PercentageOutlined,
   TrophyOutlined,
-  UserOutlined
+  UserOutlined,
 } from "@ant-design/icons";
 import { faBowlFood, faTable } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

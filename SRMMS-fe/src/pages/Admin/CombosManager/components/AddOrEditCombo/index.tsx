@@ -115,7 +115,7 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
     if (isModalVisible) {
       const fetchProducts = async () => {
         const response = await getListProduct();
-        setAvailableProducts(response.data.products);
+        setAvailableProducts(response?.data);
       };
       fetchProducts();
     }
@@ -170,6 +170,7 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
       ComboStatus: values.comboStatus,
       ProductNames: productNames,
     };
+    console.log("🚀 ~ AddOrEditCombos ~ formData:", formData);
     if (isEditCombo) {
       handleUpdateCombo.mutate({
         id: comboData?.comboId,
@@ -252,7 +253,7 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
               placeholder="Nhập mô tả"
               form={form}
             />
-            <UploadComponent
+            {/* <UploadComponent
               name="ComboImg"
               label="Hình Ảnh"
               form={form}
@@ -263,7 +264,7 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
                 },
               ]}
               onChange={handleFileChange}
-            />
+            /> */}
             <InputComponent
               name="ComboMoney"
               label="Giá"

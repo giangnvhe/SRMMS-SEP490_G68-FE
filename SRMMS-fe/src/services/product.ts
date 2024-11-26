@@ -126,7 +126,6 @@ export const deleteProduct = async (
   return result.data;
 };
 
-
 export const getListProducts = async (
   params: FormFields
 ): Promise<ProductResponse> => {
@@ -134,4 +133,13 @@ export const getListProducts = async (
     params,
   });
   return data;
+};
+
+interface productCount {
+  totalCount: number;
+}
+
+export const getCountProduct = async (): Promise<productCount> => {
+  const result = await axiosInstance.get(getApi("api", "product/count"), {});
+  return result.data;
 };

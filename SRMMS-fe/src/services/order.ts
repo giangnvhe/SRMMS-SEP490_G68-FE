@@ -79,6 +79,15 @@ interface AddToOrderResponse {
   message: string;
 }
 
+export const getListOrder = async (
+  params: FormFields
+): Promise<OrderDataResponse> => {
+  const result = await axiosInstance.get(getApi("api", "Order/list"), {
+    params,
+  });
+  return result;
+};
+
 export const AddToOrder = async (
   data: AddToOrderRequest
 ): Promise<AxiosResponse<AddToOrderResponse>> => {
@@ -89,18 +98,36 @@ export const AddToOrder = async (
   return result;
 };
 
-export const getListOrder = async (
-  params: FormFields
-): Promise<OrderDataResponse> => {
-  const result = await axiosInstance.get(getApi("api", "Order/list"), {
-    params,
-  });
-  return result;
-};
-
 export const getOrderById = async (
   id: number
 ): Promise<AxiosResponse<OrderData>> => {
   const result = await axiosInstance.get(getApi("api", `Order/order/${id}`));
   return result;
+};
+
+interface orderCount {
+  totalOrders: number;
+}
+
+export const getCountOrder = async (): Promise<orderCount> => {
+  const result = await axiosInstance.get(getApi("api", "Order/count"), {});
+  return result.data;
+};
+
+export interface ResponseRevenue {
+  totalRevenue: number;
+  orders: OrderData[];
+}
+export interface Params {
+  year: number;
+  month: number;
+  week: number;
+}
+export const getRevenueOrder = async (
+  params: Params
+): Promise<ResponseRevenue> => {
+  const result = await axiosInstance.get(getApi("api", "Order/total-revenue"), {
+    params,
+  });
+  return result.data;
 };
