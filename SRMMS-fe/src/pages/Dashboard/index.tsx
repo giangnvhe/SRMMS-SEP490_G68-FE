@@ -65,7 +65,7 @@ const Dashboard = () => {
       </Row>
       <Divider />
       <Row gutter={[20, 20]}>
-        <Col span={6}>
+        <Col xs={24} sm={12} md={6} lg={6} xl={6}>
           <CardWithIcon
             icon={
               <ShoppingCartOutlined
@@ -79,7 +79,7 @@ const Dashboard = () => {
             }
           />
         </Col>
-        <Col span={6}>
+        <Col xs={24} sm={12} md={6} lg={6} xl={6}>
           <CardWithIcon
             icon={
               <FontAwesomeIcon
@@ -94,7 +94,7 @@ const Dashboard = () => {
             }
           />
         </Col>
-        <Col span={6}>
+        <Col xs={24} sm={12} md={6} lg={6} xl={6}>
           <CardWithIcon
             icon={
               <FontAwesomeIcon
@@ -109,7 +109,7 @@ const Dashboard = () => {
             }
           />
         </Col>
-        <Col span={6}>
+        <Col xs={24} sm={12} md={6} lg={6} xl={6}>
           <CardWithIcon
             icon={
               <FontAwesomeIcon

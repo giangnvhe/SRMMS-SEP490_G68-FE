@@ -106,6 +106,22 @@ const BookingForm = () => {
             format="HH:mm"
             style={{ width: "100%" }}
             prefix={<ClockCircleOutlined />}
+            disabledHours={() => {
+              const hours = Array.from({ length: 24 }, (_, i) => i);
+              return hours.filter(
+                (hour) =>
+                  hour < 10 ||
+                  hour > 22 || // Trước 10:00 hoặc sau 22:30
+                  (hour >= 15 && hour < 16) // Khoảng 15:00 - 16:30
+              );
+            }}
+            disabledMinutes={(selectedHour) => {
+              if (selectedHour === 15)
+                return Array.from({ length: 60 }, (_, i) => i); // Vô hiệu hóa toàn bộ phút của giờ 15
+              if (selectedHour === 16)
+                return Array.from({ length: 30 }, (_, i) => i); // Vô hiệu hóa phút 0-29 của giờ 16
+              return [];
+            }}
           />
         </Form.Item>
 
@@ -124,21 +140,9 @@ const BookingForm = () => {
           />
         </Form.Item>
 
-        {/* <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            block
-            style={{
-              backgroundColor: "#1890ff",
-              borderColor: "#1890ff",
-              borderRadius: "4px",
-            }}
-          >
-            Đặt Bàn
-          </Button>
-        </Form.Item> */}
-        <ButtonComponent htmlType="submit" className="w-full">Xác Nhận Đặt Bàn</ButtonComponent>
+        <ButtonComponent htmlType="submit" className="w-full">
+          Xác Nhận Đặt Bàn
+        </ButtonComponent>
       </Form>
     </div>
   );

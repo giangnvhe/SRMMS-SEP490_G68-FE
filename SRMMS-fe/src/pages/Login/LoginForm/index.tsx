@@ -30,6 +30,7 @@ const LoginForm = () => {
       if (result.status === 200) {
         setToken(result.data.token);
         setUser({
+          id: result.data.id,
           phone: result.data.phone,
           fullName: result.data.fullName,
           roleName: result.data.roleName,
@@ -50,11 +51,11 @@ const LoginForm = () => {
         navigate("/home");
       }
     },
-    onError: (error: AxiosError<{ message: string }>) => {
+    onError: () => {
       errorMessage({
+        title: "Đăng nhập",
         description:
-          error.response?.data?.message ||
-          "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
+          "Đăng nhập thất bại, vui lòng kiểm tra lại tài khoản mật khẩu",
       });
       navigate("/");
     },

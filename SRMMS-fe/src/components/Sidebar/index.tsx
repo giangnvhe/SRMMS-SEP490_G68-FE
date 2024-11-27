@@ -11,8 +11,8 @@ import { faClipboardList, faTh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Menu, MenuProps } from "antd";
 import classNames from "classnames";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "../../common/const/const";
 import styles from "./index.module.scss";
 
@@ -21,6 +21,7 @@ type MenuItem = Required<MenuProps>["items"][number];
 interface Props {
   isOpenSideBar: boolean;
   isAdmin?: boolean;
+  className?: string;
 }
 
 const items: MenuItem[] = [
@@ -68,17 +69,34 @@ const items: MenuItem[] = [
   },
 ];
 
-const SidebarComponent = ({ isOpenSideBar, isAdmin }: Props) => {
+const SidebarComponent = ({ isOpenSideBar, isAdmin, className }: Props) => {
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  const [collapsed, setCollapsed] = useState(window.innerWidth <= 768);
+  const [selectedKey, setSelectedKey] = useState(location.pathname);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setCollapsed(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
 
+  useEffect(() => {
+    setSelectedKey(location.pathname);
+  }, [location.pathname]);
+
   const onClick: MenuProps["onClick"] = (e) => {
+    setSelectedKey(e.key);
     navigate(e.key);
   };
+
   return (
     <div
       className={cx("sidebar-wrapper")}
@@ -90,7 +108,8 @@ const SidebarComponent = ({ isOpenSideBar, isAdmin }: Props) => {
       >
         <Menu
           onClick={onClick}
-          defaultSelectedKeys={[location.pathname]}
+          //defaultSelectedKeys={[location.pathname]}
+          selectedKeys={[selectedKey]}
           mode="inline"
           items={items}
           inlineCollapsed={collapsed}

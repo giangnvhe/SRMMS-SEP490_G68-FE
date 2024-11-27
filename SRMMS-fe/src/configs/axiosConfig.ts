@@ -45,10 +45,10 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     switch (error?.response?.status) {
-      case UNAUTHORIZED:
-        removeAccessToken();
-        window.location.href = "/";
-        break;
+      // case UNAUTHORIZED:
+      //   removeAccessToken();
+      //   window.location.href = "/";
+      //   break;
 
       case NOT_FOUND:
         window.location.href = "/not-found";
