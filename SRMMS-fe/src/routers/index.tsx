@@ -6,6 +6,7 @@ import Register from "~/pages/Register";
 import OrderDetails from "~/pages/Admin/OrderMana/components/OrderDetail";
 import CombosManager from "~/pages/Admin/CombosManager";
 import { AdminRouter } from "~/middleware/Staff";
+import ForgotPassword from "~/pages/ForgetPassword";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -52,6 +53,10 @@ const RouterComponent = () => {
     {
       path: "/register",
       element: <Register />,
+    },
+    {
+      element: <ForgotPassword />,
+      path: "/forget-password",
     },
 
     //Public Layout
