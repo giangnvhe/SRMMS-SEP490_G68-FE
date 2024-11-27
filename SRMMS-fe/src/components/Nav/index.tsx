@@ -29,8 +29,8 @@ const NavComponent = ({
   const items: MenuProps["items"] = [
     {
       label: (
-        <div className="flex gap-2">
-          <InfoCircleOutlined style={{color: "green"}}/>
+        <div className="flex gap-2" onClick={() => navigate("/profile")}>
+          <InfoCircleOutlined style={{ color: "green" }} />
           <p className="font-bold text-sm">Information</p>
         </div>
       ),

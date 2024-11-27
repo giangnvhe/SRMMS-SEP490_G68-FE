@@ -2,15 +2,18 @@ import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
-import Register from "~/pages/Register";
-import OrderDetails from "~/pages/Admin/OrderMana/components/OrderDetail";
-import CombosManager from "~/pages/Admin/CombosManager";
 import { AdminRouter } from "~/middleware/Staff";
-import ForgotPassword from "~/pages/ForgetPassword";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
+const OrderDetails = lazy(
+  () => import("~/pages/Admin/OrderMana/components/OrderDetail")
+);
+const CombosManager = lazy(() => import("~/pages/Admin/CombosManager"));
+const Register = lazy(() => import("~/pages/Register"));
 const StaffOfficer = lazy(() => import("~/middleware/Staff"));
+const ProfilePage = lazy(() => import("~/pages/Profile"));
+const ForgotPassword = lazy(() => import("~/pages/ForgetPassword"));
 const InvoiceDialog = lazy(() => import("~/pages/Invoice"));
 const Login = lazy(() => import("~/pages/Login"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
@@ -57,6 +60,10 @@ const RouterComponent = () => {
     {
       element: <ForgotPassword />,
       path: "/forget-password",
+    },
+    {
+      path: "/profile",
+      element: <ProfilePage />,
     },
 
     //Public Layout
@@ -111,6 +118,7 @@ const RouterComponent = () => {
                 </StaffOfficer>
               ),
             },
+
             {
               path: "/payment/:id",
               element: (

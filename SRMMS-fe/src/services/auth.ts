@@ -7,6 +7,7 @@ interface LoginRequest {
 }
 
 interface LoginResponse {
+  id: number;
   roleName: string;
   phone: string;
   fullName: string;

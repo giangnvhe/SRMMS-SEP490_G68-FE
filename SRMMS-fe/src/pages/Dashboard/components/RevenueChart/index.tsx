@@ -31,7 +31,6 @@ const RevenueChart = () => {
       retry: 2,
     }
   );
-  console.log("🚀 ~ RevenueChart ~ data:", data);
 
   const transformedData = data?.orders
     ? groupOrdersByDayOfWeek(data.orders)

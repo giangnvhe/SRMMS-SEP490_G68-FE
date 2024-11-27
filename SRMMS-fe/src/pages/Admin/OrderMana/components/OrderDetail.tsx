@@ -32,6 +32,7 @@ const OrderDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
+  console.log("🚀 ~ OrderDetails ~ orderData:", orderData);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -77,12 +78,12 @@ const OrderDetails = () => {
   if (!orderData) {
     return (
       <Result
-        status="404"
-        title="Order Not Found"
-        subTitle="Sorry, the order you are looking for does not exist."
+        status="warning" // Use 'warning' or any other suitable status
+        title="Chưa Thanh Toán"
+        subTitle="Khách hàng chưa thanh toán, nên chưa thể xem đơn hàng."
         extra={
           <Button type="primary" onClick={handleBack}>
-            Back to Orders
+            Quay lại danh sách đơn hàng
           </Button>
         }
       />

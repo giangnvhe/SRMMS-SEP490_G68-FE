@@ -13,9 +13,8 @@ export interface AccountData {
   roleName: string;
   roleId: number;
   status: boolean;
-  empDob?: string;
-  empStartDate?: string;
-  action: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface AccountResponse {
