@@ -118,14 +118,17 @@ const LoginForm = () => {
           <p>
             Do you have a account?{" "}
             <span
-              className="text-blue-500 hover:text-blue-700 font-medium ml-1"
+              className="text-blue-500 hover:text-blue-700 font-medium ml-1 cursor-pointer"
               onClick={() => navigate("/register")}
             >
               Đăng kí
             </span>
           </p>
         </div>
-        <div className="text-blue-500 hover:text-blue-700 font-medium">
+        <div
+          className="text-blue-500 hover:text-blue-700 font-medium cursor-pointer"
+          onClick={() => navigate("/forget-password")}
+        >
           Quên mật khẩu?
         </div>
       </Form>

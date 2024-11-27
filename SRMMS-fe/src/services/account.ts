@@ -109,3 +109,33 @@ export const deleteAccount = async (
   );
   return result.data;
 };
+
+export interface VerificationOTP {
+  phoneNumber: string;
+}
+
+export interface OtpResponse {
+  success: boolean;
+  message: string;
+}
+export const forgetPassword = async (params: VerificationOTP) => {
+  const result = await axiosInstance.post<
+    VerificationOTP,
+    AxiosResponse<OtpResponse>
+  >(getApi("api", "forgot-password"), params);
+
+  return result;
+};
+
+export interface RequestResetPassword {
+  phoneNumber: string;
+  newPassword: string;
+}
+
+export const resetPassword = async (params: RequestResetPassword) => {
+  const result = await axiosInstance.post<
+    RequestResetPassword,
+    AxiosResponse<OtpResponse>
+  >(getApi("api", "reset-password"), params);
+  return result;
+};
