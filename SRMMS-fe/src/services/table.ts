@@ -19,6 +19,7 @@ export interface TableStatusData {
 export interface TableStatusResponse {
   data: TableStatusData[];
 }
+
 export interface TableResponse {
   data: TableData[];
 }
@@ -35,6 +36,7 @@ export interface RequestTable {
   statusId: number;
   tableOfPeople: number;
 }
+
 interface ResponseTable {
   success: boolean;
   message: string;
