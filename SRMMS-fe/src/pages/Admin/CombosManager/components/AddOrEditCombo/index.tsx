@@ -170,7 +170,6 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
       ComboStatus: values.comboStatus,
       ProductNames: productNames,
     };
-    console.log("🚀 ~ AddOrEditCombos ~ formData:", formData);
     if (isEditCombo) {
       handleUpdateCombo.mutate({
         id: comboData?.comboId,

@@ -14,6 +14,7 @@ import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "../../common/const/const";
+import { faTicket } from "@fortawesome/free-solid-svg-icons";
 import styles from "./index.module.scss";
 
 const cx = classNames.bind(styles);
@@ -66,6 +67,11 @@ const items: MenuItem[] = [
     key: "/admin/order-list",
     label: "Quản lý Order",
     icon: <FontAwesomeIcon icon={faClipboardList} />,
+  },
+  {
+    key: "/admin/voucher",
+    label: "Quản lý Voucher",
+    icon: <FontAwesomeIcon icon={faTicket} />,
   },
 ];
 

@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
 import { AdminRouter } from "~/middleware/Staff";
+import VoucherManager from "~/pages/Admin/Voucher";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -158,6 +159,14 @@ const RouterComponent = () => {
               element: (
                 <AdminOfficer>
                   <Dashboard />
+                </AdminOfficer>
+              ),
+            },
+            {
+              path: "/admin/voucher",
+              element: (
+                <AdminOfficer>
+                  <VoucherManager />
                 </AdminOfficer>
               ),
             },

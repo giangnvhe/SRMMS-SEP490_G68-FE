@@ -61,7 +61,7 @@ const CombosManager = () => {
       });
     }
     if (getListCombos.data) {
-      const combos = getListCombos.data.data?.combos;
+      //const combos = getListCombos.data.data?.combos;
 
       // Check if combos is an array before calling map
       if (getListCombos.data) {

@@ -97,7 +97,7 @@ export const updateProduct = async (
   id: number,
   employeeData: NewProductRequest
 ) => {
-  const response = await axiosInstance.put(
+  const response = await axiosInstanceFormData.put(
     getApi("api", `product/update/${id}`),
     employeeData
   );

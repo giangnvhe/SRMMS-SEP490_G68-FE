@@ -169,8 +169,8 @@ const AddOrEditAccount = ({
   };
 
   const isLoadings = useMemo(
-    () => handleCreateEmployee.isLoading || handleCreateEmployee.isLoading,
-    [handleCreateEmployee.isLoading, handleCreateEmployee.isLoading]
+    () => handleUpdateEmployee.isLoading || handleCreateEmployee.isLoading,
+    [handleCreateEmployee.isLoading, handleUpdateEmployee.isLoading]
   );
 
   return (
