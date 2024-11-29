@@ -1,7 +1,3 @@
-import { Avatar, Dropdown, MenuProps, Space } from "antd";
-import classNames from "classnames";
-import logo from "../../assets/images/logo2.png";
-import styles from "./index.module.scss";
 import {
   CloseOutlined,
   InfoCircleOutlined,
@@ -9,8 +5,11 @@ import {
   MenuOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { Avatar, Dropdown, MenuProps, Space } from "antd";
+import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
-import Logout from "../../pages/Logout";
+import logo from "../../assets/images/logo2.png";
+import styles from "./index.module.scss";
 
 interface Props {
   isOpenSideBar: boolean;
