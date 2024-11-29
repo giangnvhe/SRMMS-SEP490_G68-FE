@@ -13,6 +13,7 @@ const items = [
   { key: "2", label: "Thực Đơn", path: "/thuc-don" },
   { key: "3", label: "Liên hệ", path: "/lien-he" },
   { key: "4", label: "Đặt bàn", path: "/dat-ban" },
+  { key: "5", label: "Chính sách", path: "/term" },
 ];
 
 const Header = () => {
@@ -84,6 +85,7 @@ const Header = () => {
               Chào mừng,{" "}
               <span className="text-green-700">{user?.fullName}</span>!
             </div>
+            
             <div
               onClick={handleLogout}
               className="flex justify-center items-center gap-2 hover:text-red-500 transition-colors duration-200 cursor-pointer"

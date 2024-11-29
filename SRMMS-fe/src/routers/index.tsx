@@ -3,13 +3,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
 import { AdminRouter } from "~/middleware/Staff";
-import VoucherManager from "~/pages/Admin/Voucher";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
 const OrderDetails = lazy(
   () => import("~/pages/Admin/OrderMana/components/OrderDetail")
 );
+const VoucherManager = lazy(() => import("~/pages/Admin/Voucher"));
+const ContactInfo = lazy(() => import("~/pages/HomePage/ContractInfo"));
+const TermsAndConditions = lazy(() => import("~/pages/HomePage/Policy"));
 const CombosManager = lazy(() => import("~/pages/Admin/CombosManager"));
 const Register = lazy(() => import("~/pages/Register"));
 const StaffOfficer = lazy(() => import("~/middleware/Staff"));
@@ -83,6 +85,14 @@ const RouterComponent = () => {
         {
           element: <ProductDetail />,
           path: "/product/:id",
+        },
+        {
+          element: <ContactInfo />,
+          path: "/lien-he",
+        },
+        {
+          element: <TermsAndConditions />,
+          path: "/term",
         },
       ],
     },

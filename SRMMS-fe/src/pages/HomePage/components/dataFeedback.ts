@@ -1,0 +1,73 @@
+ export const fakeFeedbacks = [
+    {
+      feedback: "Món ăn ở đây rất ngon, tôi rất hài lòng với dịch vụ.",
+      rateStar: 5,
+      acc_id: "user001",
+      create_at: new Date("2024-11-01"),
+      update_at: new Date("2024-11-01"),
+    },
+    {
+      feedback: "Không gian quán rất đẹp, nhưng phục vụ hơi chậm.",
+      rateStar: 4,
+      acc_id: "user002",
+      create_at: new Date("2024-11-02"),
+      update_at: new Date("2024-11-03"),
+    },
+    {
+      feedback: "Giá cả hợp lý, món tráng miệng ngon tuyệt!",
+      rateStar: 5,
+      acc_id: "user003",
+      create_at: new Date("2024-11-03"),
+      update_at: new Date("2024-11-03"),
+    },
+    {
+      feedback: "Tôi không thích món chính, nhưng nước uống khá ổn.",
+      rateStar: 3,
+      acc_id: "user004",
+      create_at: new Date("2024-11-04"),
+      update_at: new Date("2024-11-04"),
+    },
+    {
+      feedback: "Nhà hàng này là nơi lý tưởng để tụ họp gia đình!",
+      rateStar: 5,
+      acc_id: "user005",
+      create_at: new Date("2024-11-05"),
+      update_at: new Date("2024-11-05"),
+    },
+    {
+      feedback: "Phục vụ rất nhiệt tình, nhưng món ăn chưa đạt kỳ vọng.",
+      rateStar: 3,
+      acc_id: "user006",
+      create_at: new Date("2024-11-06"),
+      update_at: new Date("2024-11-06"),
+    },
+    {
+      feedback: "Lần đầu trải nghiệm ở đây, cảm giác rất tuyệt vời!",
+      rateStar: 5,
+      acc_id: "user007",
+      create_at: new Date("2024-11-07"),
+      update_at: new Date("2024-11-07"),
+    },
+    {
+      feedback: "Tôi sẽ quay lại vì không gian và phong cách phục vụ.",
+      rateStar: 4,
+      acc_id: "user008",
+      create_at: new Date("2024-11-08"),
+      update_at: new Date("2024-11-08"),
+    },
+    {
+      feedback: "Món ăn rất ngon, đặc biệt là món gỏi hải sản!",
+      rateStar: 5,
+      acc_id: "user009",
+      create_at: new Date("2024-11-09"),
+      update_at: new Date("2024-11-09"),
+    },
+    {
+      feedback: "Quá đông khách, tôi phải chờ lâu để được phục vụ.",
+      rateStar: 2,
+      acc_id: "user010",
+      create_at: new Date("2024-11-10"),
+      update_at: new Date("2024-11-10"),
+    },
+  ];
+  
