@@ -59,10 +59,6 @@ const RouterComponent = () => {
       element: <Register />,
     },
     {
-      element: <ForgotPassword />,
-      path: "/forget-password",
-    },
-    {
       path: "/profile",
       element: <ProfilePage />,
     },
@@ -100,6 +96,10 @@ const RouterComponent = () => {
         {
           element: <MenuClient />,
           path: "/menu-client/:id",
+        },
+        {
+          element: <ForgotPassword />,
+          path: "/forget-password",
         },
       ],
     },

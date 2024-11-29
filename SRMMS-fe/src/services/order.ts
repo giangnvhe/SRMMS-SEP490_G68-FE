@@ -131,3 +131,29 @@ export const getRevenueOrder = async (
   });
   return result.data;
 };
+
+export interface RequestPaymentOrder {
+  orderId: number;
+  discountId: number | null;
+  totalMoney: number;
+}
+
+export interface dataResponse {
+  orderId: number;
+  totalMoney: number;
+  tableId: number;
+  orderDate: string;
+  status: boolean;
+  discountId: number;
+  discountValue: number;
+}
+
+export const PaymentOrder = async (
+  data: RequestPaymentOrder
+): Promise<AxiosResponse<AddToOrderResponse>> => {
+  const result = await axiosInstance.post(
+    getApi("api", "Order/CompleteOrder"),
+    data
+  );
+  return result;
+};

@@ -3,7 +3,7 @@ import { getAccessToken, removeAccessToken } from "./accessToken";
 import { NOT_FOUND, UNAUTHORIZED } from "~/common/const";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL ?? "",
   timeout: 100000,
   headers: {
     "Content-Type": "application/json",
@@ -32,7 +32,7 @@ axiosInstance.interceptors.request.use(
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
     return config;
-    // return Promise.reject();
+    //return Promise.reject(new Error("No access token"));
   },
   (error) => {
     return Promise.reject(error);
@@ -44,11 +44,11 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    switch (error?.response?.status) {
-      // case UNAUTHORIZED:
-      //   removeAccessToken();
-      //   window.location.href = "/";
-      //   break;
+    switch (error?.response) {
+      case UNAUTHORIZED:
+        removeAccessToken();
+        window.location.href = "/";
+        break;
 
       case NOT_FOUND:
         window.location.href = "/not-found";
@@ -64,7 +64,6 @@ axiosInstanceFormData.interceptors.request.use(
     const accessToken = getAccessToken();
     if (accessToken) {
       config.headers["Authorization"] = "Bearer " + accessToken;
-      return config;
     }
     return config;
   },

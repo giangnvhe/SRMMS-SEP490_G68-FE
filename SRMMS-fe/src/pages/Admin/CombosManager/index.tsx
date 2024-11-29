@@ -60,27 +60,27 @@ const CombosManager = () => {
           (getListCombos.error as AxiosError)?.message || "Đã có lỗi xảy ra!!!",
       });
     }
-    if (getListCombos.data) {
+    if (getListCombos?.data) {
       //const combos = getListCombos.data.data?.combos;
 
       // Check if combos is an array before calling map
-      if (getListCombos.data) {
+      if (getListCombos?.data) {
         setDataTable(
-          getListCombos.data.data?.combos.map((d, i) => ({
+          getListCombos?.data?.data?.combos.map((d, i) => ({
             ...d,
-            key: d.comboId,
+            key: d?.comboId,
             index:
-              (getListCombos.data.data.pageNumber - 1) *
-                getListCombos.data.data.pageSize +
+              (getListCombos?.data?.data?.pageNumber - 1) *
+                getListCombos.data?.data?.pageSize +
               i +
               1,
           }))
         );
       }
 
-      form.setFieldValue("pageNumber", getListCombos.data.data.pageNumber);
-      form.setFieldValue("pageSize", getListCombos.data.data.pageSize);
-      form.setFieldValue("totalCount", getListCombos.data.data.totalCount);
+      form.setFieldValue("pageNumber", getListCombos?.data?.data?.pageNumber);
+      form.setFieldValue("pageSize", getListCombos?.data?.data?.pageSize);
+      form.setFieldValue("totalCount", getListCombos?.data?.data?.totalCount);
     }
   }, [getListCombos.data, getListCombos.isError, getListCombos.error]);
 
