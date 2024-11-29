@@ -9,7 +9,7 @@ import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import useNotification from "~/hooks/useNotification";
 
 const items = [
-  { key: "1", label: "Trang chủ", path: "/" },
+  { key: "1", label: "Trang chủ", path: "/home" },
   { key: "2", label: "Thực Đơn", path: "/thuc-don" },
   { key: "3", label: "Liên hệ", path: "/lien-he" },
   { key: "4", label: "Đặt bàn", path: "/dat-ban" },
