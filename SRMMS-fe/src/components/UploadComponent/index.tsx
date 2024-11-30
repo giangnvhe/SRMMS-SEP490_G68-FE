@@ -35,6 +35,14 @@ const UploadComponent = ({
     }
   };
 
+  const handleBeforeUpload = (file: RcFile) => {
+    const isLessThan20MB = file.size / 1024 / 1024 < 10;
+    if (!isLessThan20MB) {
+      alert("File không được vượt quá 20MB!");
+    }
+    return isLessThan20MB; // Chỉ cho phép upload nếu file <= 20MB
+  };
+
   return (
     <Form.Item
       label={label}
@@ -45,13 +53,13 @@ const UploadComponent = ({
       className={cx("textarea-component", { [className]: !!className })}
     >
       <Upload
-        beforeUpload={() => false}
+        beforeUpload={handleBeforeUpload}
         listType="picture"
         onChange={handleChange}
         disabled={disabled}
         maxCount={1}
       >
-        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+        <Button icon={<UploadOutlined />}>Chọn File</Button>
       </Upload>
     </Form.Item>
   );

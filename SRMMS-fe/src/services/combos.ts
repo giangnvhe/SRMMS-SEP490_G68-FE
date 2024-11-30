@@ -57,13 +57,11 @@ export const getLisComboProduct = async (
   return result;
 };
 
-export const deleteComboProduct = async (
-  id: string
-): Promise<ComboDataResponse> => {
-  const result = await axiosInstance.delete<ComboDataResponse>(
-    getApi("api", `comboProduct/${id}`)
+export const changeComboStatus = async (id: number): Promise<AxiosResponse> => {
+  const response = await axiosInstance.patch(
+    getApi("api", `comboProduct/changeStatus/${id}`)
   );
-  return result.data;
+  return response.data;
 };
 
 export const addNewCombo = async (

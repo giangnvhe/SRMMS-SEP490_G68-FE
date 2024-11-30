@@ -45,17 +45,20 @@ const Payment = () => {
     }
   );
 
-  const paymentMutation = useMutation(PaymentOrder, {
-    onSuccess: (response) => {
-      message.success("Thanh toán thành công!");
-      navigate("/order-table"); // Redirect to order table page after successful payment
-    },
-    onError: (error) => {
-      message.error("Thanh toán thất bại. Vui lòng thử lại.");
-      console.error("Payment error:", error);
-    },
-  });
-
+  const paymentMutation = useMutation(
+    (paymentData: { id: number; data: RequestPaymentOrder }) =>
+      PaymentOrder(paymentData.id, paymentData.data),
+    {
+      onSuccess: (response) => {
+        message.success("Thanh toán thành công!");
+        navigate("/order-table");
+      },
+      onError: (error) => {
+        message.error("Thanh toán thất bại. Vui lòng thử lại.");
+        console.error("Payment error:", error);
+      },
+    }
+  );
   const CONSTANT = {
     order: "Thanh Toán",
     table: "Bàn",
@@ -114,8 +117,6 @@ const Payment = () => {
   ];
   const tableData: DataType[] =
     data?.data?.flatMap((order: TableOrderData) => {
-      //setOrderPayment(order.orderId);
-
       const products = order.products.map((product) => ({
         productName: product.proName,
         comboName: "",
@@ -153,61 +154,32 @@ const Payment = () => {
   }, [data]);
 
   const handlePayNow = () => {
-    const orderIds = data?.data?.map((order) => order.orderId) || [];
-
-    // Nếu chỉ có một order
-    if (orderIds.length === 1) {
-      const paymentData: RequestPaymentOrder = {
-        orderId: orderIds[0],
-        discountId: data?.data?.[0]?.discountId || null,
-        totalMoney: totalBill,
-      };
-      paymentMutation.mutate(paymentData);
+    if (!data?.data?.length) {
+      message.error("Không có order để thanh toán.");
+      return;
+    }
+    if (data.data.length === 1) {
+      const order = data.data[0];
+      paymentMutation.mutate({
+        id: order.orderId,
+        data: {
+          discountId: order.discountId || null,
+          totalMoney: parseFloat(order.totalMoney.toString()),
+        },
+      });
     } else {
-      // Nếu nhiều order, có thể gọi multiple mutations hoặc API riêng để xử lý
-      orderIds.forEach((orderId) => {
-        const orderToPayment = data?.data?.find(
-          (order) => order.orderId === orderId
-        );
-        const paymentData: RequestPaymentOrder = {
-          orderId: orderId,
-          discountId: orderToPayment?.discountId || null,
-          totalMoney: orderToPayment?.totalMoney || 0,
-        };
-        paymentMutation.mutate(paymentData);
+      // Multiple orders
+      data.data.forEach((order: any) => {
+        paymentMutation.mutate({
+          id: order.orderId,
+          data: {
+            discountId: order.discountId || null,
+            totalMoney: parseFloat(order.totalMoney.toString()),
+          },
+        });
       });
     }
   };
-
-  // const handlePayNow = async () => {
-  //   if (!data?.data?.length) {
-  //     message.error("Không có order để thanh toán.");
-  //     return;
-  //   }
-
-  //   const paymentRequests = data.data.map((order) => ({
-  //     orderId: order.orderId,
-  //     discountId: order.discountId || null,
-  //     totalMoney: order.totalMoney,
-  //   }));
-  //   console.log("Payload:", paymentRequests);
-  //   paymentRequests.forEach((paymentData) => {
-  //     paymentMutation.mutate(paymentData);
-  //   });
-  //   // try {
-  //   //   await Promise.all(
-  //   //     paymentRequests.map(async (paymentData: any) => {
-  //   //       await paymentMutation.mutateAsync(paymentData);
-  //   //       message.success(
-  //   //         `Thanh toán thành công cho order ID: ${paymentData.orderId}`
-  //   //       );
-  //   //     })
-  //   //   );
-  //   // } catch (error) {
-  //   //   message.error("Thanh toán thất bại cho một hoặc nhiều đơn hàng.");
-  //   //   console.error("Payment error:", error);
-  //   // }
-  // };
 
   return (
     <div style={{ padding: "24px", height: "100%" }}>
