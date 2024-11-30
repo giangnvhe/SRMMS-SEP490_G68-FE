@@ -7,6 +7,7 @@ import { useMutation } from "react-query";
 import ButtonComponent from "~/components/ButtonComponent";
 import DatePickerComponent from "~/components/DatePickerComponent";
 import InputComponent from "~/components/InputComponent";
+import SwitchComponent from "~/components/SwitchComponent";
 import useNotification from "~/hooks/useNotification";
 import {
   addVoucher,
@@ -27,11 +28,11 @@ interface MutationUpdateVoucher {
 }
 
 const initialFormValues = {
-  fullName: "",
-  email: "",
-  empDob: "",
-  phone: "",
-  roleId: 2,
+  codeDetail: "",
+  discountValue: "",
+  startDate: dayjs(),
+  endDate: dayjs().add(1, "day"),
+  status: true,
 };
 
 const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
@@ -49,7 +50,6 @@ const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
         });
         form.resetFields();
         setFormValues(initialFormValues);
-        onCancel();
         refetch();
       },
       onError: (error: AxiosError<{ message: string }>) => {
@@ -112,9 +112,9 @@ const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
     const formData: VoucherRequest = {
       codeDetail: values.codeDetail,
       discountValue: values.discountValue,
-      startDate: values.startDate,
-      endDate: values.endDate,
-      status: true,
+      startDate: dayjs(values.startDate).format("YYYY-MM-DD"), // Format ngày bắt đầu
+      endDate: dayjs(values.endDate).format("YYYY-MM-DD"),
+      status: values.status !== undefined ? values.status : true,
     };
     if (isEditVoucher) {
       handleUpdateEmployee.mutate({
@@ -198,6 +198,15 @@ const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
                   date.isBefore(dayjs().add(1, "day"), "day")
                 }
               />
+              {isEditVoucher && (
+                <SwitchComponent
+                  name="status"
+                  label="Trạng Thái"
+                  form={form}
+                  checkedChildren="Bật"
+                  unCheckedChildren="Tắt"
+                />
+              )}
             </div>
           </div>
           <div className="mt-6 flex justify-end space-x-3">
