@@ -1,16 +1,22 @@
 import { Form, Modal } from "antd";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import ButtonComponent from "~/components/ButtonComponent";
 import useNotification from "~/hooks/useNotification";
-import { DiscountData, getDiscount } from "~/services/voucher";
+import {
+  changeVoucherStatus,
+  DiscountData,
+  getDiscount,
+} from "~/services/voucher";
 import TableVoucher from "./components/TableVoucher";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import AddOrEditVoucher from "./components/AddOrEdit";
 
 export interface FormFields {
   codeDetail: string;
+  startDate: string;
+  endDate: string;
   pageNumber: number;
   pageSize: number;
   totalDiscountCode: number;
@@ -19,7 +25,7 @@ export interface FormFields {
 const VoucherManager = () => {
   const [form] = Form.useForm<FormFields>();
   const [dataTable, setDataTable] = useState<DiscountData[]>([]);
-  const { errorMessage } = useNotification();
+  const { errorMessage, successMessage } = useNotification();
   const [openModal, setOpenModal] = useState(false);
   const [selectedVoucher, setSelectedVoucher] = useState<
     DiscountData | undefined
@@ -28,6 +34,26 @@ const VoucherManager = () => {
   const getVouchers = useQuery("getVouchers", () =>
     getDiscount(form.getFieldsValue(true))
   );
+
+  const handleChangeStatus = useMutation(changeVoucherStatus, {
+    onSuccess: () => {
+      successMessage({
+        title: "Thành công",
+        description: "Dừng hoạt động voucher thành công",
+      });
+      getVouchers.refetch();
+    },
+    onError: (error: AxiosError) => {
+      errorMessage({
+        title: "Thất bại",
+        description: error.message || "Đã có lỗi xảy ra, xóa thất bại!!",
+      });
+    },
+  });
+
+  const onOk = async (key: number) => {
+    handleChangeStatus.mutate(key);
+  };
 
   const onSelected = (id: DiscountData | undefined) => {
     setSelectedVoucher(id);
@@ -88,6 +114,7 @@ const VoucherManager = () => {
             refetch={getVouchers.refetch}
             loading={getVouchers.isLoading || getVouchers.isFetching}
             form={form}
+            onOk={onOk}
           />
         </div>
       </div>

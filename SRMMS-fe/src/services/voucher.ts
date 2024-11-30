@@ -65,3 +65,10 @@ export const updateVoucher = async (
   );
   return response.data;
 };
+
+export const changeVoucherStatus = async (id: number): Promise<AxiosResponse> => {
+  const response = await axiosInstance.put(
+    getApi("api", `DiscountCodes/changeStatus/${id}`)
+  );
+  return response.data;
+};
