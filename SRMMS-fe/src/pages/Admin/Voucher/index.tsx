@@ -20,6 +20,7 @@ export interface FormFields {
   pageNumber: number;
   pageSize: number;
   totalDiscountCode: number;
+  status?: boolean;
 }
 
 const VoucherManager = () => {

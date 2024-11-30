@@ -57,7 +57,6 @@ const MenuClient = () => {
         const response = await getListProduct({
           name: "",
           categoryId: selectedCategory,
-          pagination: { pageNumber: 1, pageSize: 10 },
           pageNumber: 1,
           pageSize: 10,
           totalProducts: 0,
@@ -114,7 +113,7 @@ const MenuClient = () => {
       setCart((prevCart) => [...prevCart, { ...product, quantity: 1 }]);
     }
 
-    message.success(`${product.productName} added to cart!`);
+    message.success(`${product.productName} đã thêm vào đơn hàng của bạn!`);
   };
 
   const handleClearCart = () => {
@@ -223,7 +222,7 @@ const MenuClient = () => {
           className="bg-gray-700 border-none rounded-full shadow-lg hover:bg-gray-800 font-semibold"
           onClick={toggleCart}
         >
-          Giỏ hàng ({cart.length})
+          Đơn hàng ({cart.length})
         </Button>
       </div>
 
