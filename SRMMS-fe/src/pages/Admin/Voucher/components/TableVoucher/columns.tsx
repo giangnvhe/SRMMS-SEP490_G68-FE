@@ -1,14 +1,19 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Popconfirm, Space, TableColumnsType, Tooltip } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Space, TableColumnsType, Tooltip } from "antd";
 import moment from "moment";
 import { formatVND } from "~/common/utils/formatPrice";
+import useNotification from "~/hooks/useNotification";
 import { DiscountData } from "~/services/voucher";
 
 interface IProps {
   onSelected: (id: DiscountData | undefined) => void;
+  onOk: (key: number) => void;
 }
 
-function UseColumn({ onSelected }: IProps) {
+function UseColumn({ onSelected, onOk }: IProps) {
+  const { comfirmMessage } = useNotification();
   const columns: TableColumnsType<DiscountData> = [
     {
       title: "STT",
@@ -16,12 +21,14 @@ function UseColumn({ onSelected }: IProps) {
       align: "center",
       width: 20,
     },
-
     {
       title: "Tên mã code",
       dataIndex: "codeDetail",
       align: "center",
       width: 100,
+      render: (codeDetail: string) => (
+        <div className="font-bold text-blue-600">{codeDetail}</div>
+      ),
     },
     {
       title: "Giảm giá tiền",
@@ -36,12 +43,29 @@ function UseColumn({ onSelected }: IProps) {
       dataIndex: "startDate",
       align: "center",
       width: 80,
+      render: (date: string) => <div>{moment(date).format("YYYY-MM-DD")}</div>,
     },
     {
       title: "Ngày kết thúc",
       dataIndex: "endDate",
       align: "center",
       width: 100,
+      render: (date: string) => <div>{moment(date).format("YYYY-MM-DD")}</div>,
+    },
+    {
+      title: "Trạng Thái",
+      dataIndex: "status",
+      align: "center",
+      width: 100,
+      render: (status: boolean) => (
+        <span
+          className={`px-3 py-1 rounded-full text-white font-semibold ${
+            status ? "bg-green-500" : "bg-red-500"
+          }`}
+        >
+          {status ? "Hoạt động" : "Không hoạt động"}
+        </span>
+      ),
     },
     {
       title: "Hành Động",
@@ -56,8 +80,24 @@ function UseColumn({ onSelected }: IProps) {
               onClick={() => onSelected(record)}
             />
           </Tooltip>
-          <Tooltip title="Xóa">
-            <DeleteOutlined className="text-red-500 cursor-pointer hover:text-red-700" />
+          <Tooltip title="Tắt">
+            <FontAwesomeIcon
+              icon={faPowerOff}
+              className="text-red-500 cursor-pointer hover:text-red-700"
+              onClick={() =>
+                comfirmMessage({
+                  description:
+                    "Bạn chắc chắn muốn tắt trạng thái hoạt động của " +
+                    record.codeDetail +
+                    " ?",
+                  onSubmit: () => {
+                    if (record.key) {
+                      onOk(record.key as number);
+                    }
+                  },
+                })
+              }
+            />
           </Tooltip>
         </Space>
       ),
