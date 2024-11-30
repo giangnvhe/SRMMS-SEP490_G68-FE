@@ -45,7 +45,7 @@ const ViewCart = ({
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <ShoppingCartOutlined className="text-xl" />
-              <span className="text-lg font-semibold">Giỏ hàng của bạn</span>
+              <span className="text-lg font-semibold">Đơn hàng của bạn</span>
             </div>
             <span className="text-gray-500">
               ({cart.reduce((total, item) => total + item.quantity, 0)} món)
@@ -86,7 +86,7 @@ const ViewCart = ({
                 onClick={onCheckout}
                 className="h-12 px-8 font-semibold text-base"
               >
-                Thanh toán
+                Gọi Món
               </Button>
             </div>
           </div>

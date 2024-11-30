@@ -20,7 +20,6 @@ export interface AccountData {
 export interface AccountResponse {
   data: {
     accounts: AccountData[];
-    totalCustomers: number;
     totalEmployees: number;
     pageNumber: number;
     pageSize: number;
@@ -63,9 +62,12 @@ interface DeleteAccountResponse {
 export const getListAccount = async (
   params: FormFields
 ): Promise<AccountResponse> => {
-  const result = await axiosInstance.get(getApi("api", "account/list"), {
-    params,
-  });
+  const result = await axiosInstance.get(
+    getApi("api", "account/list/employees"),
+    {
+      params,
+    }
+  );
   return result;
 };
 

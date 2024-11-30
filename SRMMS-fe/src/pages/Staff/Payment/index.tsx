@@ -19,6 +19,7 @@ import { getOrderTable, TableOrderData } from "~/services/orderTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { PaymentOrder, RequestPaymentOrder } from "~/services/order";
+import PaymentMethod from "./components/PaymentMethod";
 
 const ORDER_HEIGHT_CONTAINER = "calc(100vh - 64px)";
 const ORDER_TABLE_HEIGHT = "calc(100vh - 64px - 64px - 64px - 150px)";
@@ -33,7 +34,6 @@ interface DataType {
 }
 const Payment = () => {
   const { id } = useParams();
-  const [showQRCode, setShowQRCode] = useState(false);
   const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery(
@@ -136,14 +136,6 @@ const Payment = () => {
       return [...products, ...combos];
     }) || [];
 
-  const handleBankTransferClick = () => {
-    setShowQRCode(true);
-  };
-
-  const cancel = () => {
-    setShowQRCode(false);
-  };
-
   const totalBill = useMemo(() => {
     return (
       data?.data?.reduce(
@@ -153,7 +145,7 @@ const Payment = () => {
     );
   }, [data]);
 
-  const handlePayNow = () => {
+  const handlePayNow = (discountId?: number, accId?: number) => {
     if (!data?.data?.length) {
       message.error("Không có order để thanh toán.");
       return;
@@ -163,8 +155,11 @@ const Payment = () => {
       paymentMutation.mutate({
         id: order.orderId,
         data: {
-          discountId: order.discountId || null,
-          totalMoney: parseFloat(order.totalMoney.toString()),
+          discountId: discountId || null,
+          accId: accId || null,
+          totalMoney: discountId
+            ? totalBill - (order.discountValue || 0) // Apply discount
+            : parseFloat(order.totalMoney.toString()),
         },
       });
     } else {
@@ -173,8 +168,11 @@ const Payment = () => {
         paymentMutation.mutate({
           id: order.orderId,
           data: {
-            discountId: order.discountId || null,
-            totalMoney: parseFloat(order.totalMoney.toString()),
+            discountId: discountId || null,
+            accId: order.accId || null,
+            totalMoney: discountId
+              ? totalBill - (order.discountValue || 0) // Apply discount
+              : parseFloat(order.totalMoney.toString()),
           },
         });
       });
@@ -265,83 +263,11 @@ const Payment = () => {
 
         <Col xs={24} md={8}>
           <Card bordered={false}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Typography.Title style={{ margin: 0 }} level={4}>
-                {CONSTANT.paymentMethod.toUpperCase()}
-              </Typography.Title>
-            </div>
-            <Divider />
-            <Row gutter={[16, 16]} style={{ margin: "20px 0 0 0" }}>
-              <Col xs={24} sm={8} md={8} lg={8}>
-                <Button
-                  type="default"
-                  style={{ height: 50, width: "100%" }}
-                  onClick={cancel}
-                >
-                  {CONSTANT.cash.toUpperCase()}
-                </Button>
-              </Col>
-              <Col xs={24} sm={8} md={8} lg={8}>
-                <Button
-                  type="default"
-                  style={{ height: 50, width: "100%" }}
-                  onClick={handleBankTransferClick}
-                >
-                  {CONSTANT.card.toUpperCase()}
-                </Button>
-              </Col>
-              <Col xs={24} sm={8} md={8} lg={8}>
-                <Button
-                  type="default"
-                  style={{ height: 50, width: "100%" }}
-                  onClick={cancel}
-                >
-                  {CONSTANT.other.toUpperCase()} {/* Card */}
-                </Button>
-              </Col>
-            </Row>
-            <Divider />
-            {showQRCode && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "200px",
-                  marginTop: "20px",
-                  textAlign: "center",
-                  padding: "10px",
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "8px",
-                }}
-              >
-                <QRCode
-                  value={`BANK_TRANSFER_AMOUNT_${formatVND(
-                    data?.data?.reduce(
-                      (acc, order) => acc + parseFloat(order.totalMoney),
-                      0
-                    )
-                  )}`}
-                />
-              </div>
-            )}
-
-            <Divider />
-            <Button
-              type="primary"
-              block
-              style={{ marginTop: "24px", height: 50 }}
-              onClick={handlePayNow}
-              loading={paymentMutation.isLoading}
-            >
-              {CONSTANT.payNow.toUpperCase()}
-            </Button>
+            <PaymentMethod
+              totalAmount={totalBill}
+              onPayNow={handlePayNow}
+              isPaying={paymentMutation.isLoading}
+            />
           </Card>
         </Col>
       </Row>
