@@ -12,7 +12,7 @@ interface IProps {
   loading: boolean;
   form: FormInstance;
   onSelected: (id: ComboData | undefined) => void;
-  onOk: (key: string) => void;
+  onOk: (key: number) => void;
 }
 
 const initialValue = {

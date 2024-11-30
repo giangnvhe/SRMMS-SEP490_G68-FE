@@ -1,5 +1,7 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Modal, Space, TableColumnsType } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Modal, Space, TableColumnsType, Tooltip } from "antd";
 import { useState } from "react";
 import useNotification from "~/hooks/useNotification";
 import { ProductData } from "~/services/product";
@@ -89,19 +91,25 @@ function UseColumn({ onSelected, onOk }: IProps) {
             className="text-blue-500 cursor-pointer"
             onClick={() => onSelected(record)}
           />
-          <DeleteOutlined
-            className="text-red-500 cursor-pointer"
-            onClick={() =>
-              comfirmMessage({
-                description: "Do you want delete " + record.productName + " ?",
-                onSubmit: () => {
-                  if (record.key) {
-                    onOk(record.key as string);
-                  }
-                },
-              })
-            }
-          />
+          <Tooltip title="Tắt">
+            <FontAwesomeIcon
+              icon={faPowerOff}
+              className="text-red-500 cursor-pointer hover:text-red-700"
+              onClick={() =>
+                comfirmMessage({
+                  description:
+                    "Bạn chắc chắn muốn tắt trạng thái hoạt động của món " +
+                    record.productName +
+                    " ?",
+                  onSubmit: () => {
+                    if (record.key) {
+                      onOk(record.key as string);
+                    }
+                  },
+                })
+              }
+            />
+          </Tooltip>
         </Space>
       ),
     },

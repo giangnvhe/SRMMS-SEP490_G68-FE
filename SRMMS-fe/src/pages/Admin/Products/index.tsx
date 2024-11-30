@@ -47,7 +47,10 @@ const ListProduct = () => {
 
   const deleProduct = useMutation(deleteProduct, {
     onSuccess: () => {
-      successMessage({ description: "Xóa thành công" });
+      successMessage({
+        title: "Thành công",
+        description: "Dừng hoạt động Product thành công",
+      });
       getListProducts.refetch();
     },
     onError: (error: AxiosError) => {
