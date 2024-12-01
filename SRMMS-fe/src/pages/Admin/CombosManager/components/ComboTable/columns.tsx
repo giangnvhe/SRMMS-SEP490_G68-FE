@@ -5,10 +5,10 @@ import { Modal, Space, TableColumnsType, Tooltip } from "antd";
 import { useState } from "react";
 import { formatVND } from "~/common/utils/formatPrice";
 import useNotification from "~/hooks/useNotification";
-import { ComboData } from "~/services/combos";
+import { CombosData } from "~/services/combos";
 
 interface IProps {
-  onSelected: (id: ComboData | undefined) => void;
+  onSelected: (id: CombosData | undefined) => void;
   onOk: (key: number) => void;
 }
 
@@ -17,7 +17,7 @@ function UseColumn({ onSelected, onOk }: IProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
 
-  const columns: TableColumnsType<ComboData> = [
+  const columns: TableColumnsType<CombosData> = [
     {
       title: "STT",
       dataIndex: "index",

@@ -1,17 +1,17 @@
 import { Col, Form, FormInstance, Row, TableProps } from "antd";
 import { PAGE_NUMBER, PAGE_SIZE } from "~/common/const/pagingation";
-import { ComboData } from "~/services/combos";
 import UseColumn from "./columns";
 import InputComponent from "~/components/InputComponent";
 import ButtonComponent from "~/components/ButtonComponent";
 import TableComponent from "~/components/TableComponent";
+import { CombosData } from "~/services/combos";
 
 interface IProps {
-  dataTable: ComboData[] | [];
+  dataTable: CombosData[] | [];
   refetch: () => void;
   loading: boolean;
   form: FormInstance;
-  onSelected: (id: ComboData | undefined) => void;
+  onSelected: (id: CombosData | undefined) => void;
   onOk: (key: number) => void;
 }
 

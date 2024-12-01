@@ -7,7 +7,7 @@ import useNotification from "~/hooks/useNotification";
 import { LoadingOutlined } from "@ant-design/icons";
 import {
   addNewCombo,
-  ComboData,
+  CombosData,
   getListProduct,
   NewComboRequest,
   updateCombo,
@@ -19,7 +19,7 @@ import ButtonComponent from "~/components/ButtonComponent";
 
 interface IProps {
   onCancel: () => void;
-  comboData: ComboData | undefined;
+  comboData: CombosData | undefined;
   refetch: () => void;
 }
 

@@ -26,6 +26,14 @@ const FilterDish = ({ categories, selectedCategory, onTabChange }: IProps) => {
             }
             key="all"
           />
+          <TabPane
+            tab={
+              <span className="text-gray-600 font-medium hover:text-gray-800 text-sm sm:text-base">
+                Combo
+              </span>
+            }
+            key="Combo"
+          />
           {categories.map((category) => (
             <TabPane
               tab={

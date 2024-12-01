@@ -13,6 +13,8 @@ import { useParams } from "react-router-dom";
 import useNotification from "~/hooks/useNotification";
 import { AxiosError, AxiosResponse } from "axios";
 import InputComponent from "~/components/InputComponent";
+import { CombosData, getLisComboProduct } from "~/services/combos";
+import ComboContent from "../components/comboContent";
 
 export interface CartItem extends ProductData {
   quantity: number;
@@ -21,6 +23,7 @@ export interface CartItem extends ProductData {
 const MenuClient = () => {
   const { id } = useParams();
   const [products, setProducts] = useState<ProductData[]>([]);
+  const [combos, setCombos] = useState<CombosData[]>([]);
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | undefined>(
     undefined
@@ -31,6 +34,9 @@ const MenuClient = () => {
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(1000000);
   const [cartVisible, setCartVisible] = useState(false);
+  const [selectedView, setSelectedView] = useState<"products" | "combos">(
+    "products"
+  );
   const { successMessage, errorMessage } = useNotification();
 
   useEffect(() => {
@@ -50,6 +56,7 @@ const MenuClient = () => {
     fetchCategories();
   }, []);
 
+  //fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -76,6 +83,35 @@ const MenuClient = () => {
 
     fetchProducts();
   }, [selectedCategory, minPrice, maxPrice]);
+
+  //fetch combo
+
+  useEffect(() => {
+    const fetchCombos = async () => {
+      setLoading(true);
+      try {
+        const response = await getLisComboProduct({
+          cbName: "",
+          pageNumber: 1,
+          pageSize: 10,
+          totalCount: 0,
+          minPrice: 0,
+          maxPrice: 1000000,
+        });
+        const validatedCombos = response.data.combos.map((combo) => ({
+          ...combo,
+          ProductNames: combo.ProductNames || [],
+        }));
+        setCombos(validatedCombos);
+      } catch (error) {
+        message.error("Failed to load combos!");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCombos();
+  }, []);
 
   const orderMutation = useMutation(AddToOrder, {
     onSuccess: (success: AxiosResponse<{ message: string }>) => {
@@ -116,24 +152,48 @@ const MenuClient = () => {
     message.success(`${product.productName} đã thêm vào đơn hàng của bạn!`);
   };
 
+   const addToComboCart = (combo: CombosData) => {
+    setCartCombo((prevCartCombo) => {
+      const existingComboIndex = prevCartCombo.findIndex((item) => item.comboId === combo.comboId);
+      if (existingComboIndex > -1) {
+        const updatedCartCombo = [...prevCartCombo];
+        updatedCartCombo[existingComboIndex].quantity += 1;
+        return updatedCartCombo;
+      } else {
+        return [...prevCartCombo, { ...combo, quantity: 1 }];
+      }
+    });
+    message.success(`${combo.comboName} has been added to your order!`);
+  };
+
   const handleClearCart = () => {
     Modal.confirm({
       title: "Xác nhận xóa giỏ hàng",
       content: "Bạn có chắc chắn muốn xóa tất cả món khỏi giỏ hàng?",
       onOk: () => {
         setCart([]);
+        setCartCombo([]);
         message.success("Đã xóa toàn bộ giỏ hàng!");
       },
     });
   };
 
-  const handleUpdateCart = (updatedCart: CartItem[]) => {
+  const handleUpdateCart = (
+    updatedCart: CartItem[],
+    updatedComboCart: CombosData[]
+  ) => {
     setCart(updatedCart);
+    setCartCombo(updatedComboCart);
   };
 
-  const handleRemoveItem = (index: number) => {
-    setCart((prevCart) => prevCart.filter((_, i) => i !== index));
-    message.success("Đã xóa món khỏi giỏ hàng!");
+  const handleRemoveItem = (index: number, type: "product" | "combo") => {
+    if (type === "product") {
+      setCart((prevCart) => prevCart.filter((_, i) => i !== index));
+      message.success("Đã xóa món khỏi giỏ hàng!");
+    } else if (type === "combo") {
+      setCartCombo((prevCartCombo) => prevCartCombo.filter((_, i) => i !== index));
+      message.success("Đã xóa combo khỏi giỏ hàng!");
+    }
   };
 
   const handleCheckout = () => {
@@ -142,6 +202,7 @@ const MenuClient = () => {
       quantity: item.quantity,
       price: item.price,
     }));
+
     const comboDetails = cartCombo.map((item) => ({
       comboId: item.comboId,
       quantity: item.quantity,
@@ -168,8 +229,14 @@ const MenuClient = () => {
   };
 
   const handleTabChange = (key: string) => {
-    const categoryId = key === "all" ? undefined : parseInt(key, 10);
-    setSelectedCategory(categoryId);
+    if (key === "Combo") {
+      setSelectedView("combos");
+    } else if (key === "all") {
+      setSelectedView("products");
+    } else {
+      setSelectedView("products");
+      setSelectedCategory(parseInt(key, 10));
+    }
   };
 
   return (
@@ -205,14 +272,19 @@ const MenuClient = () => {
           onMaxPriceChange={setMaxPrice}
         />
 
-        {/* Product List */}
-        {loading ? (
+        {selectedView === "products" ? (
+          <MenuContent products={products} onAddToCart={addToCart} />
+        ) : (
+          <ComboContent comboData={combos} onAddToComboCart={addToComboCart} />
+        )}
+
+        {/* {loading ? (
           <div className="flex justify-center items-center h-96">
             <Spin size="large" />
           </div>
         ) : (
           <MenuContent products={products} onAddToCart={addToCart} />
-        )}
+        )} */}
       </div>
       <div className="fixed bottom-4 right-4">
         <Button
@@ -222,13 +294,17 @@ const MenuClient = () => {
           className="bg-gray-700 border-none rounded-full shadow-lg hover:bg-gray-800 font-semibold"
           onClick={toggleCart}
         >
-          Đơn hàng ({cart.length})
+          Đơn hàng (
+          {cart.reduce((total, item) => total + item.quantity, 0) +
+            cartCombo.reduce((total, item) => total + (item.quantity || 0), 0)}
+          )
         </Button>
       </div>
 
       {/* Cart Button */}
       <ViewCart
         cart={cart}
+        cartCombo={cartCombo}
         visible={cartVisible}
         onClose={() => setCartVisible(false)}
         onRemoveItem={handleRemoveItem}
