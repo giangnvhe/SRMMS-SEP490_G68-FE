@@ -52,6 +52,21 @@ const UseColumn = ({ onSelected, onOk }: IProps) => {
       align: "center",
     },
     {
+      title: "Trạng Thái",
+      dataIndex: "status",
+      align: "center",
+      width: 100,
+      render: (status: boolean) => (
+        <span
+          className={`px-3 py-1 rounded-full text-white font-semibold ${
+            status ? "bg-green-500" : "bg-red-500"
+          }`}
+        >
+          {status ? "Hoạt động" : "Không hoạt động"}
+        </span>
+      ),
+    },
+    {
       title: "Action",
       width: "50px",
       fixed: "right",

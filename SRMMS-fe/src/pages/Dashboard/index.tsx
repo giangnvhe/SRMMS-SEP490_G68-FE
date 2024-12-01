@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import CardWithIcon from "./components/Header/CardWithIcon";
 import { getComboProduct } from "~/services/combos";
 import RevenueChart from "./components/RevenueChart";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Dashboard = () => {
   const [orderCount, setOrderCount] = useState<number | null>(null);
@@ -113,7 +114,7 @@ const Dashboard = () => {
           <CardWithIcon
             icon={
               <FontAwesomeIcon
-                icon={faUtensils}
+                icon={faUser}
                 style={{ fontSize: "24px", color: "#1890ff" }}
               />
             }

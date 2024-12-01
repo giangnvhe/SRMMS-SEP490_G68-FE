@@ -133,9 +133,9 @@ export const getRevenueOrder = async (
 };
 
 export interface RequestPaymentOrder {
-  orderId: number;
   discountId: number | null;
   totalMoney: number;
+  accId: number | null;
 }
 
 export interface dataResponse {
@@ -149,10 +149,11 @@ export interface dataResponse {
 }
 
 export const PaymentOrder = async (
+  id: number,
   data: RequestPaymentOrder
 ): Promise<AxiosResponse<AddToOrderResponse>> => {
   const result = await axiosInstance.post(
-    getApi("api", "Order/CompleteOrder"),
+    getApi("api", `Order/CompleteOrder/${id}`),
     data
   );
   return result;

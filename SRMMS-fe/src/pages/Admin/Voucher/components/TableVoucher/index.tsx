@@ -85,7 +85,7 @@ const TableVoucher = ({
         pagination={{
           current: form.getFieldValue("pageNumber"),
           pageSize: form.getFieldValue("pageSize"),
-          total: form.getFieldValue("totalProducts"),
+          total: form.getFieldValue("totalDiscountCode"),
         }}
         scroll={{ x: 1700 }}
       />

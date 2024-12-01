@@ -1,12 +1,15 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Modal, Space, TableColumnsType } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Modal, Space, TableColumnsType, Tooltip } from "antd";
 import { useState } from "react";
+import { formatVND } from "~/common/utils/formatPrice";
 import useNotification from "~/hooks/useNotification";
-import { ComboData } from "~/services/combos";
+import { CombosData } from "~/services/combos";
 
 interface IProps {
-  onSelected: (id: ComboData | undefined) => void;
-  onOk: (key: string) => void;
+  onSelected: (id: CombosData | undefined) => void;
+  onOk: (key: number) => void;
 }
 
 function UseColumn({ onSelected, onOk }: IProps) {
@@ -14,7 +17,7 @@ function UseColumn({ onSelected, onOk }: IProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
 
-  const columns: TableColumnsType<ComboData> = [
+  const columns: TableColumnsType<CombosData> = [
     {
       title: "STT",
       dataIndex: "index",
@@ -76,7 +79,22 @@ function UseColumn({ onSelected, onOk }: IProps) {
       dataIndex: "comboMoney",
       align: "left",
       width: 100,
-      render: (price: number) => `${price.toFixed(2)} VNĐ`,
+      render: (price: number) => `${formatVND(price)}`,
+    },
+    {
+      title: "Trạng Thái",
+      dataIndex: "comboStatus",
+      align: "center",
+      width: 100,
+      render: (status: boolean) => (
+        <span
+          className={`px-3 py-1 rounded-full text-white font-semibold ${
+            status ? "bg-green-500" : "bg-red-500"
+          }`}
+        >
+          {status ? "Hoạt động" : "Không hoạt động"}
+        </span>
+      ),
     },
     {
       title: "Hành Động",
@@ -89,19 +107,25 @@ function UseColumn({ onSelected, onOk }: IProps) {
             className="text-blue-500 cursor-pointer"
             onClick={() => onSelected(record)}
           />
-          <DeleteOutlined
-            className="text-red-500 cursor-pointer"
-            onClick={() =>
-              comfirmMessage({
-                description: "Do you want delete " + record.comboName + " ?",
-                onSubmit: () => {
-                  if (record.key) {
-                    onOk(record.key as string);
-                  }
-                },
-              })
-            }
-          />
+          <Tooltip title="Tắt">
+            <FontAwesomeIcon
+              icon={faPowerOff}
+              className="text-red-500 cursor-pointer hover:text-red-700"
+              onClick={() =>
+                comfirmMessage({
+                  description:
+                    "Bạn chắc chắn muốn tắt trạng thái hoạt động của " +
+                    record.comboName +
+                    " ?",
+                  onSubmit: () => {
+                    if (record.key) {
+                      onOk(record.key as number);
+                    }
+                  },
+                })
+              }
+            />
+          </Tooltip>
         </Space>
       ),
     },

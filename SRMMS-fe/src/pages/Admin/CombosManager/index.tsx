@@ -6,19 +6,19 @@ import { useMutation, useQuery } from "react-query";
 import ButtonComponent from "~/components/ButtonComponent";
 import useNotification from "~/hooks/useNotification";
 import {
-  ComboData,
-  deleteComboProduct,
+  changeComboStatus,
+  CombosData,
   FormFields,
   getLisComboProduct,
 } from "~/services/combos";
-import ComboTable from "./components/ComboTable";
 import AddOrEditCombos from "./components/AddOrEditCombo";
+import ComboTable from "./components/ComboTable";
 
 const CombosManager = () => {
   const [form] = Form.useForm<FormFields>();
-  const [dataTable, setDataTable] = useState<ComboData[]>([]);
+  const [dataTable, setDataTable] = useState<CombosData[]>([]);
   const { errorMessage, successMessage } = useNotification();
-  const [selectedCombo, setSelectedCombo] = useState<ComboData | undefined>(
+  const [selectedCombo, setSelectedCombo] = useState<CombosData | undefined>(
     undefined
   );
   const [openModal, setOpenModal] = useState(false);
@@ -27,23 +27,27 @@ const CombosManager = () => {
     getLisComboProduct(form.getFieldsValue(true))
   );
 
-  const deleCombo = useMutation(deleteComboProduct, {
+  const handleChangeStatus = useMutation(changeComboStatus, {
     onSuccess: () => {
-      successMessage({ description: "Xóa thành công" });
+      successMessage({
+        title: "Thành công",
+        description: "Dừng hoạt động combos thành công",
+      });
       getListCombos.refetch();
     },
     onError: (error: AxiosError) => {
       errorMessage({
+        title: "Thất bại",
         description: error.message || "Đã có lỗi xảy ra, xóa thất bại!!",
       });
     },
   });
 
-  const onOk = async (key: string) => {
-    deleCombo.mutate(key);
+  const onOk = async (key: number) => {
+    handleChangeStatus.mutate(key);
   };
 
-  const onSelected = (id: ComboData | undefined) => {
+  const onSelected = (id: CombosData | undefined) => {
     setSelectedCombo(id);
     setOpenModal(true);
   };

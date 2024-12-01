@@ -59,6 +59,9 @@ const AddOrEditProduct = ({
   const isEditProduct = useMemo(() => !!productData, [productData]);
   const { successMessage, errorMessage } = useNotification();
   const [file, setFile] = useState<RcFile | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | undefined>(
+    undefined
+  );
 
   const handleUpdateCategory = useMutation(
     ({ id, data }: MutationUpdateCategory) => updateProduct(Number(id), data),
@@ -120,13 +123,26 @@ const AddOrEditProduct = ({
       } else {
         const rcFile = file.originFileObj || file;
         if (rcFile instanceof File) {
+          const isLessThan10MB = rcFile.size / 1024 / 1024 < 10;
+          if (!isLessThan10MB) {
+            errorMessage({
+              description: "File không được vượt quá 10MB!",
+            });
+            return;
+          }
+
           setFile(rcFile as RcFile);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setImagePreview(reader.result as string);
+          };
+          reader.readAsDataURL(rcFile);
         } else {
           console.log("File is not an instance of File:", rcFile);
         }
       }
     },
-    []
+    [errorMessage]
   );
 
   useEffect(() => {
@@ -134,17 +150,29 @@ const AddOrEditProduct = ({
   }, [file]);
 
   useEffect(() => {
-    isEditProduct
-      ? form.setFieldsValue({
-          ProductName: productData?.productName,
-          Description: productData?.description,
-          Price: productData?.price,
-          Category: productData?.category,
-          Calories: productData?.calories,
-          Status: productData?.status,
-        })
-      : form.resetFields();
-  }, [productData]);
+    if (isEditProduct && productData) {
+      const categoryId = category.find(
+        (cat) => cat.label === productData?.category
+      )?.value;
+
+      form.setFieldsValue({
+        ProductName: productData?.productName,
+        Description: productData?.description,
+        Price: productData?.price,
+        Category: categoryId,
+        Calories: productData?.calories,
+        Status: productData?.status,
+      });
+
+      // Set the existing image preview
+      if (productData.image) {
+        setImagePreview(productData.image);
+      }
+    } else {
+      form.resetFields();
+      setImagePreview(undefined);
+    }
+  }, [productData, isEditProduct]);
 
   const onSubmitForm = (values: {
     ProductName: string;
@@ -243,18 +271,36 @@ const AddOrEditProduct = ({
               ]}
               placeholder="Nhập Calories"
             />
+            <div>
+              <span className="text-red-600">* </span>Hình ảnh{" "}
+              <span className="text-gray-500 text-sm">
+                {" "}
+                (Dung lượng không vượt quá 10MB)
+              </span>
+            </div>
             <UploadComponent
               name="Image"
-              label="Hình Ảnh"
               form={form}
               rules={[
                 {
-                  required: true,
+                  required: !imagePreview,
                   message: "Image không được để trống",
                 },
               ]}
               onChange={handleFileChange}
             />
+            {imagePreview && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Hình ảnh hiện tại
+                </label>
+                <img
+                  src={imagePreview}
+                  alt="Product Preview"
+                  className="mt-2 max-h-48 object-contain rounded-lg"
+                />
+              </div>
+            )}
             <TextAreaComponent
               label="Mô Tả"
               name="Description"

@@ -3,7 +3,7 @@ import { getApi } from "../common/utils";
 import { RcFile } from "antd/es/upload";
 import { AxiosResponse } from "axios";
 
-export interface ComboData {
+export interface CombosData {
   key: React.Key;
   index: number;
   comboId: number;
@@ -13,6 +13,7 @@ export interface ComboData {
   comboMoney: number;
   comboStatus: boolean;
   ProductNames: string[];
+  quantity: number;
 }
 
 export interface ComboResponse {
@@ -20,7 +21,7 @@ export interface ComboResponse {
     totalCount: number;
     pageNumber: number;
     pageSize: number;
-    combos: ComboData[];
+    combos: CombosData[];
   };
 }
 
@@ -31,7 +32,6 @@ interface ComboDataResponse {
 
 export interface FormFields {
   cbName: string;
-  pagination: { pageNumber: number; pageSize: number };
   pageNumber: number;
   pageSize: number;
   totalCount: number;
@@ -57,13 +57,11 @@ export const getLisComboProduct = async (
   return result;
 };
 
-export const deleteComboProduct = async (
-  id: string
-): Promise<ComboDataResponse> => {
-  const result = await axiosInstance.delete<ComboDataResponse>(
-    getApi("api", `comboProduct/${id}`)
+export const changeComboStatus = async (id: number): Promise<AxiosResponse> => {
+  const response = await axiosInstance.patch(
+    getApi("api", `comboProduct/changeStatus/${id}`)
   );
-  return result.data;
+  return response.data;
 };
 
 export const addNewCombo = async (
