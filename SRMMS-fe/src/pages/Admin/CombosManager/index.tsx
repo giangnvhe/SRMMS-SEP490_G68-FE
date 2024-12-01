@@ -7,7 +7,7 @@ import ButtonComponent from "~/components/ButtonComponent";
 import useNotification from "~/hooks/useNotification";
 import {
   changeComboStatus,
-  ComboData,
+  CombosData,
   FormFields,
   getLisComboProduct,
 } from "~/services/combos";
@@ -16,9 +16,9 @@ import ComboTable from "./components/ComboTable";
 
 const CombosManager = () => {
   const [form] = Form.useForm<FormFields>();
-  const [dataTable, setDataTable] = useState<ComboData[]>([]);
+  const [dataTable, setDataTable] = useState<CombosData[]>([]);
   const { errorMessage, successMessage } = useNotification();
-  const [selectedCombo, setSelectedCombo] = useState<ComboData | undefined>(
+  const [selectedCombo, setSelectedCombo] = useState<CombosData | undefined>(
     undefined
   );
   const [openModal, setOpenModal] = useState(false);
@@ -47,7 +47,7 @@ const CombosManager = () => {
     handleChangeStatus.mutate(key);
   };
 
-  const onSelected = (id: ComboData | undefined) => {
+  const onSelected = (id: CombosData | undefined) => {
     setSelectedCombo(id);
     setOpenModal(true);
   };
