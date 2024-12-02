@@ -73,6 +73,11 @@ const items: MenuItem[] = [
     label: "Quản lý Voucher",
     icon: <FontAwesomeIcon icon={faTicket} />,
   },
+  {
+    key: "/admin/booking-list",
+    label: "Quản lý Booking",
+    icon: <FontAwesomeIcon icon={faTicket} />,
+  },
 ];
 
 const SidebarComponent = ({ isOpenSideBar, isAdmin, className }: Props) => {
