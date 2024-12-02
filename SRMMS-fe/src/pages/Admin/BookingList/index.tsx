@@ -56,7 +56,7 @@ const BookingList = () => {
     <div className="min-h-screen bg-gray-100">
       <div className="flex justify-between items-center bg-white shadow-md p-6">
         <h1 className="text-2xl font-extrabold text-gray-800">
-          Quản lý Món Ăn
+          Quản lý Booking
         </h1>
       </div>
       <div className="mt-5 px-10">
