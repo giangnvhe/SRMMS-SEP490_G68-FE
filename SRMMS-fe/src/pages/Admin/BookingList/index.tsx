@@ -3,23 +3,44 @@ import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import useNotification from "~/hooks/useNotification";
-import { BookingData, FormFields, getListBooking } from "~/services/booking";
+import {
+  BookingData,
+  ChangeStatusBooking,
+  FormFields,
+  getListBooking,
+} from "~/services/booking";
 import BookingTable from "./components/BookingTable";
+import ApprovalModal from "./components/ApprovalModal";
 
 const BookingList = () => {
   const [form] = Form.useForm<FormFields>();
   const [dataTable, setDataTable] = useState<BookingData[]>([]);
-  const { errorMessage } = useNotification();
-  const [selectedProduct, setSelectedProduct] = useState<
+  const { errorMessage, successMessage } = useNotification();
+  const [selectedBooking, setSelectedBooking] = useState<
     BookingData | undefined
   >(undefined);
-
   const getListBookings = useQuery("getListBooking", () =>
     getListBooking(form.getFieldsValue(true))
   );
 
-  const onSelected = (id: BookingData | undefined) => {
-    setSelectedProduct(id);
+  const handleApprove = async () => {
+    getListBookings.refetch();
+  };
+
+  const onReject = async (id: number) => {
+    try {
+      await ChangeStatusBooking(id, { status: false }); // Gọi API từ chối
+      successMessage({
+        title: "Thành công",
+        description: "Đã từ chối đặt bàn thành công.",
+      });
+      getListBookings.refetch();
+    } catch (error) {
+      errorMessage({
+        description:
+          (error as AxiosError)?.message || "Từ chối đặt bàn thất bại!",
+      });
+    }
   };
 
   useEffect(() => {
@@ -62,12 +83,21 @@ const BookingList = () => {
       <div className="mt-5 px-10">
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <BookingTable
-            onSelected={onSelected}
+            setSelectedBooking={setSelectedBooking}
             dataTable={dataTable}
             refetch={getListBookings.refetch}
             loading={getListBookings.isLoading || getListBookings.isFetching}
             form={form}
-            //onOk={onOk}
+            onReject={onReject}
+          />
+          <ApprovalModal
+            visible={!!selectedBooking}
+            booking={selectedBooking}
+            onClose={() => setSelectedBooking(undefined)}
+            onApprove={() => {
+              getListBookings.refetch();
+              setSelectedBooking(undefined);
+            }}
           />
         </div>
       </div>

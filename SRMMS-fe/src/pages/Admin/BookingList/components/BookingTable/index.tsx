@@ -11,8 +11,8 @@ interface IProps {
   refetch: () => void;
   loading: boolean;
   form: FormInstance;
-  onSelected: (id: BookingData | undefined) => void;
-  // onOk: (key: string) => void;
+  setSelectedBooking: (booking: BookingData | undefined) => void;
+  onReject: (id: number) => void;
 }
 
 const BookingTable = ({
@@ -20,9 +20,10 @@ const BookingTable = ({
   refetch,
   loading,
   form,
-  onSelected,
+  setSelectedBooking,
+  onReject,
 }: IProps) => {
-  const columns = UseColumn({ onSelected });
+  const columns = UseColumn({ setSelectedBooking, onReject });
   const handleTableChange: TableProps["onChange"] = (pagination) => {
     form.setFieldValue("pageSize", pagination.pageSize);
     form.setFieldValue("pageNumber", pagination.current);

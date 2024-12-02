@@ -72,3 +72,47 @@ export const getListBooking = async (
   });
   return result;
 };
+
+export interface StatusRequest {
+  status: boolean;
+}
+
+export const ChangeStatusBooking = async (
+  id: number,
+  request: StatusRequest
+) => {
+  const response = await axiosInstance.put(
+    getApi("api", `booking/updateStatus/${id}`),
+    request
+  );
+  return response.data;
+};
+
+export interface SetTableForBookingRequest {
+  tableId: number;
+  bookingId: number;
+}
+
+export const SetBookingForTable = async (
+  data: SetTableForBookingRequest
+): Promise<AxiosResponse<BookingResponse>> => {
+  const result = await axiosInstance.post(
+    getApi("api", "table/SetBookingForTable"),
+    data
+  );
+
+  return result;
+};
+
+export interface DataBookingResponse {
+  data: {
+    bookings: BookingData[];
+  };
+}
+
+export const getBookingList = async (): Promise<DataBookingResponse> => {
+  const result = await axiosInstance.get(getApi("api", "booking/getList"));
+  return result;
+};
+
+
