@@ -1,13 +1,16 @@
 import { CheckOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
 import { Badge, Popconfirm, Space, TableColumnsType, Tooltip } from "antd";
+import useNotification from "~/hooks/useNotification";
 import { BookingData } from "~/services/booking";
 
 interface IProps {
-  onSelected: (id: BookingData | undefined) => void;
-  //onOk: (key: string) => void;
+  setSelectedBooking: (booking: BookingData | undefined) => void;
+  onReject: (id: number) => void;
 }
 
-function UseColumn({ onSelected }: IProps) {
+function UseColumn({ setSelectedBooking, onReject }: IProps) {
+  const { comfirmMessage } = useNotification();
+
   const columns: TableColumnsType<BookingData> = [
     {
       title: "STT",
@@ -67,28 +70,30 @@ function UseColumn({ onSelected }: IProps) {
       align: "center",
       render: (_, record) => (
         <Space size="middle">
-          <Tooltip title="Duyệt">
-            <CheckOutlined
-              className="text-green-500 cursor-pointer hover:text-green-700"
-              //   onClick={() =>
-              //     comfirmMessage({
-              //       description: `Bạn có chắc chắn muốn duyệt món ${record.productName}?`,
-              //       onSubmit: () => {
-              //         if (record.key) {
-              //           onApprove(record.key as string); // Hàm xử lý trạng thái duyệt
-              //         }
-              //       },
-              //     })
-              //   }
-            />
-          </Tooltip>
+          <Space size="middle">
+            <Tooltip title="Duyệt">
+              <CheckOutlined
+                className="text-green-500 cursor-pointer hover:text-green-700"
+                onClick={() => setSelectedBooking(record)}
+              />
+            </Tooltip>
+            {/* Existing reject button */}
+          </Space>
 
           {/* Nút "Reject" */}
           <Tooltip title="Từ chối">
             <Popconfirm
               title={`Bạn có chắc chắn muốn từ ${record?.nameBooking}?`}
-              okText="Có"
-              cancelText="Không"
+              onConfirm={() =>
+                comfirmMessage({
+                  description: `Bạn có chắc chắn muốn duyệt món ${record.nameBooking}?`,
+                  onSubmit: () => {
+                    if (record.bookingId) {
+                      onReject(record.bookingId); // Hàm xử lý trạng thái duyệt
+                    }
+                  },
+                })
+              }
             >
               <CloseOutlined className="text-red-500 cursor-pointer hover:text-red-700" />
             </Popconfirm>

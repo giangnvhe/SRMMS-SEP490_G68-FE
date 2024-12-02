@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "../../common/const/const";
 import { faTicket } from "@fortawesome/free-solid-svg-icons";
 import styles from "./index.module.scss";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 type MenuItem = Required<MenuProps>["items"][number];
@@ -76,7 +77,7 @@ const items: MenuItem[] = [
   {
     key: "/admin/booking-list",
     label: "Quản lý Booking",
-    icon: <FontAwesomeIcon icon={faTicket} />,
+    icon: <FontAwesomeIcon icon={faClock} />,
   },
 ];
 
