@@ -10,6 +10,7 @@ const OrderDetails = lazy(
   () => import("~/pages/Admin/OrderMana/components/OrderDetail")
 );
 const VoucherManager = lazy(() => import("~/pages/Admin/Voucher"));
+const BookingList = lazy(() => import("~/pages/Admin/BookingList"));
 const ContactInfo = lazy(() => import("~/pages/HomePage/ContractInfo"));
 const TermsAndConditions = lazy(() => import("~/pages/HomePage/Policy"));
 const CombosManager = lazy(() => import("~/pages/Admin/CombosManager"));
@@ -185,6 +186,14 @@ const RouterComponent = () => {
               element: (
                 <AdminOfficer>
                   <ListEmployee />
+                </AdminOfficer>
+              ),
+            },
+            {
+              path: "/admin/booking-list",
+              element: (
+                <AdminOfficer>
+                  <BookingList />
                 </AdminOfficer>
               ),
             },

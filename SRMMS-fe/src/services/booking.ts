@@ -57,9 +57,11 @@ export interface BookingDataResponse {
 }
 
 export interface FormFields {
+  bookingDate: string;
   pageNumber: number;
   pageSize: number;
   totalBookings: number;
+  status: boolean;
 }
 
 export const getListBooking = async (
