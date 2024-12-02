@@ -1,4 +1,4 @@
-import { Col, Form, FormInstance, Row, TableProps } from "antd";
+import { Col, Form, FormInstance, Row, Select, TableProps } from "antd";
 import { PAGE_NUMBER, PAGE_SIZE } from "~/common/const/pagingation";
 import ButtonComponent from "~/components/ButtonComponent";
 import DatePickerComponent from "~/components/DatePickerComponent";
@@ -12,7 +12,7 @@ interface IProps {
   loading: boolean;
   form: FormInstance;
   onSelected: (id: BookingData | undefined) => void;
- // onOk: (key: string) => void;
+  // onOk: (key: string) => void;
 }
 
 const BookingTable = ({
@@ -37,14 +37,28 @@ const BookingTable = ({
 
   return (
     <div>
-      <Form form={form} onFinish={onSubmitTable}>
+      <Form form={form} onFinish={onSubmitTable} layout="horizontal">
         <Row gutter={8}>
           <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
-            <DatePickerComponent name="bookingDate" form={form} placeholder="Tìm kiếm theo ngày"/>
+            <Form.Item name="status" label="Trạng thái">
+              <Select
+                placeholder="Chọn trạng thái"
+                allowClear
+                options={[
+                  { value: true, label: "Duyệt" },
+                  { value: false, label: "Từ chối" },
+                ]}
+              />
+            </Form.Item>
           </Col>
-          {/* <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
-            
-          </Col> */}
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <DatePickerComponent
+              label="Tìm kiếm theo ngày"
+              name="bookingDate"
+              form={form}
+              placeholder="Tìm kiếm theo ngày"
+            />
+          </Col>
           <Col sm={{ span: 4 }} xs={{ span: 24 }}>
             <ButtonComponent onClick={() => form.submit()}>
               Tìm Kiếm
