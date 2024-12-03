@@ -12,7 +12,8 @@ const TablesManagement = () => {
   const [selectedTable, setSelectedTable] = useState<TableData | undefined>(
     undefined
   );
-  const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
+  const [selectedStatus, setSelectedStatus] = useState<string>("Tất cả");
+  const [selectedShift, setSelectedShift] = useState<string>("Tất cả");
   const [openModal, setOpenModal] = useState(false);
 
   const onCancel = () => {
@@ -66,13 +67,12 @@ const TablesManagement = () => {
     }
   };
 
-  // const handleStatusChange = (status: string) => {
-  //   setSelectedStatus(status);
-  // };
-
   const filteredTableData = tableData?.filter((table) => {
-    if (selectedStatus === "ALL") return true;
-    return table.statusName === selectedStatus;
+    const statusMatch =
+      selectedStatus === "Tất cả" || table.statusName === selectedStatus;
+    const shiftMatch =
+      selectedShift === "Tất cả" || table.shift === selectedShift;
+    return statusMatch && shiftMatch;
   });
 
   return (
@@ -82,7 +82,9 @@ const TablesManagement = () => {
       </div>
       <StatusButtonGroup
         selectedStatus={selectedStatus}
+        selectedShift={selectedShift}
         onStatusChange={setSelectedStatus}
+        onShiftChange={setSelectedShift}
         refetch={refetch}
         setOpenModal={setOpenModal}
         setSelectedTable={setSelectedTable}
