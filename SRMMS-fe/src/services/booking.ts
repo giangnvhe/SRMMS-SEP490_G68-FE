@@ -44,7 +44,8 @@ export interface BookingData {
   nameBooking: string;
   phoneBooking: string;
   shift: string;
-  status: boolean;
+  statusId: number;
+  statusName: string;
 }
 
 export interface BookingDataResponse {
@@ -61,7 +62,7 @@ export interface FormFields {
   pageNumber: number;
   pageSize: number;
   totalBookings: number;
-  status: boolean;
+  statusId: number;
 }
 
 export const getListBooking = async (
@@ -74,7 +75,7 @@ export const getListBooking = async (
 };
 
 export interface StatusRequest {
-  status: boolean;
+  statusId: number;
 }
 
 export const ChangeStatusBooking = async (
@@ -114,5 +115,3 @@ export const getBookingList = async (): Promise<DataBookingResponse> => {
   const result = await axiosInstance.get(getApi("api", "booking/getList"));
   return result;
 };
-
-

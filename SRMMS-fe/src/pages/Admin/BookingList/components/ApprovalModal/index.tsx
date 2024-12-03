@@ -34,7 +34,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
         .filter((table) => table.statusId === 1)
         .map((table) => ({
           id: table.tableId,
-          name: table.tableName,
+          name: `${table.tableName} (${table.tableOfPeople} chỗ)`,
         }));
 
       setTables(availableTables);
@@ -45,18 +45,22 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
 
   const handleApprove = async () => {
     try {
-      const tableId = form.getFieldValue("tableId");
+      const tableIds = form.getFieldValue("tableId");
 
-      if (!tableId) {
-        message.error("Vui lòng chọn 1 bàn");
+      if (!tableIds || tableIds.length === 0) {
+        message.error("Vui lòng chọn ít nhất 1 bàn");
         return;
       }
 
       setLoading(true);
-      await SetBookingForTable({
-        bookingId: booking!.bookingId,
-        tableId,
-      });
+      await Promise.all(
+        tableIds.map((tableId: number) =>
+          SetBookingForTable({
+            bookingId: booking!.bookingId,
+            tableId,
+          })
+        )
+      );
 
       message.success("Đặt bàn đã được phê duyệt thành công");
       onApprove();
@@ -107,7 +111,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
           label="Chọn bàn"
           rules={[{ required: true, message: "Vui lòng chọn 1 bàn" }]}
         >
-          <Select placeholder="Chọn 1 bàn">
+          <Select placeholder="Chọn 1 bàn" mode="multiple">
             {tables.map((table) => (
               <Select.Option key={table.id} value={table.id}>
                 {table.name}
