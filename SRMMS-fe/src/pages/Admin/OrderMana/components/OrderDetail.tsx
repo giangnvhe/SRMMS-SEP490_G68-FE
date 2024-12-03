@@ -32,7 +32,6 @@ const OrderDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
-  console.log("🚀 ~ OrderDetails ~ orderData:", orderData);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -165,10 +164,28 @@ const OrderDetails = () => {
         }
         extra={
           <Tag
-            color={orderData.status ? "success" : "warning"}
+            color={
+              orderData.status === 1
+                ? "warning" // Chờ xác nhận
+                : orderData.status === 2
+                ? "processing" // Đang chuẩn bị
+                : orderData.status === 3
+                ? "success" // Đã hoàn thành
+                : orderData.status === 4
+                ? "purple" // Đã thanh toán
+                : "default"
+            }
             style={{ padding: "4px 12px", fontSize: "14px" }}
           >
-            {orderData.status ? "Đã thanh toán" : "Chưa thanh toán"}
+            {orderData.status === 1
+              ? "Chờ xác nhận"
+              : orderData.status === 2
+              ? "Đang chuẩn bị"
+              : orderData.status === 3
+              ? "Đã hoàn thành"
+              : orderData.status === 4
+              ? "Đã thanh toán"
+              : "Không xác định"}
           </Tag>
         }
       >

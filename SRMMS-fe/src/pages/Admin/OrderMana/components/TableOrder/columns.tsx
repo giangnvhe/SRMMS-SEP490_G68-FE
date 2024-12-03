@@ -50,16 +50,39 @@ const UseColumn = () => {
     {
       title: "Trạng thái",
       dataIndex: "status",
-      render: (status) => (
-        <div
-          className={`text-sm text-gray-700 font-semibold ${
-            status ? "text-green-500" : "text-red-500"
-          }`}
-        >
-          {status ? "Đã thanh toán" : "Chưa thanh toán"}
-        </div>
-      ),
-      width: "120px",
+      render: (status) => {
+        let statusText = "";
+        let statusColor = "";
+
+        switch (status) {
+          case 1:
+            statusText = "Chờ xác nhận";
+            statusColor = "text-yellow-500";
+            break;
+          case 2:
+            statusText = "Đang chuẩn bị";
+            statusColor = "text-blue-500";
+            break;
+          case 3:
+            statusText = "Đã hoàn thành";
+            statusColor = "text-green-500";
+            break;
+          case 4:
+            statusText = "Đã thanh toán";
+            statusColor = "text-purple-500";
+            break;
+          default:
+            statusText = "Không xác định";
+            statusColor = "text-gray-500";
+        }
+
+        return (
+          <div className={`text-sm font-semibold ${statusColor}`}>
+            {statusText}
+          </div>
+        );
+      },
+      width: "180px",
       align: "center",
     },
     {

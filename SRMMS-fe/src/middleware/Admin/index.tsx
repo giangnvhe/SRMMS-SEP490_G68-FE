@@ -4,7 +4,7 @@ import Error from "~/pages/Error/Error";
 
 const AdminOfficer = ({ children }: any) => {
   const { user } = useAuth();
-  if (user?.roleName !== permissionObject.ADMIN) {
+  if (user?.roleName !== permissionObject.ADMIN  && user?.roleName !== permissionObject.MANAGER) {
     return <Error />;
   }
 

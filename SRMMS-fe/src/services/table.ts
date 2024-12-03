@@ -8,7 +8,12 @@ export interface TableData {
   statusName: string;
   statusId: number;
   bookingId: number | null;
+  shift?: string;
   tableOfPeople: number | null;
+}
+
+export interface TableStatusResponse {
+  data: TableStatusData[];
 }
 
 export interface TableStatusData {
@@ -16,9 +21,6 @@ export interface TableStatusData {
   statusName: string;
 }
 
-export interface TableStatusResponse {
-  data: TableStatusData[];
-}
 
 export interface TableResponse {
   data: TableData[];
@@ -72,5 +74,15 @@ export const updateTable = async (id: number, tableData: TableRequest) => {
 
 export const getListStatus = async (): Promise<TableStatusResponse> => {
   const result = await axiosInstance.get(getApi("api", "status/list"));
+  return result;
+};
+
+export const getTablesLunch = async (): Promise<TableResponse> => {
+  const result = await axiosInstance.get(getApi("api", "table/list/lunch"));
+  return result;
+};
+
+export const getTablesDinner = async (): Promise<TableResponse> => {
+  const result = await axiosInstance.get(getApi("api", "table/list/dinner"));
   return result;
 };

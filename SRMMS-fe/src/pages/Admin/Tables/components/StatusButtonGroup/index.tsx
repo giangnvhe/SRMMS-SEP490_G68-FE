@@ -1,4 +1,5 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { Select } from "antd";
 import { startTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "~/components/ButtonComponent";
@@ -6,7 +7,9 @@ import { TableData } from "~/services/table";
 
 interface IProps {
   selectedStatus: string;
+  selectedShift: string;
   onStatusChange: (status: string) => void;
+  onShiftChange: (shift: string) => void;
   refetch: () => void;
   setOpenModal: (isOpen: boolean) => void;
   setSelectedTable: (table: TableData | undefined) => void;
@@ -14,30 +17,52 @@ interface IProps {
 
 const StatusButtonGroup = ({
   selectedStatus,
+  selectedShift,
   onStatusChange,
+  onShiftChange,
   setOpenModal,
   setSelectedTable,
 }: IProps) => {
-  const statuses = ["ALL", "Trống", "Đang sử dụng", "Đã đặt", "Đang sửa chữa"];
+  const statuses = [
+    "Tất cả",
+    "Trống",
+    "Đang sử dụng",
+    "Đã đặt",
+    "Đang sửa chữa",
+  ];
+  const shifts = ["Tất cả", "Lunch", "Dinner"];
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between flex-wrap gap-4">
-      <div className="mb-4 flex flex-wrap space-x-2 space-y-2 md:flex-nowrap md:space-y-0 w-full md:w-auto">
-        {statuses.map((status) => (
-          <button
-            key={status}
-            onClick={() => onStatusChange(status)}
-            className={`w-full md:w-auto px-3 py-1 md:px-4 md:py-2 text-sm md:text-base font-semibold rounded-lg shadow-sm transition duration-200 ease-in-out ${
-              selectedStatus === status
-                ? "bg-[#08979C] text-white"
-                : `bg-white text-gray-700 border border-gray-300 hover:bg-blue-100 hover:text-blue-700`
-            }`}
-          >
-            {status}
-          </button>
-        ))}
+    <div className="flex justify-between">
+      <div className="flex flex-col gap-4 mb-2">
+        <div className="flex flex-wrap space-x-2 space-y-2 md:flex-nowrap md:space-y-0">
+          {statuses.map((status) => (
+            <button
+              key={status}
+              onClick={() => onStatusChange(status)}
+              className={`w-full md:w-auto px-3 py-1 md:px-4 md:py-2 text-sm md:text-base font-semibold rounded-lg shadow-sm transition duration-200 ease-in-out ${
+                selectedStatus === status
+                  ? "bg-[#08979C] text-white"
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-blue-100 hover:text-blue-700"
+              }`}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-gray-700 font-medium">Ca:</span>
+          <Select
+            style={{ width: 120 }}
+            value={selectedShift}
+            onChange={onShiftChange}
+            options={shifts.map((shift) => ({ label: shift, value: shift }))}
+          />
+        </div>
       </div>
+
       <div className="flex gap-2 flex-wrap w-full md:w-auto">
         <ButtonComponent
           icon={<PlusCircleOutlined />}

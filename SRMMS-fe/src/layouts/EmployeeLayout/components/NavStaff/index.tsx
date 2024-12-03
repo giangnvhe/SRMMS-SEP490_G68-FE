@@ -1,29 +1,28 @@
 import {
-  Avatar,
-  Dropdown,
-  MenuProps,
-  Space,
-  Badge,
-  Card,
-  Button,
-  List,
-  Typography,
-} from "antd";
-import classNames from "classnames";
-import logo from "../../assets/images/logo2.png";
-import styles from "./index.module.scss";
-import {
+  BellOutlined,
   CloseOutlined,
   InfoCircleOutlined,
   LogoutOutlined,
   MenuOutlined,
   UserOutlined,
-  BellOutlined,
 } from "@ant-design/icons";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  Dropdown,
+  List,
+  MenuProps,
+  Space,
+  Typography,
+} from "antd";
+import classNames from "classnames";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import socket from "~/common/const/mockSocket";
-import dayjs from "dayjs";
+import logo from "~/assets/images/logo2.png";
+import styles from "./index.module.scss";
 
 interface Props {
   isOpenSideBar: boolean;
@@ -40,7 +39,7 @@ interface Notification {
 
 const cx = classNames.bind(styles);
 
-const NavComponent = ({
+const NavStaff = ({
   isOpenSideBar,
   handleHiddenSideBar,
   handleShowSideBar,
@@ -203,4 +202,4 @@ const NavComponent = ({
   );
 };
 
-export default NavComponent;
+export default NavStaff;

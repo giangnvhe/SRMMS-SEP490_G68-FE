@@ -2,7 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
-import { AdminRouter } from "~/middleware/Staff";
+import { AdminRouter, Staff } from "~/middleware/Staff";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -10,6 +10,7 @@ const OrderDetails = lazy(
   () => import("~/pages/Admin/OrderMana/components/OrderDetail")
 );
 const VoucherManager = lazy(() => import("~/pages/Admin/Voucher"));
+const BookingList = lazy(() => import("~/pages/Admin/BookingList"));
 const ContactInfo = lazy(() => import("~/pages/HomePage/ContractInfo"));
 const TermsAndConditions = lazy(() => import("~/pages/HomePage/Policy"));
 const CombosManager = lazy(() => import("~/pages/Admin/CombosManager"));
@@ -146,6 +147,82 @@ const RouterComponent = () => {
                 </StaffOfficer>
               ),
             },
+            {
+              path: "/tables",
+              element: (
+                <Staff>
+                  <TablesManagement />
+                </Staff>
+              ),
+            },
+            {
+              path: "/order-list",
+              element: (
+                <Staff>
+                  <OrderManager />
+                </Staff>
+              ),
+            },
+            {
+              path: "/order/:id",
+              element: (
+                <Staff>
+                  <OrderDetails />
+                </Staff>
+              ),
+            },
+            {
+              path: "/combos-list",
+              element: (
+                <Staff>
+                  <CombosManager />
+                </Staff>
+              ),
+            },
+            {
+              path: "/product",
+              element: (
+                <Staff>
+                  <ListProduct />
+                </Staff>
+              ),
+            },
+            {
+              path: "/category",
+              element: (
+                <Staff>
+                  <CategoryAdmin />
+                </Staff>
+              ),
+            },
+            {
+              path: "/voucher",
+              element: (
+                <Staff>
+                  <VoucherManager />
+                </Staff>
+              ),
+            },
+            {
+              path: "/qr-code",
+              element: (
+                <Staff>
+                  <QRCodeScreen />
+                </Staff>
+              ),
+            },
+            {
+              path: "/booking-list",
+              element: (
+                <Staff>
+                  <BookingList />
+                </Staff>
+              ),
+            },
+            {
+              path: "/admin/logout",
+              element: <Logout />,
+            },
           ],
         },
       ],
@@ -185,6 +262,14 @@ const RouterComponent = () => {
               element: (
                 <AdminOfficer>
                   <ListEmployee />
+                </AdminOfficer>
+              ),
+            },
+            {
+              path: "/admin/booking-list",
+              element: (
+                <AdminOfficer>
+                  <BookingList />
                 </AdminOfficer>
               ),
             },

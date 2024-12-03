@@ -1,5 +1,5 @@
-import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Button, Layout, message, Modal, Spin } from "antd";
+import { ClockCircleOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { Button, Layout, message, Modal, Spin, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { CategoryData, getListCategory } from "~/services/category_product";
 import { ComboData, getListProduct, ProductData } from "~/services/product";
@@ -98,9 +98,9 @@ const MenuClient = () => {
           minPrice: 0,
           maxPrice: 1000000,
         });
-        const validatedCombos = response.data.combos.map((combo) => ({
+        const validatedCombos = response?.data?.combos.map((combo) => ({
           ...combo,
-          ProductNames: combo.ProductNames || [],
+          ProductNames: combo?.ProductNames || [],
         }));
         setCombos(validatedCombos);
       } catch (error) {
@@ -152,9 +152,11 @@ const MenuClient = () => {
     message.success(`${product.productName} đã thêm vào đơn hàng của bạn!`);
   };
 
-   const addToComboCart = (combo: CombosData) => {
+  const addToComboCart = (combo: CombosData) => {
     setCartCombo((prevCartCombo) => {
-      const existingComboIndex = prevCartCombo.findIndex((item) => item.comboId === combo.comboId);
+      const existingComboIndex = prevCartCombo.findIndex(
+        (item) => item.comboId === combo.comboId
+      );
       if (existingComboIndex > -1) {
         const updatedCartCombo = [...prevCartCombo];
         updatedCartCombo[existingComboIndex].quantity += 1;
@@ -191,7 +193,9 @@ const MenuClient = () => {
       setCart((prevCart) => prevCart.filter((_, i) => i !== index));
       message.success("Đã xóa món khỏi giỏ hàng!");
     } else if (type === "combo") {
-      setCartCombo((prevCartCombo) => prevCartCombo.filter((_, i) => i !== index));
+      setCartCombo((prevCartCombo) =>
+        prevCartCombo.filter((_, i) => i !== index)
+      );
       message.success("Đã xóa combo khỏi giỏ hàng!");
     }
   };
@@ -218,7 +222,7 @@ const MenuClient = () => {
       tableId: Number(id),
       orderDate: new Date().toISOString(),
       totalMoney,
-      status: false,
+      status: 1,
       productDetails: productDetails,
       comboDetails: comboDetails,
     });
@@ -245,10 +249,17 @@ const MenuClient = () => {
       <div className="bg-gradient-to-r from-gray-800 to-gray-600 shadow-lg px-6 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <h1 className="text-white text-xl sm:text-4xl md:text-3xl font-semibold">
-            Thực đơn bàn: {id}
+            Thực đơn nhà hàng
           </h1>
+          <Button
+            type="link"
+            className="text-white font-semibold hover:text-gray-300"
+            //onClick={() => navigate("/history")}
+          >
+            Lịch sử
+          </Button>
         </div>
-        <div className="w-full max-w-md ml-auto">
+        <div className="w-full max-w-md ml-auto mt-2">
           <InputComponent
             name="search"
             type="search"
@@ -286,15 +297,26 @@ const MenuClient = () => {
           <MenuContent products={products} onAddToCart={addToCart} />
         )} */}
       </div>
-      <div className="fixed bottom-4 right-4">
+      <div className="fixed bottom-4 right-4 flex flex-col items-center space-y-3">
+        {/* Nút Lịch sử */}
+        <Tooltip title="Xem lịch gọi món">
+          <Button
+            type="default"
+            shape="circle"
+            icon={<ClockCircleOutlined />}
+            className="border-gray-400 shadow-md hover:shadow-lg hover:bg-gray-200 transition-all duration-300"
+            //onClick={() => navigate("/history")}
+          />
+        </Tooltip>
+
         <Button
           type="primary"
           size="large"
           icon={<ShoppingCartOutlined />}
-          className="bg-gray-700 border-none rounded-full shadow-lg hover:bg-gray-800 font-semibold"
+          className="bg-gray-700 border-none rounded-full shadow-lg hover:bg-gray-800 hover:shadow-xl font-semibold transition-all duration-300"
           onClick={toggleCart}
         >
-          Đơn hàng (
+          Món (
           {cart.reduce((total, item) => total + item.quantity, 0) +
             cartCombo.reduce((total, item) => total + (item.quantity || 0), 0)}
           )

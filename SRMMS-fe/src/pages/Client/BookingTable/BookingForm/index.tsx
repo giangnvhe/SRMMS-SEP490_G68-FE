@@ -1,15 +1,15 @@
 import {
   CalendarOutlined,
   ClockCircleOutlined,
-  MailOutlined,
   PhoneOutlined,
   TeamOutlined,
-  UserOutlined,
+  UserOutlined
 } from "@ant-design/icons";
-import { Button, DatePicker, Form, Input, InputNumber, TimePicker } from "antd";
+import { Form, InputNumber, TimePicker } from "antd";
 import { AxiosError, AxiosResponse } from "axios";
 import moment from "moment";
 import { useMutation } from "react-query";
+import socket from "~/common/const/mockSocket";
 import ButtonComponent from "~/components/ButtonComponent";
 import DatePickerComponent from "~/components/DatePickerComponent";
 import InputComponent from "~/components/InputComponent";
@@ -51,6 +51,7 @@ const BookingForm = () => {
       numberOfPeople: values.numberOfPeople,
     };
     bookingMutation.mutate(bookingData);
+    socket.emit("booking", bookingData);
   };
 
   return (
