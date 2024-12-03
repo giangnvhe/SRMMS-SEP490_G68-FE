@@ -82,7 +82,6 @@ const ViewCart = ({
     }
   };
 
-
   return (
     <Drawer
       title={
@@ -121,7 +120,7 @@ const ViewCart = ({
           <div className="space-y-4 p-4 border-t">
             <div className="flex justify-between items-center">
               <div className="space-y-2">
-                <div className="text-gray-500">Tổng thanh toán</div>
+                <div className="text-gray-500">Tổng tiền</div>
                 <div className="text-xl font-bold text-blue-500">
                   {formatVND(total)}
                 </div>
