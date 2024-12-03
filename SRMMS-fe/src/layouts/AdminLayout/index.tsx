@@ -31,7 +31,6 @@ const AdminLayout = () => {
     }
   }, [resize]);
 
-  
   return (
     <ConfigProvider
       theme={{

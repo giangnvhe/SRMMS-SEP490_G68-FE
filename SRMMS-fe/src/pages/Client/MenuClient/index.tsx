@@ -98,9 +98,9 @@ const MenuClient = () => {
           minPrice: 0,
           maxPrice: 1000000,
         });
-        const validatedCombos = response.data.combos.map((combo) => ({
+        const validatedCombos = response?.data?.combos.map((combo) => ({
           ...combo,
-          ProductNames: combo.ProductNames || [],
+          ProductNames: combo?.ProductNames || [],
         }));
         setCombos(validatedCombos);
       } catch (error) {
@@ -152,9 +152,11 @@ const MenuClient = () => {
     message.success(`${product.productName} đã thêm vào đơn hàng của bạn!`);
   };
 
-   const addToComboCart = (combo: CombosData) => {
+  const addToComboCart = (combo: CombosData) => {
     setCartCombo((prevCartCombo) => {
-      const existingComboIndex = prevCartCombo.findIndex((item) => item.comboId === combo.comboId);
+      const existingComboIndex = prevCartCombo.findIndex(
+        (item) => item.comboId === combo.comboId
+      );
       if (existingComboIndex > -1) {
         const updatedCartCombo = [...prevCartCombo];
         updatedCartCombo[existingComboIndex].quantity += 1;
@@ -191,7 +193,9 @@ const MenuClient = () => {
       setCart((prevCart) => prevCart.filter((_, i) => i !== index));
       message.success("Đã xóa món khỏi giỏ hàng!");
     } else if (type === "combo") {
-      setCartCombo((prevCartCombo) => prevCartCombo.filter((_, i) => i !== index));
+      setCartCombo((prevCartCombo) =>
+        prevCartCombo.filter((_, i) => i !== index)
+      );
       message.success("Đã xóa combo khỏi giỏ hàng!");
     }
   };
@@ -218,7 +222,7 @@ const MenuClient = () => {
       tableId: Number(id),
       orderDate: new Date().toISOString(),
       totalMoney,
-      status: false,
+      status: 1,
       productDetails: productDetails,
       comboDetails: comboDetails,
     });

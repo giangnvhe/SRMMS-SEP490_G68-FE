@@ -10,6 +10,7 @@ import { useAuth } from "~/context/authProvider";
 import useNotification from "~/hooks/useNotification";
 import { login } from "~/services/auth";
 import styles from "./index.module.scss";
+import { permissionObject } from "~/common/const/permission";
 
 const cx = classNames.bind(styles);
 
@@ -40,12 +41,15 @@ const LoginForm = () => {
         title: "Đăng Nhập",
         description: "Đăng nhập thành công",
       });
-      if (result.data.roleName === "Admin") {
+      if (result.data.roleName === permissionObject.ADMIN) {
         navigate("/admin/dashboard");
-      } else if (result.data.roleName === "Nhân viên thu ngân") {
-        navigate("/order-table");
-      } else if (result.data.roleName === "Bếp") {
-      } else if (result.data.roleName === "Quản lý") {
+      } else if (
+        result.data.roleName === permissionObject.STAFF.CASHIER ||
+        result.data.roleName === permissionObject.STAFF.SERVICE_STAFF
+      ) {
+        navigate("/tables");
+      } else if (result.data.roleName === permissionObject.KITCHEN) {
+      } else if (result.data.roleName === permissionObject.MANAGER) {
         navigate("/admin/employees");
       } else {
         navigate("/home");

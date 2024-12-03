@@ -32,3 +32,15 @@ export const AdminRouter = ({ children }: any) => {
 
   return <>{children}</>;
 };
+
+export const Staff = ({ children }: any) => {
+  const { user } = useAuth();
+  if (
+    user?.roleName !== permissionObject.STAFF.CASHIER &&
+    user?.roleName !== permissionObject.STAFF.SERVICE_STAFF
+  ) {
+    return <Error />;
+  }
+
+  return <>{children}</>;
+};

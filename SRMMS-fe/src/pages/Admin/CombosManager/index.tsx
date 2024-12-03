@@ -58,30 +58,32 @@ const CombosManager = () => {
   };
 
   useEffect(() => {
-    if (getListCombos.isError) {
+    if (getListCombos?.isError) {
       errorMessage({
         description:
-          (getListCombos.error as AxiosError)?.message || "Đã có lỗi xảy ra!!!",
+          (getListCombos?.error as AxiosError)?.message ||
+          "Đã có lỗi xảy ra!!!",
       });
     }
-    if (getListCombos?.data) {
-      //const combos = getListCombos.data.data?.combos;
 
-      // Check if combos is an array before calling map
-      if (getListCombos?.data) {
+    if (getListCombos?.data) {
+      const combosData = getListCombos?.data?.data?.combos;
+
+      if (Array.isArray(combosData)) {
         setDataTable(
-          getListCombos?.data?.data?.combos.map((d, i) => ({
+          combosData.map((d, i) => ({
             ...d,
             key: d?.comboId,
             index:
               (getListCombos?.data?.data?.pageNumber - 1) *
-                getListCombos.data?.data?.pageSize +
+                getListCombos?.data?.data?.pageSize +
               i +
               1,
           }))
         );
+      } else {
+        setDataTable([]);
       }
-
       form.setFieldValue("pageNumber", getListCombos?.data?.data?.pageNumber);
       form.setFieldValue("pageSize", getListCombos?.data?.data?.pageSize);
       form.setFieldValue("totalCount", getListCombos?.data?.data?.totalCount);
@@ -107,8 +109,8 @@ const CombosManager = () => {
           <ComboTable
             onSelected={onSelected}
             dataTable={dataTable}
-            refetch={getListCombos.refetch}
-            loading={getListCombos.isLoading || getListCombos.isFetching}
+            refetch={getListCombos?.refetch}
+            loading={getListCombos?.isLoading || getListCombos?.isFetching}
             form={form}
             onOk={onOk}
           />

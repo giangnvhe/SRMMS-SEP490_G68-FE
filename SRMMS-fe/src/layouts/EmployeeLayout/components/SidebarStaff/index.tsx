@@ -13,10 +13,10 @@ import { Button, Menu, MenuProps } from "antd";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "../../common/const/const";
 import { faTicket } from "@fortawesome/free-solid-svg-icons";
 import styles from "./index.module.scss";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "~/common/const/const";
 
 const cx = classNames.bind(styles);
 type MenuItem = Required<MenuProps>["items"][number];
@@ -28,60 +28,50 @@ interface Props {
 
 const items: MenuItem[] = [
   {
-    key: "/admin/dashboard",
-    label: "Dashboard",
-    icon: <AppstoreOutlined />,
-  },
-  {
-    key: "/admin/employees",
-    label: "Quản lý nhân viên",
-    icon: <TeamOutlined />,
-  },
-  {
-    key: "/admin/products",
-    label: "Quản lý món",
+    key: "/products",
+    label: "Danh sách món",
     icon: <ProductOutlined />,
     children: [
       {
-        key: "/admin/product",
+        key: "/product",
         label: "Danh sách món",
         icon: <FolderOpenOutlined />,
       },
       {
-        key: "/admin/category",
+        key: "/category",
         label: "Danh sách loại món",
         icon: <ProductOutlined />,
       },
     ],
   },
   {
-    key: "/admin/tables",
-    label: "Quản lý bàn",
+    key: "/tables",
+    label: "Danh sách bàn",
     icon: <TableOutlined />,
   },
   {
-    key: "/admin/combos-list",
-    label: "Quản lý combo",
+    key: "/combos-list",
+    label: "Danh sách combo",
     icon: <FontAwesomeIcon icon={faTh} />,
   },
   {
-    key: "/admin/order-list",
+    key: "/order-list",
     label: "Quản lý Order",
     icon: <FontAwesomeIcon icon={faClipboardList} />,
   },
   {
-    key: "/admin/voucher",
-    label: "Quản lý Voucher",
+    key: "/voucher",
+    label: "Danh sách Voucher",
     icon: <FontAwesomeIcon icon={faTicket} />,
   },
   {
-    key: "/admin/booking-list",
-    label: "Quản lý đặt bàn",
+    key: "/booking-list",
+    label: "Danh sách đặt bàn",
     icon: <FontAwesomeIcon icon={faClock} />,
   },
 ];
 
-const SidebarComponent = ({ isOpenSideBar, isAdmin, className }: Props) => {
+const SidebarStaff = ({ isOpenSideBar, isAdmin }: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(window.innerWidth <= 768);
@@ -140,4 +130,4 @@ const SidebarComponent = ({ isOpenSideBar, isAdmin, className }: Props) => {
   );
 };
 
-export default SidebarComponent;
+export default SidebarStaff;
