@@ -1,5 +1,6 @@
 import { CheckOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
 import { Badge, Popconfirm, Space, TableColumnsType, Tooltip } from "antd";
+import moment from "moment";
 import useNotification from "~/hooks/useNotification";
 import { BookingData } from "~/services/booking";
 
@@ -50,18 +51,41 @@ function UseColumn({ setSelectedBooking, onReject }: IProps) {
       dataIndex: "dayBooking",
       align: "left",
       width: 100,
+      render: (dayBooking) => {
+        return moment(dayBooking).format("YYYY-MM-DD");
+      },
     },
     {
       title: "Trạng thái",
-      dataIndex: "status",
-      align: "left",
+      dataIndex: "statusName",
+      align: "center",
       width: 100,
-      render: (status) => (
-        <Badge
-          status={status ? "success" : "error"}
-          text={status ? "Chấp nhận" : "Từ chối"}
-        />
-      ),
+      render: (statusName) => {
+        let badgeClass = "";
+
+        switch (statusName) {
+          case "Đã duyệt":
+            badgeClass = "bg-green-100 text-green-800 border border-green-300";
+            break;
+          case "Đang chờ xử lý":
+            badgeClass =
+              "bg-yellow-100 text-yellow-800 border border-yellow-300";
+            break;
+          case "Hủy":
+            badgeClass = "bg-red-100 text-red-800 border border-red-300";
+            break;
+          default:
+            badgeClass = "bg-gray-100 text-gray-800 border border-gray-300";
+        }
+
+        return (
+          <span
+            className={`inline-block px-3 py-1 text-sm font-medium rounded ${badgeClass}`}
+          >
+            {statusName}
+          </span>
+        );
+      },
     },
     {
       title: "Hành Động",

@@ -41,13 +41,14 @@ const BookingTable = ({
       <Form form={form} onFinish={onSubmitTable} layout="horizontal">
         <Row gutter={8}>
           <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
-            <Form.Item name="status" label="Trạng thái">
+            <Form.Item name="statusId" label="Trạng thái">
               <Select
                 placeholder="Chọn trạng thái"
                 allowClear
                 options={[
-                  { value: true, label: "Duyệt" },
-                  { value: false, label: "Từ chối" },
+                  { value: 1, label: "Đang chờ xử lý" },
+                  { value: 2, label: "Đã duyệt" },
+                  { value: 3, label: "Hủy" },
                 ]}
               />
             </Form.Item>

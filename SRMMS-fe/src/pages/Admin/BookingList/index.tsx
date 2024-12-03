@@ -23,13 +23,9 @@ const BookingList = () => {
     getListBooking(form.getFieldsValue(true))
   );
 
-  const handleApprove = async () => {
-    getListBookings.refetch();
-  };
-
   const onReject = async (id: number) => {
     try {
-      await ChangeStatusBooking(id, { status: false }); // Gọi API từ chối
+      await ChangeStatusBooking(id, { statusId: 3 });
       successMessage({
         title: "Thành công",
         description: "Đã từ chối đặt bàn thành công.",
