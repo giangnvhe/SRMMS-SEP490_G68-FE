@@ -82,7 +82,6 @@ const ViewCart = ({
     }
   };
 
-  console.log("CartCombo Data: ", cartCombo);
 
   return (
     <Drawer

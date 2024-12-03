@@ -1,10 +1,10 @@
 export const permissionObject = {
   ADMIN: "Admin",
-  SALE: "SALE",
   STAFF: {
     SERVICE_STAFF: "Nhân viên phục vụ",
-    CASHIER: "Nhân viên thu ngân",
+    CASHIER: "Ngân viên thu ngân",
   },
-  MANAGER: "MANAGER",
+  MANAGER: "Quản lý",
+  KITCHEN: "Bếp",
   LEADER_SALE: "LEADER_SALE",
 };

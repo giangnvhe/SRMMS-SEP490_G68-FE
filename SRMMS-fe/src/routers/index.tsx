@@ -2,7 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
-import { AdminRouter } from "~/middleware/Staff";
+import { AdminRouter, Staff } from "~/middleware/Staff";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -146,6 +146,82 @@ const RouterComponent = () => {
                   <InvoiceDialog />
                 </StaffOfficer>
               ),
+            },
+            {
+              path: "/tables",
+              element: (
+                <Staff>
+                  <TablesManagement />
+                </Staff>
+              ),
+            },
+            {
+              path: "/order-list",
+              element: (
+                <Staff>
+                  <OrderManager />
+                </Staff>
+              ),
+            },
+            {
+              path: "/order/:id",
+              element: (
+                <Staff>
+                  <OrderDetails />
+                </Staff>
+              ),
+            },
+            {
+              path: "/combos-list",
+              element: (
+                <Staff>
+                  <CombosManager />
+                </Staff>
+              ),
+            },
+            {
+              path: "/product",
+              element: (
+                <Staff>
+                  <ListProduct />
+                </Staff>
+              ),
+            },
+            {
+              path: "/category",
+              element: (
+                <Staff>
+                  <CategoryAdmin />
+                </Staff>
+              ),
+            },
+            {
+              path: "/voucher",
+              element: (
+                <Staff>
+                  <VoucherManager />
+                </Staff>
+              ),
+            },
+            {
+              path: "/qr-code",
+              element: (
+                <Staff>
+                  <QRCodeScreen />
+                </Staff>
+              ),
+            },
+            {
+              path: "/booking-list",
+              element: (
+                <Staff>
+                  <BookingList />
+                </Staff>
+              ),
+            },
+            {
+              path: "/admin/logout",
+              element: <Logout />,
             },
           ],
         },

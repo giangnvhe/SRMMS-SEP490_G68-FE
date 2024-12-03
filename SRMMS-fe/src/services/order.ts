@@ -9,7 +9,7 @@ export interface OrderData {
   orderId: number;
   orderDate: string;
   totalMoney: number;
-  status: boolean;
+  status: number;
   tableId: number;
   tableName: string;
   products: [
@@ -60,7 +60,7 @@ interface AddToOrderRequest {
   tableId: number;
   orderDate: string;
   totalMoney: number;
-  status?: boolean;
+  status?: number;
   codeId?: number;
   productDetails?: {
     proId: number;
