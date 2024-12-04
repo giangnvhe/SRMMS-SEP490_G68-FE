@@ -49,6 +49,7 @@ const LoginForm = () => {
       ) {
         navigate("/tables");
       } else if (result.data.roleName === permissionObject.KITCHEN) {
+        navigate("/kitchen");
       } else if (result.data.roleName === permissionObject.MANAGER) {
         navigate("/admin/employees");
       } else {

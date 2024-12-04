@@ -4,6 +4,7 @@ import formatter from "~/common/utils/formatter";
 import ButtonComponent from "~/components/ButtonComponent";
 import { TableData } from "~/services/table";
 import { TABLE_STATUS } from "../const";
+import { useAuth } from "~/context/authProvider";
 
 interface IProps {
   selectedTable: TableData | undefined;
@@ -12,6 +13,7 @@ interface IProps {
 }
 
 const FooterTable = ({ selectedTable, onSelected }: IProps) => {
+  const { user } = useAuth();
   return (
     <div
       style={{
@@ -40,13 +42,15 @@ const FooterTable = ({ selectedTable, onSelected }: IProps) => {
         <Typography.Title level={4} style={{ margin: 0 }}>
           Đang chọn : {selectedTable?.tableName || "N/A"}
         </Typography.Title>
-        <ButtonComponent
-          className="rounded-lg"
-          disabled={!selectedTable}
-          onClick={() => onSelected(selectedTable)}
-        >
-          Cập nhật
-        </ButtonComponent>
+        {user && (user.roleName === "Admin" || user.roleName === "Quản lý") && (
+          <ButtonComponent
+            className="rounded-lg"
+            disabled={!selectedTable}
+            onClick={() => onSelected(selectedTable)}
+          >
+            Cập nhật
+          </ButtonComponent>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,19 @@
+@import "~/styles/variables.scss";
+
+:global(.admin-layout) {
+  width: 100%;
+  height: $min-heigth-user-layout-pc;
+  margin-top: 60px;
+  // css auth
+  display: flex;
+  overflow: hidden;
+  @media (max-width: 992px) {
+    height: $min-heigth-user-layout-sp;
+    margin-top: 52px;
+  }
+  :global(.body-layout) {
+    width: 100%;
+    overflow: auto;
+    background: whitesmoke;
+  }
+}

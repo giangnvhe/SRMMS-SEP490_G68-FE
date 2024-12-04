@@ -11,7 +11,7 @@ import styles from "./index.module.scss";
 
 const cx = classNames.bind(styles);
 
-const EmployeeLayout = () => {
+const KitchenLayout = () => {
 
   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
   const resize = useWindowSize();
@@ -82,4 +82,4 @@ const EmployeeLayout = () => {
   );
 };
 
-export default EmployeeLayout;
+export default KitchenLayout;

@@ -5,6 +5,9 @@ import ClientLayout from "~/layouts/ClientLayout";
 import { AdminRouter, Staff } from "~/middleware/Staff";
 import HistoryOrder from "~/pages/Client/components/HistoryOrder";
 import Chatbot from "~/pages/ChatAi";
+import KitchenLayout from "~/layouts/KitchenLayout";
+import KitchenOfficer from "~/middleware/Kitchen";
+import Kitchen from "~/pages/Kitchen";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -117,6 +120,26 @@ const RouterComponent = () => {
         {
           element: <ForgotPassword />,
           path: "/forget-password",
+        },
+      ],
+    },
+    //Kitchen
+    {
+      path: "/",
+      element: <ProtectedRoute />,
+      children: [
+        {
+          element: <KitchenLayout />,
+          children: [
+            {
+              path: "/kitchen",
+              element: (
+                <KitchenOfficer>
+                  <Kitchen />
+                </KitchenOfficer>
+              ),
+            },
+          ],
         },
       ],
     },
