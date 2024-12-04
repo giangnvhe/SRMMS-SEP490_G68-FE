@@ -7,7 +7,7 @@ import { getStatusColor } from "../const";
 
 interface IProps {
   tables: TableData[];
-  onSelect: (tableName: string) => void;
+  onSelect: (tableId: number) => void;
 }
 
 const ListTable = ({ tables, onSelect }: IProps) => {
@@ -17,7 +17,7 @@ const ListTable = ({ tables, onSelect }: IProps) => {
         tables.map((table) => (
           <Col xs={24} sm={12} md={8} key={table.tableId}>
             <Card
-              onClick={() => onSelect(table.tableName)}
+              onClick={() => onSelect(table.tableId)}
               className="flex flex-col justify-center items-center bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-200 ease-in-out cursor-pointer relative h-[200px]"
             >
               <div>

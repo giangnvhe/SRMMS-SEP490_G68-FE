@@ -82,7 +82,7 @@ interface AddToOrderResponse {
 export const getListOrder = async (
   params: FormFields
 ): Promise<OrderDataResponse> => {
-  const result = await axiosInstance.get(getApi("api", "Order/list"), {
+  const result = await axiosInstance.get(getApi("api", "Order/listAllStatus"), {
     params,
   });
   return result;

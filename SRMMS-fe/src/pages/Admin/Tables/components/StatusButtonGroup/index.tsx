@@ -30,7 +30,11 @@ const StatusButtonGroup = ({
     "Đã đặt",
     "Đang sửa chữa",
   ];
-  const shifts = ["Tất cả", "Lunch", "Dinner"];
+  const shifts = [
+    { label: "Tất cả", value: "Tất cả" },
+    { label: "Ca trưa", value: "Lunch" },
+    { label: "Ca tối", value: "Dinner" },
+  ];
   const navigate = useNavigate();
 
   return (
@@ -58,7 +62,7 @@ const StatusButtonGroup = ({
             style={{ width: 120 }}
             value={selectedShift}
             onChange={onShiftChange}
-            options={shifts.map((shift) => ({ label: shift, value: shift }))}
+            options={shifts}
           />
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { Descriptions, Drawer, message, Spin, Table } from "antd";
+import moment from "moment";
 import { useQuery } from "react-query";
 import { getOrderByTableId, OrderData } from "~/services/order";
 
@@ -73,7 +74,9 @@ const HistoryOrder = ({ visible, tableId, onClose }: HistoryOrderProps) => {
           <>
             <Descriptions bordered column={2}>
               <Descriptions.Item label="Ngày Order">
-                {orderDetails[0]?.orderDate}
+                {orderDetails[0]?.orderDate
+                  ? orderDetails[0]?.orderDate
+                  : moment().format("YYYY-MM-DD HH:mm")}
               </Descriptions.Item>
               <Descriptions.Item label="Tên Bàn">
                 {orderDetails[0]?.tableName}

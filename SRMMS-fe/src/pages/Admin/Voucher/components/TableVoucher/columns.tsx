@@ -31,12 +31,19 @@ function UseColumn({ onSelected, onOk }: IProps) {
       ),
     },
     {
-      title: "Giảm giá tiền",
+      title: "Giá trị",
       dataIndex: "discountValue",
       width: 100,
-      render: (name: number) => (
-        <div className="truncate text-sm text-gray-700">{formatVND(name)}</div>
-      ),
+      render: (_: any, record: DiscountData) => {
+        const { discountValue, discountType } = record;
+        const formattedValue =
+          discountType === 0
+            ? `${formatVND(discountValue)}`
+            : `${discountValue}%`;
+        return (
+          <div className="truncate text-sm text-gray-700">{formattedValue}</div>
+        );
+      },
     },
     {
       title: "Ngày bắt đầu",
