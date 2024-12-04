@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
 import { AdminRouter, Staff } from "~/middleware/Staff";
+import HistoryOrder from "~/pages/Client/components/HistoryOrder";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -62,7 +63,7 @@ const RouterComponent = () => {
       element: <Register />,
     },
     {
-      path: "/profile",
+      path: "/profile/:id",
       element: <ProfilePage />,
     },
 
@@ -111,6 +112,10 @@ const RouterComponent = () => {
         {
           element: <ForgotPassword />,
           path: "/forget-password",
+        },
+        {
+          element: <HistoryOrder />,
+          path: "/history/:id",
         },
       ],
     },

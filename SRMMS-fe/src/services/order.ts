@@ -158,3 +158,12 @@ export const PaymentOrder = async (
   );
   return result;
 };
+
+export const getOrderByTableId = async (
+  id: number
+): Promise<AxiosResponse<OrderData>> => {
+  const result = await axiosInstance.get(
+    getApi("api", `Order/listOrderByTable/${id}`)
+  );
+  return result;
+};

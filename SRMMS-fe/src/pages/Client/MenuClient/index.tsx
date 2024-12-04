@@ -15,6 +15,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import InputComponent from "~/components/InputComponent";
 import { CombosData, getLisComboProduct } from "~/services/combos";
 import ComboContent from "../components/comboContent";
+import HistoryOrder from "../components/HistoryOrder";
 
 export interface CartItem extends ProductData {
   quantity: number;
@@ -38,6 +39,17 @@ const MenuClient = () => {
     "products"
   );
   const { successMessage, errorMessage } = useNotification();
+  const [tableId, setTableId] = useState<number | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
+
+  const handleShowHistory = () => {
+    if (id) {
+      setTableId(Number(id));
+      setShowHistory(true);
+    } else {
+      message.error("Không tìm thấy mã bàn!");
+    }
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -251,13 +263,6 @@ const MenuClient = () => {
           <h1 className="text-white text-xl sm:text-4xl md:text-3xl font-semibold">
             Thực đơn nhà hàng
           </h1>
-          <Button
-            type="link"
-            className="text-white font-semibold hover:text-gray-300"
-            //onClick={() => navigate("/history")}
-          >
-            Lịch sử
-          </Button>
         </div>
         <div className="w-full max-w-md ml-auto mt-2">
           <InputComponent
@@ -288,14 +293,6 @@ const MenuClient = () => {
         ) : (
           <ComboContent comboData={combos} onAddToComboCart={addToComboCart} />
         )}
-
-        {/* {loading ? (
-          <div className="flex justify-center items-center h-96">
-            <Spin size="large" />
-          </div>
-        ) : (
-          <MenuContent products={products} onAddToCart={addToCart} />
-        )} */}
       </div>
       <div className="fixed bottom-4 right-4 flex flex-col items-center space-y-3">
         {/* Nút Lịch sử */}
@@ -305,7 +302,7 @@ const MenuClient = () => {
             shape="circle"
             icon={<ClockCircleOutlined />}
             className="border-gray-400 shadow-md hover:shadow-lg hover:bg-gray-200 transition-all duration-300"
-            //onClick={() => navigate("/history")}
+            onClick={handleShowHistory}
           />
         </Tooltip>
 
@@ -333,6 +330,11 @@ const MenuClient = () => {
         onUpdateCart={handleUpdateCart}
         onClearCart={handleClearCart}
         onCheckout={handleCheckout}
+      />
+      <HistoryOrder
+        visible={showHistory}
+        tableId={tableId}
+        onClose={() => setShowHistory(false)}
       />
     </Layout>
   );
