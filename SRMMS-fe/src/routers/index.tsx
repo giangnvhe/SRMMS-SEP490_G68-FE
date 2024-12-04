@@ -4,6 +4,7 @@ import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
 import { AdminRouter, Staff } from "~/middleware/Staff";
 import HistoryOrder from "~/pages/Client/components/HistoryOrder";
+import Chatbot from "~/pages/ChatAi";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -65,6 +66,10 @@ const RouterComponent = () => {
     {
       path: "/profile/:id",
       element: <ProfilePage />,
+    },
+    {
+      path: "/chat-ai",
+      element: <Chatbot />,
     },
 
     //Public Layout

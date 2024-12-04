@@ -1,4 +1,4 @@
-import { Spin } from "antd";
+import { Modal, Spin } from "antd";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -9,6 +9,8 @@ import Grap1 from "./grap1";
 import Grap2 from "./Grap2";
 import Grap3 from "./Grap3";
 import styles from "./index.module.scss";
+import Chatbot from "~/pages/ChatAi";
+import { MessageOutlined } from "@ant-design/icons";
 
 const cx = classNames.bind(styles);
 
@@ -16,8 +18,12 @@ const Content = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const feedbacksPerPage = 5;
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const { data, isLoading, error, refetch } = useQuery(["feedbacks"], getListFeedbacks);
+  const { data, isLoading, error, refetch } = useQuery(
+    ["feedbacks"],
+    getListFeedbacks
+  );
 
   const feedbacks: FeedbackData[] = data?.feedbacks || [];
   const [filteredFeedbacks, setFilteredFeedbacks] = useState(feedbacks);
@@ -146,6 +152,31 @@ const Content = () => {
       <div className="p-4">
         <FeedbackForm refetch={refetch} />
       </div>
+      <button
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-6 right-6 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600"
+      >
+        <MessageOutlined style={{ fontSize: "24px" }} />
+      </button>
+
+      {/* Modal Chat */}
+      <Modal
+        title="Chat AI"
+        open={isChatOpen}
+        onCancel={() => setIsChatOpen(false)}
+        footer={null}
+        mask={false}
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          margin: 0,
+          padding: 0,
+        }}
+        width={500}
+      >
+        <Chatbot />
+      </Modal>
     </div>
   );
 };
