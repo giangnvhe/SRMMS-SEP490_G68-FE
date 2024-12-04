@@ -118,10 +118,6 @@ const RouterComponent = () => {
           element: <ForgotPassword />,
           path: "/forget-password",
         },
-        {
-          element: <HistoryOrder />,
-          path: "/history/:id",
-        },
       ],
     },
     //Staff layout

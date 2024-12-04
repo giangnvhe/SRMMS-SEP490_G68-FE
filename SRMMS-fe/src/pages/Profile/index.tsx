@@ -17,6 +17,7 @@ import {
   Typography,
 } from "antd";
 import { AxiosResponse } from "axios";
+import moment from "moment";
 import { useEffect, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "~/context/authProvider";
@@ -149,7 +150,7 @@ const ProfilePage = () => {
             </>
           }
         >
-          {startDate || "Chưa xác định"}
+          {moment(startDate).format("YYYY-MM-DD") || "Chưa xác định"}
         </Descriptions.Item>
 
         {endDate && (
