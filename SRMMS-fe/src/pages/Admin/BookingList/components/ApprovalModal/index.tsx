@@ -34,7 +34,9 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
         .filter((table) => table.statusId === 1)
         .map((table) => ({
           id: table.tableId,
-          name: `${table.tableName} (${table.tableOfPeople} chỗ)`,
+          name: `${table.tableName} (${table.tableOfPeople} chỗ ${
+            table.shift === "Lunch" ? "Ca trưa" : "Ca tối"
+          })`,
         }));
 
       setTables(availableTables);
