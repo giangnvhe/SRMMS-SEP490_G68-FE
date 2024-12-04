@@ -1,29 +1,29 @@
 import {
-  Avatar,
-  Dropdown,
-  MenuProps,
-  Space,
-  Badge,
-  Card,
-  Button,
-  List,
-  Typography,
-} from "antd";
-import classNames from "classnames";
-import logo from "../../assets/images/logo2.png";
-import styles from "./index.module.scss";
-import {
+  BellOutlined,
   CloseOutlined,
   InfoCircleOutlined,
   LogoutOutlined,
   MenuOutlined,
   UserOutlined,
-  BellOutlined,
 } from "@ant-design/icons";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  Dropdown,
+  List,
+  MenuProps,
+  Space,
+  Typography,
+} from "antd";
+import classNames from "classnames";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import socket from "~/common/const/mockSocket";
-import dayjs from "dayjs";
+import logo from "../../assets/images/logo2.png";
+import styles from "./index.module.scss";
+import { useAuth } from "~/context/authProvider";
 
 interface Props {
   isOpenSideBar: boolean;
@@ -49,6 +49,7 @@ const NavComponent = ({
   const [unreadCount, setUnreadCount] = useState(0);
   const [notification, setNotification] = useState<Notification[]>([]);
   const [notificationVisible, setNotificationVisible] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     socket.on("booking", (bookingData) => {
@@ -83,7 +84,10 @@ const NavComponent = ({
   const items: MenuProps["items"] = [
     {
       label: (
-        <div className="flex gap-2">
+        <div
+          className="flex gap-2"
+          onClick={() => navigate(`/profile/${user?.id}`)}
+        >
           <InfoCircleOutlined style={{ color: "green" }} />
           <p className="font-bold text-sm">Information</p>
         </div>
