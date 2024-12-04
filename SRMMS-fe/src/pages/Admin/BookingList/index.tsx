@@ -1,4 +1,4 @@
-import { Form } from "antd";
+import { Form, Modal } from "antd";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -11,6 +11,7 @@ import {
 } from "~/services/booking";
 import BookingTable from "./components/BookingTable";
 import ApprovalModal from "./components/ApprovalModal";
+import UpdateBooking from "./components/EditBooking";
 
 const BookingList = () => {
   const [form] = Form.useForm<FormFields>();
@@ -19,9 +20,21 @@ const BookingList = () => {
   const [selectedBooking, setSelectedBooking] = useState<
     BookingData | undefined
   >(undefined);
+  const [openModal, setOpenModal] = useState(false);
+
   const getListBookings = useQuery("getListBooking", () =>
     getListBooking(form.getFieldsValue(true))
   );
+
+  const onSelected = (id: BookingData | undefined) => {
+    setSelectedBooking(id);
+    setOpenModal(true);
+  };
+
+  const onCancel = () => {
+    setSelectedBooking(undefined);
+    setOpenModal(false);
+  };
 
   const onReject = async (id: number) => {
     try {
@@ -85,6 +98,7 @@ const BookingList = () => {
             loading={getListBookings.isLoading || getListBookings.isFetching}
             form={form}
             onReject={onReject}
+            onSelected={onSelected}
           />
           <ApprovalModal
             visible={!!selectedBooking}
@@ -97,6 +111,36 @@ const BookingList = () => {
           />
         </div>
       </div>
+      <Modal
+        footer={null}
+        width={900}
+        onCancel={onCancel}
+        title={
+          <span
+            style={{
+              fontSize: "24px",
+              fontWeight: "600",
+              color: "#fff",
+              background: "linear-gradient(90deg, #4A90E2, #50E3C2)",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+              display: "inline-block",
+            }}
+          >
+            {selectedBooking === undefined
+              ? "✨ Thêm Món Ăn Mới"
+              : "🛠️ Chỉnh Sửa"}
+          </span>
+        }
+        open={openModal}
+      >
+        <UpdateBooking
+          refetch={getListBookings.refetch}
+          onCancel={onCancel}
+          bookingData={selectedBooking}
+        />
+      </Modal>
     </div>
   );
 };

@@ -7,9 +7,10 @@ import { BookingData } from "~/services/booking";
 interface IProps {
   setSelectedBooking: (booking: BookingData | undefined) => void;
   onReject: (id: number) => void;
+  onSelected: (id: BookingData | undefined) => void;
 }
 
-function UseColumn({ setSelectedBooking, onReject }: IProps) {
+function UseColumn({ setSelectedBooking, onReject, onSelected }: IProps) {
   const { comfirmMessage } = useNotification();
 
   const columns: TableColumnsType<BookingData> = [
@@ -121,6 +122,13 @@ function UseColumn({ setSelectedBooking, onReject }: IProps) {
             >
               <CloseOutlined className="text-red-500 cursor-pointer hover:text-red-700" />
             </Popconfirm>
+          </Tooltip>
+
+          <Tooltip title="Chỉnh sửa">
+            <EditOutlined
+              className="text-blue-500 cursor-pointer"
+              onClick={() => onSelected(record)}
+            />
           </Tooltip>
         </Space>
       ),
