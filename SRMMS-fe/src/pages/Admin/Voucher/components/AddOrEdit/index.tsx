@@ -184,8 +184,8 @@ const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
               ]}
             >
               <Radio.Group>
-                <Radio value={0}>Giá trị</Radio>
-                <Radio value={1}>Phần trăm</Radio>
+                <Radio value={1}>Giá trị</Radio>
+                <Radio value={0}>Phần trăm</Radio>
               </Radio.Group>
             </Form.Item>
             <div className="flex gap-6">

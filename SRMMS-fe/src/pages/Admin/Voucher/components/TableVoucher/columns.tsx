@@ -37,7 +37,7 @@ function UseColumn({ onSelected, onOk }: IProps) {
       render: (_: any, record: DiscountData) => {
         const { discountValue, discountType } = record;
         const formattedValue =
-          discountType === 0
+          discountType === 1
             ? `${formatVND(discountValue)}`
             : `${discountValue}%`;
         return (
