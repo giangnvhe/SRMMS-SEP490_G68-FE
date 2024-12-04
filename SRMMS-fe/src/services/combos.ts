@@ -44,7 +44,7 @@ export interface NewComboRequest {
   ComboDescription: string;
   ComboMoney: number;
   ComboStatus: boolean;
-  ComboImg?: RcFile | null;
+  ComboImg?: RcFile | string | null | undefined;
   ProductNames: string[];
 }
 

@@ -115,3 +115,23 @@ export const getBookingList = async (): Promise<DataBookingResponse> => {
   const result = await axiosInstance.get(getApi("api", "booking/getList"));
   return result;
 };
+
+export interface NewBookingRequest{
+  dayBooking: string;
+  hourBooking?: moment.Moment;
+  numberOfPeople: number;
+  statusId: number;
+  shift: string;
+}
+
+
+export const updateBooking = async (
+  id: number,
+  bookingData: NewBookingRequest
+) => {
+  const response = await axiosInstance.put(
+    getApi("api", `booking/update/${id}`),
+    bookingData
+  );
+  return response.data;
+};
