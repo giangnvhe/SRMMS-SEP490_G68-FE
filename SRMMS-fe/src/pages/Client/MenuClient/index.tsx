@@ -315,7 +315,7 @@ const MenuClient = () => {
           className="bg-gray-700 border-none rounded-full shadow-lg hover:bg-gray-800 hover:shadow-xl font-semibold transition-all duration-300"
           onClick={toggleCart}
         >
-          Món (
+          Đơn (
           {cart.reduce((total, item) => total + item.quantity, 0) +
             cartCombo.reduce((total, item) => total + (item.quantity || 0), 0)}
           )

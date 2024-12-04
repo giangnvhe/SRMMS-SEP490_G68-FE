@@ -7,6 +7,8 @@ import { useAuth } from "~/context/authProvider";
 import { LuLogOut } from "react-icons/lu";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import useNotification from "~/hooks/useNotification";
+import { Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 const items = [
   { key: "1", label: "Trang chủ", path: "/home" },
@@ -37,7 +39,7 @@ const Header = () => {
         title: "Đăng Xuất",
         description: "Bạn đã đăng xuất thành công.",
       });
-      navigate("/login");
+      navigate("/home");
     });
   };
 
@@ -49,7 +51,11 @@ const Header = () => {
       navigate(selectedItem.path);
     }
   };
-
+  const handleNavigateToProfile = () => {
+    startTransition(() => {
+      navigate(`/profile/${user?.id}`);
+    });
+  };
   return (
     <div className="flex justify-between items-center py-4 px-4 bg-white border-b border-gray-200 shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="flex items-center gap-4">
@@ -85,7 +91,12 @@ const Header = () => {
               Chào mừng,{" "}
               <span className="text-green-700">{user?.fullName}</span>!
             </div>
-            
+            <Avatar
+              style={{ backgroundColor: "#87d068" }}
+              className="cursor-pointer"
+              icon={<UserOutlined />}
+              onClick={handleNavigateToProfile}
+            />
             <div
               onClick={handleLogout}
               className="flex justify-center items-center gap-2 hover:text-red-500 transition-colors duration-200 cursor-pointer"

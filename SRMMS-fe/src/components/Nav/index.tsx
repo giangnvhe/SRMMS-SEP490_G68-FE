@@ -89,7 +89,7 @@ const NavComponent = ({
           onClick={() => navigate(`/profile/${user?.id}`)}
         >
           <InfoCircleOutlined style={{ color: "green" }} />
-          <p className="font-bold text-sm">Information</p>
+          <p className="font-bold text-sm">Thông tin cá nhân</p>
         </div>
       ),
       key: "0",
@@ -102,7 +102,7 @@ const NavComponent = ({
           className="flex justify-center items-center gap-2"
         >
           <LogoutOutlined style={{ color: "red" }} />
-          <span className="font-bold text-sm">Log out</span>
+          <span className="font-bold text-sm">Đăng xuất</span>
         </div>
       ),
     },

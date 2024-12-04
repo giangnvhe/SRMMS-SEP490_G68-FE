@@ -81,6 +81,21 @@ function UseColumn({ onSelected, onOk }: IProps) {
       render: (price: number) => `${price.toFixed(2)} VNĐ`,
     },
     {
+      title: "Trạng Thái",
+      dataIndex: "status",
+      align: "center",
+      width: 100,
+      render: (status: boolean) => (
+        <span
+          className={`px-3 py-1 rounded-full text-white font-semibold ${
+            status ? "bg-green-500" : "bg-red-500"
+          }`}
+        >
+          {status ? "Còn hàng" : "Hết hàng"}
+        </span>
+      ),
+    },
+    {
       title: "Hành Động",
       width: 50,
       fixed: "right",

@@ -101,7 +101,7 @@ const LoginForm = () => {
         <InputComponent
           form={form}
           name="password"
-          label="Password :"
+          label="Mật khẩu :"
           type="password"
           rules={[
             {
@@ -121,7 +121,7 @@ const LoginForm = () => {
         </ButtonComponent>
         <div className="mt-2 flex cursor-pointer justify-between text-sm">
           <p>
-            Do you have a account?{" "}
+            Bạn có tài khoản chưa?{" "}
             <span
               className="text-blue-500 hover:text-blue-700 font-medium ml-1 cursor-pointer"
               onClick={() => navigate("/register")}
