@@ -225,10 +225,12 @@ const MenuClient = () => {
       price: item.comboMoney,
     }));
 
-    const totalMoney = cart.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
+    const totalMoney =
+      cart.reduce((sum, item) => sum + item.price * item.quantity, 0) +
+      cartCombo.reduce(
+        (sum, item) => sum + item.comboMoney * (item.quantity || 0),
+        0
+      );
 
     orderMutation.mutate({
       tableId: Number(id),

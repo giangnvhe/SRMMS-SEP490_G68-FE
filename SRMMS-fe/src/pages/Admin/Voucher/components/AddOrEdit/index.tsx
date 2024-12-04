@@ -1,5 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Form, Spin } from "antd";
+import { Form, Radio, Spin } from "antd";
 import { AxiosError, AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react";
@@ -33,6 +33,7 @@ const initialFormValues = {
   startDate: dayjs(),
   endDate: dayjs().add(1, "day"),
   status: true,
+  discountType: null,
 };
 
 const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
@@ -96,6 +97,7 @@ const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
         startDate: startDate,
         endDate: endDate,
         status: voucherData?.status,
+        discountType: voucherData?.discountType,
       });
     } else {
       form.resetFields();
@@ -108,13 +110,15 @@ const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
     startDate: string;
     endDate: string;
     status: boolean;
+    discountType: number;
   }) => {
     const formData: VoucherRequest = {
       codeDetail: values.codeDetail,
       discountValue: values.discountValue,
-      startDate: dayjs(values.startDate).format("YYYY-MM-DD"), // Format ngày bắt đầu
+      startDate: dayjs(values.startDate).format("YYYY-MM-DD"),
       endDate: dayjs(values.endDate).format("YYYY-MM-DD"),
       status: values.status !== undefined ? values.status : true,
+      discountType: values.discountType,
     };
     if (isEditVoucher) {
       handleUpdateEmployee.mutate({
@@ -169,6 +173,21 @@ const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
               ]}
               placeholder="Nhập giá trị"
             />
+            <Form.Item
+              name="discountType"
+              label="Loại giảm giá"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng chọn loại giảm giá",
+                },
+              ]}
+            >
+              <Radio.Group>
+                <Radio value={0}>Giá trị</Radio>
+                <Radio value={1}>Phần trăm</Radio>
+              </Radio.Group>
+            </Form.Item>
             <div className="flex gap-6">
               <DatePickerComponent
                 name="startDate"

@@ -64,7 +64,7 @@ const UpdateBooking = ({ refetch, bookingData, onCancel }: IProps) => {
   }, [bookingData]);
 
   const onSubmitForm = (values: {
-    dayBooking: string;
+    dayBooking: moment.Moment;
     hourBooking: moment.Moment;
     numberOfPeople: number;
     statusId: number;

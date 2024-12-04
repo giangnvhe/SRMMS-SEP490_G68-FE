@@ -12,6 +12,7 @@ export interface DiscountData {
   startDate: string;
   endDate: string;
   status: boolean;
+  discountType: number;
 }
 export interface DiscountResponse {
   data: {
@@ -37,6 +38,7 @@ export interface VoucherRequest {
   startDate: string;
   endDate: string;
   status: boolean;
+  discountType: number;
 }
 
 interface VoucherResponse {
@@ -66,7 +68,9 @@ export const updateVoucher = async (
   return response.data;
 };
 
-export const changeVoucherStatus = async (id: number): Promise<AxiosResponse> => {
+export const changeVoucherStatus = async (
+  id: number
+): Promise<AxiosResponse> => {
   const response = await axiosInstance.put(
     getApi("api", `DiscountCodes/changeStatus/${id}`)
   );

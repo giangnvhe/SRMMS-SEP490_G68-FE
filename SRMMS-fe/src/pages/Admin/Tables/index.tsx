@@ -54,11 +54,9 @@ const TablesManagement = () => {
     );
   }
 
-  const handleTableSelection = (tableName: string) => {
+  const handleTableSelection = (tableId: number) => {
     if (!tableData) return;
-    const chosenTable = tableData.find(
-      (table) => table.tableName === tableName
-    );
+    const chosenTable = tableData.find((table) => table.tableId === tableId);
 
     if (chosenTable) {
       if (chosenTable.statusName) {
