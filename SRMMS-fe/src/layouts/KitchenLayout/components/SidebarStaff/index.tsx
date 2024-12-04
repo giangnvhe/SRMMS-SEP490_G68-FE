@@ -1,16 +1,22 @@
 import {
+  AppstoreOutlined,
+  FolderOpenOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  TableOutlined
+  ProductOutlined,
+  TableOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
-import { faClipboardList, faClock, faTh, faTicket } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardList, faTh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Menu, MenuProps } from "antd";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "~/common/const/const";
+import { faTicket } from "@fortawesome/free-solid-svg-icons";
 import styles from "./index.module.scss";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "~/common/const/const";
 
 const cx = classNames.bind(styles);
 type MenuItem = Required<MenuProps>["items"][number];
@@ -21,6 +27,11 @@ interface Props {
 }
 
 const items: MenuItem[] = [
+  {
+    key: "/kitchen",
+    label: "Bếp",
+    icon: <AppstoreOutlined />,
+  },
   {
     key: "/tables",
     label: "Danh sách bàn",

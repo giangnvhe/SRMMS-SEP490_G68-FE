@@ -3,6 +3,7 @@ import { Select } from "antd";
 import { startTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "~/components/ButtonComponent";
+import { useAuth } from "~/context/authProvider";
 import { TableData } from "~/services/table";
 
 interface IProps {
@@ -36,6 +37,7 @@ const StatusButtonGroup = ({
     { label: "Ca tối", value: "Dinner" },
   ];
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <div className="flex justify-between">
@@ -67,38 +69,48 @@ const StatusButtonGroup = ({
         </div>
       </div>
 
-      <div className="flex gap-2 flex-wrap w-full md:w-auto">
-        <ButtonComponent
-          icon={<PlusCircleOutlined />}
-          onClick={() => {
-            setSelectedTable(undefined);
-            setOpenModal(true);
-          }}
-          className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
-        >
-          Thêm Bàn Mới
-        </ButtonComponent>
-        <ButtonComponent
-          onClick={() => {
-            startTransition(() => {
-              navigate("/qr-code");
-            });
-          }}
-          className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
-        >
-          QR Code Bàn
-        </ButtonComponent>
-        <ButtonComponent
-          className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
-          onClick={() => {
-            startTransition(() => {
-              navigate("/order-table");
-            });
-          }}
-        >
-          Thanh Toán
-        </ButtonComponent>
-      </div>
+      {user && (
+        <div className="flex gap-2 flex-wrap w-full md:w-auto">
+          {(user.roleName === "Admin" || user.roleName === "Quản lý") && (
+            <>
+              <ButtonComponent
+                icon={<PlusCircleOutlined />}
+                onClick={() => {
+                  setSelectedTable(undefined);
+                  setOpenModal(true);
+                }}
+                className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
+              >
+                Thêm Bàn Mới
+              </ButtonComponent>
+            </>
+          )}
+          <ButtonComponent
+            onClick={() => {
+              startTransition(() => {
+                navigate("/qr-code");
+              });
+            }}
+            className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
+          >
+            QR Code Bàn
+          </ButtonComponent>
+          {(user.roleName === "Nhân viên thu ngân" ||
+            user.roleName === "Admin" ||
+            user.roleName === "Quản lý") && (
+            <ButtonComponent
+              className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
+              onClick={() => {
+                startTransition(() => {
+                  navigate("/order-table");
+                });
+              }}
+            >
+              Thanh Toán
+            </ButtonComponent>
+          )}
+        </div>
+      )}
     </div>
   );
 };

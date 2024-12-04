@@ -39,7 +39,7 @@ const QRCodeScreen = () => {
   }
 
   const handleBack = () => {
-    navigate("/admin/tables");
+    navigate(-1);
   };
 
   return (

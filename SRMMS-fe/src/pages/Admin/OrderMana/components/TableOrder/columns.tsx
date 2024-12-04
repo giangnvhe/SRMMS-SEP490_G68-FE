@@ -34,7 +34,7 @@ const UseColumn = () => {
           </div>
         );
       },
-      width: "160px", // Adjusted width for better readability
+      width: "160px",
     },
     {
       title: "Tổng số tiền",
