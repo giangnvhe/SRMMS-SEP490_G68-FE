@@ -51,7 +51,6 @@ const Payment = () => {
     {
       onSuccess: (response) => {
         message.success("Thanh toán thành công!");
-        navigate("/order-table");
       },
       onError: (error) => {
         message.error("Thanh toán thất bại. Vui lòng thử lại.");
