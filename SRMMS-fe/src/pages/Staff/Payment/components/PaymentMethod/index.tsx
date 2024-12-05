@@ -128,8 +128,8 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
 
   // account point
   const handleSelectAccount = (account: AccountCusData) => {
-    setSelectedAccount(account); // Store selected account
-    setShowAccountModal(false); // Close the account modal
+    setSelectedAccount(account); 
+    setShowAccountModal(false); 
   };
 
   const handleAccountClick = () => {
