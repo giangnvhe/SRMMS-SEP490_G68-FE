@@ -1,12 +1,18 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Checkbox, Form, Image, Modal, Select, Spin, Table } from "antd";
-import Upload, { RcFile, UploadFile, UploadProps } from "antd/es/upload";
+import Upload, {
+  RcFile,
+  UploadChangeParam,
+  UploadFile,
+  UploadProps,
+} from "antd/es/upload";
 import { AxiosError, AxiosResponse } from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import ButtonComponent from "~/components/ButtonComponent";
 import InputComponent from "~/components/InputComponent";
 import TextAreaComponent from "~/components/TextAreaComponent";
+import UploadComponent from "~/components/UploadComponent";
 import useNotification from "~/hooks/useNotification";
 import {
   addNewCombo,
@@ -44,61 +50,65 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
   const [productNames, setProductNames] = useState<string[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [availableProducts, setAvailableProducts] = useState<any[]>([]);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  // const [previewImage, setPreviewImage] = useState<string | null>(null);
+  // const [previewOpen, setPreviewOpen] = useState(false);
+  // const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [file, setFile] = useState<RcFile | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | undefined>(
+    undefined
+  );
 
-  const getBase64 = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  const handlePreview = async (file: UploadFile) => {
-    const filePreview =
-      file.url || file.preview || (await getBase64(file.originFileObj as File));
-    setPreviewImage(filePreview);
-    setPreviewOpen(true);
-  };
+  // const getBase64 = (file: File): Promise<string> =>
+  //   new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result as string);
+  //     reader.onerror = (error) => reject(error);
+  //   });
+  // const handlePreview = async (file: UploadFile) => {
+  //   const filePreview =
+  //     file.url || file.preview || (await getBase64(file.originFileObj as File));
+  //   setPreviewImage(filePreview);
+  //   setPreviewOpen(true);
+  // };
 
-  const handleFileChange: UploadProps["onChange"] = ({
-    fileList: newFileList,
-  }) => {
-    setFileList(newFileList);
-    const lastFile = newFileList[newFileList.length - 1];
-    if (lastFile?.status === "done" && lastFile.originFileObj) {
-      getBase64(lastFile.originFileObj).then((base64) =>
-        setPreviewImage(base64)
-      );
-    }
-  };
+  // const handleFileChange: UploadProps["onChange"] = ({
+  //   fileList: newFileList,
+  // }) => {
+  //   setFileList(newFileList);
+  //   const lastFile = newFileList[newFileList.length - 1];
+  //   if (lastFile?.status === "done" && lastFile.originFileObj) {
+  //     getBase64(lastFile.originFileObj).then((base64) =>
+  //       setPreviewImage(base64)
+  //     );
+  //   }
+  // };
 
-  const handleCustomRequest = async ({
-    file,
-    onProgress,
-    onSuccess,
-    onError,
-  }: any) => {
-    let progress = 0;
-    try {
-      const interval = setInterval(() => {
-        progress += 20;
-        onProgress?.({ percent: progress }, file);
-        if (progress >= 100) {
-          clearInterval(interval);
-          onSuccess?.("Upload successful");
-        }
-      }, 500);
-    } catch (error) {
-      onError?.(error);
-    }
-  };
+  // const handleCustomRequest = async ({
+  //   file,
+  //   onProgress,
+  //   onSuccess,
+  //   onError,
+  // }: any) => {
+  //   let progress = 0;
+  //   try {
+  //     const interval = setInterval(() => {
+  //       progress += 20;
+  //       onProgress?.({ percent: progress }, file);
+  //       if (progress >= 100) {
+  //         clearInterval(interval);
+  //         onSuccess?.("Upload successful");
+  //       }
+  //     }, 500);
+  //   } catch (error) {
+  //     onError?.(error);
+  //   }
+  // };
 
-  const clearPreviewImage = () => {
-    setPreviewImage(null);
-    setFileList([]);
-  };
+  // const clearPreviewImage = () => {
+  //   setPreviewImage(null);
+  //   setFileList([]);
+  // };
 
   const handleUpdateCombo = useMutation(
     ({ id, data }: MutationUpdateCombo) => updateCombo(Number(id), data),
@@ -129,7 +139,6 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
           description: success?.data?.message || "Tạo mới thành công",
         });
         form.resetFields();
-        clearPreviewImage();
         setFormValues(initialFormValues);
         refetch();
       },
@@ -143,27 +152,40 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
     }
   );
 
-  // const handleFileChange = useCallback(
-  //   (info: UploadChangeParam<UploadFile>) => {
-  //     const { file } = info;
+  const handleFileChange = useCallback(
+    (info: UploadChangeParam<UploadFile>) => {
+      const { file } = info;
 
-  //     if (file.status === "removed") {
-  //       setFile(null);
-  //     } else {
-  //       const rcFile = file.originFileObj || file;
-  //       if (rcFile instanceof File) {
-  //         setFile(rcFile as RcFile);
-  //       } else {
-  //         console.log("File is not an instance of File:", rcFile);
-  //       }
-  //     }
-  //   },
-  //   []
-  // );
+      if (file.status === "removed") {
+        setFile(null);
+      } else {
+        const rcFile = file.originFileObj || file;
+        if (rcFile instanceof File) {
+          const isLessThan10MB = rcFile.size / 1024 / 1024 < 10;
+          if (!isLessThan10MB) {
+            errorMessage({
+              description: "File không được vượt quá 10MB!",
+            });
+            return;
+          }
+
+          setFile(rcFile as RcFile);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setImagePreview(reader.result as string);
+          };
+          reader.readAsDataURL(rcFile);
+        } else {
+          console.log("File is not an instance of File:", rcFile);
+        }
+      }
+    },
+    [errorMessage]
+  );
 
   useEffect(() => {
-    console.log("File state updated:", previewImage);
-  }, [previewImage]);
+    console.log("File state updated:", file);
+  }, [file]);
 
   useEffect(() => {
     if (isModalVisible) {
@@ -197,17 +219,31 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
   };
 
   useEffect(() => {
-    isEditCombo
-      ? form.setFieldsValue({
-          ComboName: comboData?.comboName,
-          ComboDescription: comboData?.comboDescription,
-          ComboMoney: comboData?.comboMoney,
-          ComboStatus: comboData?.comboStatus,
-          ComboImg: comboData?.comboImg,
-          ProductNames: comboData?.ProductNames,
-        })
-      : form.resetFields();
-  }, [comboData]);
+    if (isEditCombo && comboData) {
+      form.setFieldsValue({
+        ComboName: comboData?.comboName,
+        ComboDescription: comboData?.comboDescription,
+        ComboMoney: comboData?.comboMoney,
+        ComboStatus: comboData?.comboStatus,
+        ProductNames: comboData?.ProductNames,
+      });
+      if (comboData.comboImg) {
+        setImagePreview(comboData.comboImg);
+      } else {
+        form.resetFields();
+        setImagePreview(undefined);
+      }
+    }
+    // isEditCombo
+    //   ? form.setFieldsValue({
+    //       ComboName: comboData?.comboName,
+    //       ComboDescription: comboData?.comboDescription,
+    //       ComboMoney: comboData?.comboMoney,
+    //       ComboStatus: comboData?.comboStatus,
+    //       ProductNames: comboData?.ProductNames,
+    //     })
+    //   : form.resetFields();
+  }, [comboData, isEditCombo]);
 
   const onSubmitForm = (values: {
     ComboName: string;
@@ -221,7 +257,7 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
       ComboName: values.ComboName,
       ComboDescription: values.ComboDescription,
       ComboMoney: values.ComboMoney,
-      ComboImg: previewImage,
+      ComboImg: file,
       ComboStatus: true,
       ProductNames: productNames,
     };
@@ -307,38 +343,36 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
               placeholder="Nhập mô tả"
               form={form}
             />
-            <Form.Item
-              label="Upload Image"
-              name="comboImg"
-              valuePropName="fileList"
-              getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
-            >
-              <Upload
-                listType="picture-card"
-                maxCount={1}
-                customRequest={handleCustomRequest}
-                onChange={handleFileChange}
-                fileList={fileList}
-                onPreview={handlePreview}
-              >
-                {fileList.length < 1 && (
-                  <div>
-                    <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>Upload</div>
-                  </div>
-                )}
-              </Upload>
-              {previewImage && (
-                <Image
-                  preview={{
-                    visible: previewOpen,
-                    onVisibleChange: setPreviewOpen,
-                  }}
-                  src={previewImage}
-                  wrapperStyle={{ display: "none" }}
+            <div>
+              <span className="text-red-600">* </span>Hình ảnh{" "}
+              <span className="text-gray-500 text-sm">
+                {" "}
+                (Dung lượng không vượt quá 10MB)
+              </span>
+            </div>
+            <UploadComponent
+              name="Image"
+              form={form}
+              rules={[
+                {
+                  required: !imagePreview,
+                  message: "Image không được để trống",
+                },
+              ]}
+              onChange={handleFileChange}
+            />
+            {imagePreview && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Hình ảnh hiện tại
+                </label>
+                <img
+                  src={imagePreview}
+                  alt="Product Preview"
+                  className="mt-2 max-h-48 object-contain rounded-lg"
                 />
-              )}
-            </Form.Item>
+              </div>
+            )}
             <InputComponent
               name="ComboMoney"
               label="Giá"

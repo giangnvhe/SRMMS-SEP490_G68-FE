@@ -8,6 +8,7 @@ import Chatbot from "~/pages/ChatAi";
 import KitchenLayout from "~/layouts/KitchenLayout";
 import KitchenOfficer from "~/middleware/Kitchen";
 import Kitchen from "~/pages/Kitchen";
+import SettingPoint from "~/pages/Admin/SettingPoint";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -275,6 +276,14 @@ const RouterComponent = () => {
               element: (
                 <AdminOfficer>
                   <Dashboard />
+                </AdminOfficer>
+              ),
+            },
+            {
+              path: "/admin/point",
+              element: (
+                <AdminOfficer>
+                  <SettingPoint />
                 </AdminOfficer>
               ),
             },
