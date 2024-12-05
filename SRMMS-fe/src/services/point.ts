@@ -22,3 +22,18 @@ export const SettingPoints = async (
 
   return result;
 };
+
+export interface DataPoint {
+  moneyToPointRate: number;
+  pointToMoneyRate: number;
+}
+
+export interface DataPointResponse {
+  data: DataPoint[];
+}
+
+export const getPoint = async (): Promise<DataPointResponse> => {
+  const result = await axiosInstance.get(getApi("api", "Point/GetConversionPoint"));
+  return result;
+};
+

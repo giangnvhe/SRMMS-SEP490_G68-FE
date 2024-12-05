@@ -33,7 +33,7 @@ const items: MenuItem[] = [
   },
   {
     key: "/order-list",
-    label: "Quản lý Order",
+    label: "Danh sách Đơn",
     icon: <FontAwesomeIcon icon={faClipboardList} />,
   },
   {

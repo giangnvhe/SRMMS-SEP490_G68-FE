@@ -17,6 +17,8 @@ import { faTicket } from "@fortawesome/free-solid-svg-icons";
 import styles from "./index.module.scss";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "~/common/const/const";
+import { useAuth } from "~/context/authProvider";
+import { permissionObject } from "~/common/const/permission";
 
 const cx = classNames.bind(styles);
 type MenuItem = Required<MenuProps>["items"][number];
@@ -26,44 +28,49 @@ interface Props {
   className?: string;
 }
 
-const items: MenuItem[] = [
-  {
-    key: "/kitchen",
-    label: "Bếp",
-    icon: <AppstoreOutlined />,
-  },
-  {
-    key: "/tables",
-    label: "Danh sách bàn",
-    icon: <TableOutlined />,
-  },
-  {
-    key: "/combos-list",
-    label: "Danh sách combo",
-    icon: <FontAwesomeIcon icon={faTh} />,
-  },
-  {
-    key: "/order-list",
-    label: "Quản lý Order",
-    icon: <FontAwesomeIcon icon={faClipboardList} />,
-  },
-  {
-    key: "/voucher",
-    label: "Danh sách Voucher",
-    icon: <FontAwesomeIcon icon={faTicket} />,
-  },
-  {
-    key: "/booking-list",
-    label: "Danh sách đặt bàn",
-    icon: <FontAwesomeIcon icon={faClock} />,
-  },
-];
-
 const SidebarStaff = ({ isOpenSideBar, isAdmin }: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(window.innerWidth <= 768);
   const [selectedKey, setSelectedKey] = useState(location.pathname);
+  const { user } = useAuth();
+
+  const items: MenuItem[] = [
+    ...(user?.roleName === permissionObject.KITCHEN
+      ? [
+          {
+            key: "/kitchen",
+            label: "Bếp",
+            icon: <AppstoreOutlined />,
+          },
+        ]
+      : []),
+    {
+      key: "/tables",
+      label: "Danh sách bàn",
+      icon: <TableOutlined />,
+    },
+    {
+      key: "/combos-list",
+      label: "Danh sách combo",
+      icon: <FontAwesomeIcon icon={faTh} />,
+    },
+    {
+      key: "/order-list",
+      label: "Quản lý Order",
+      icon: <FontAwesomeIcon icon={faClipboardList} />,
+    },
+    {
+      key: "/voucher",
+      label: "Danh sách Voucher",
+      icon: <FontAwesomeIcon icon={faTicket} />,
+    },
+    {
+      key: "/booking-list",
+      label: "Danh sách đặt bàn",
+      icon: <FontAwesomeIcon icon={faClock} />,
+    },
+  ];
 
   useEffect(() => {
     const handleResize = () => {

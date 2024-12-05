@@ -2,13 +2,12 @@ import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRouter";
 import ClientLayout from "~/layouts/ClientLayout";
-import { AdminRouter, Staff } from "~/middleware/Staff";
-import HistoryOrder from "~/pages/Client/components/HistoryOrder";
 import Chatbot from "~/pages/ChatAi";
 import KitchenLayout from "~/layouts/KitchenLayout";
 import KitchenOfficer from "~/middleware/Kitchen";
 import Kitchen from "~/pages/Kitchen";
 import SettingPoint from "~/pages/Admin/SettingPoint";
+import StaffCASHIER, { Staff } from "~/middleware/Staff";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -122,6 +121,10 @@ const RouterComponent = () => {
           element: <ForgotPassword />,
           path: "/forget-password",
         },
+        {
+          path: "/profile/:id",
+          element: <ProfilePage />,
+        },
       ],
     },
     //Kitchen
@@ -144,6 +147,7 @@ const RouterComponent = () => {
         },
       ],
     },
+
     //Staff layout
     {
       path: "/",
@@ -155,26 +159,26 @@ const RouterComponent = () => {
             {
               path: "/order-table",
               element: (
-                <StaffOfficer>
+                <StaffCASHIER>
                   <OrderTable />
-                </StaffOfficer>
+                </StaffCASHIER>
               ),
             },
 
             {
               path: "/payment/:id",
               element: (
-                <StaffOfficer>
+                <StaffCASHIER>
                   <Payment />
-                </StaffOfficer>
+                </StaffCASHIER>
               ),
             },
             {
               path: "/invoice",
               element: (
-                <StaffOfficer>
+                <StaffCASHIER>
                   <InvoiceDialog />
-                </StaffOfficer>
+                </StaffCASHIER>
               ),
             },
             {
@@ -264,11 +268,7 @@ const RouterComponent = () => {
       element: <ProtectedRoute />,
       children: [
         {
-          element: (
-            <AdminRouter>
-              <AdminLayout />
-            </AdminRouter>
-          ),
+          element: <AdminLayout />,
           path: "/",
           children: [
             {

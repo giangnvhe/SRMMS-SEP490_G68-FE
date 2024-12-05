@@ -6,7 +6,8 @@ const KitchenOfficer = ({ children }: any) => {
   const { user } = useAuth();
   if (
     user?.roleName !== permissionObject.ADMIN &&
-    user?.roleName !== permissionObject.KITCHEN
+    user?.roleName !== permissionObject.KITCHEN &&
+    user?.roleName !== permissionObject.MANAGER
   ) {
     return <Error />;
   }

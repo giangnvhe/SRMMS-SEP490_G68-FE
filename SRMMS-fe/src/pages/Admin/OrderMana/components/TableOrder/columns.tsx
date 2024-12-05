@@ -1,10 +1,13 @@
-import { EyeOutlined } from "@ant-design/icons";
+import { EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Space, TableColumnsType, Tooltip } from "antd";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { OrderData } from "~/services/order";
 
-const UseColumn = () => {
+interface IProps {
+  onSelected: (id: OrderData | undefined) => void;
+}
+const UseColumn = ({ onSelected }: IProps) => {
   const navigate = useNavigate();
   const columns: TableColumnsType<OrderData> = [
     {
@@ -96,6 +99,12 @@ const UseColumn = () => {
             <EyeOutlined
               className="text-blue-500 cursor-pointer"
               onClick={() => navigate(`/admin/order/${record.orderId}`)} // Hàm này có thể dùng để chọn bản ghi
+            />
+          </Tooltip>
+          <Tooltip title="Chỉnh Sửa">
+            <EditOutlined
+              className="text-blue-500 cursor-pointer"
+              onClick={() => onSelected(record)}
             />
           </Tooltip>
         </Space>
