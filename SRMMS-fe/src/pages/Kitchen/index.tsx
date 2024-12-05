@@ -25,7 +25,6 @@ const Kitchen = () => {
   }, [getListOrders.data]);
 
   useEffect(() => {
-    // Initial data fetch
     if (getListOrders.data) {
       updateDataTable(getListOrders.data);
     }

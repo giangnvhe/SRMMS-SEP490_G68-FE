@@ -17,6 +17,8 @@ import { WIDTH_SIDE_BAR_PC, WIDTH_SIDE_BAR_SP } from "../../common/const/const";
 import { faTicket } from "@fortawesome/free-solid-svg-icons";
 import styles from "./index.module.scss";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faFeatherPointed } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 type MenuItem = Required<MenuProps>["items"][number];
@@ -78,6 +80,18 @@ const items: MenuItem[] = [
     key: "/admin/booking-list",
     label: "Quản lý đặt bàn",
     icon: <FontAwesomeIcon icon={faClock} />,
+  },
+  {
+    key: "/admin/settings",
+    label: "Cài Đặt",
+    icon: <FontAwesomeIcon icon={faGear} />,
+    children: [
+      {
+        key: "/admin/point",
+        label: "Cài đặt điểm",
+        icon: <FontAwesomeIcon icon={faFeatherPointed} />,
+      },
+    ],
   },
 ];
 
