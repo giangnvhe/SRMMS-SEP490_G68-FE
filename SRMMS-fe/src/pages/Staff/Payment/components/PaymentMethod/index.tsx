@@ -11,6 +11,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import { useQuery } from "react-query";
+import { formatVND } from "~/common/utils/formatPrice";
 import { AccountCusData, getListCustomers } from "~/services/api_customer";
 import { DiscountData, getDiscount } from "~/services/voucher";
 
@@ -81,6 +82,7 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
     other: "Voucher",
     addPoint: "Tích điểm",
     payNow: "Thanh toán ngay",
+    payment: "Thanh toán",
     paymentMethod: "Phương Thức Thanh Toán",
     remove: "Xóa",
   };
@@ -109,7 +111,19 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
 
   const calculateDiscountedTotal = () => {
     if (!selectedVoucher) return totalAmount;
-    return Math.max(0, totalAmount - selectedVoucher.discountValue);
+
+    const { discountValue, discountType } = selectedVoucher;
+
+    if (discountType === 0) {
+      const discountAmount = totalAmount * (discountValue / 100);
+      return Math.max(0, totalAmount - discountAmount);
+    }
+
+    if (discountType === 1) {
+      return Math.max(0, totalAmount - discountValue);
+    }
+
+    return totalAmount;
   };
 
   // account point
@@ -133,10 +147,19 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
       key: "codeDetail",
     },
     {
-      title: "Giá Trị Giảm",
+      title: "Giá trị",
       dataIndex: "discountValue",
-      key: "discountValue",
-      render: (value: number) => `${value.toLocaleString()} VND`,
+      width: 100,
+      render: (_: any, record: DiscountData) => {
+        const { discountValue, discountType } = record;
+        const formattedValue =
+          discountType === 1
+            ? `${formatVND(discountValue)}`
+            : `${discountValue}%`;
+        return (
+          <div className="truncate text-sm text-gray-700">{formattedValue}</div>
+        );
+      },
     },
     {
       title: "Hạn Sử Dụng",
@@ -174,6 +197,10 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
       title: "Số Điện Thoại",
       dataIndex: "phone",
       key: "phone",
+    },
+    {
+      title: "Điểm",
+      dataIndex: "totalPoints",
     },
     {
       title: "Hành Động",
@@ -251,7 +278,10 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
                 Voucher: {selectedVoucher.codeDetail}
               </Typography.Text>
               <Typography.Text type="secondary" style={{ marginLeft: "10px" }}>
-                Giảm: {selectedVoucher.discountValue.toLocaleString()} VND
+                Giảm:{" "}
+                {selectedVoucher.discountType === 0
+                  ? `${selectedVoucher.discountValue}%`
+                  : `${selectedVoucher.discountValue.toLocaleString()} VND`}
               </Typography.Text>
             </Col>
             <Col>
@@ -372,7 +402,7 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
         }
         loading={isPaying}
       >
-        {CONSTANT.payNow.toUpperCase()}
+        {CONSTANT.payment.toUpperCase()}
       </Button>
 
       <Modal
@@ -380,6 +410,7 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
         open={showAccountModal}
         onCancel={() => setShowAccountModal(false)}
         footer={null}
+        width={700}
       >
         <Input
           placeholder="Tìm kiếm theo số điện thoại"
