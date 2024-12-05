@@ -5,15 +5,17 @@ import ClientLayout from "~/layouts/ClientLayout";
 import Chatbot from "~/pages/ChatAi";
 import KitchenLayout from "~/layouts/KitchenLayout";
 import KitchenOfficer from "~/middleware/Kitchen";
-import Kitchen from "~/pages/Kitchen";
-import SettingPoint from "~/pages/Admin/SettingPoint";
 import StaffCASHIER, { Staff } from "~/middleware/Staff";
-import OrderDetailKitchens from "~/pages/Kitchen/components/Details/OrderDetail";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
 const OrderDetails = lazy(
   () => import("~/pages/Admin/OrderMana/components/OrderDetail")
+);
+const Kitchen = lazy(() => import("~/pages/Kitchen"));
+const SettingPoint = lazy(() => import("~/pages/Admin/SettingPoint"));
+const OrderDetailKitchens = lazy(
+  () => import("~/pages/Kitchen/components/Details/OrderDetail")
 );
 const VoucherManager = lazy(() => import("~/pages/Admin/Voucher"));
 const BookingList = lazy(() => import("~/pages/Admin/BookingList"));
@@ -259,6 +261,14 @@ const RouterComponent = () => {
               element: (
                 <Staff>
                   <BookingList />
+                </Staff>
+              ),
+            },
+            {
+              path: "/order/:id",
+              element: (
+                <Staff>
+                  <OrderDetails />
                 </Staff>
               ),
             },

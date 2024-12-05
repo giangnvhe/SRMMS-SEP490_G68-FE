@@ -18,11 +18,11 @@ import {
   Typography,
 } from "antd";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { startTransition, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import socket from "~/common/const/mockSocket";
 import logo from "~/assets/images/logo2.png";
 import styles from "./index.module.scss";
+import { useAuth } from "~/context/authProvider";
 
 interface Props {
   isOpenSideBar: boolean;
@@ -48,27 +48,7 @@ const NavStaff = ({
   const [unreadCount, setUnreadCount] = useState(0);
   const [notification, setNotification] = useState<Notification[]>([]);
   const [notificationVisible, setNotificationVisible] = useState(false);
-
-  useEffect(() => {
-    socket.on("booking", (bookingData) => {
-      addNotification(bookingData);
-    });
-
-    return () => {
-      socket.off("booking");
-    };
-  }, []);
-
-  const addNotification = (data: any) => {
-    const newNotification: Notification = {
-      id: data.idBooking,
-      message: `${data.nameBooking} đã đặt bàn `,
-      status: data.status || "pending",
-      nameBooking: data.nameBooking,
-    };
-    setNotification((prev) => [...prev, newNotification]);
-    setUnreadCount((prev) => prev + 1);
-  };
+  const { user } = useAuth();
 
   const handleNotificationVisibleChange = (visible: boolean) => {
     setNotificationVisible(visible);
@@ -82,9 +62,16 @@ const NavStaff = ({
   const items: MenuProps["items"] = [
     {
       label: (
-        <div className="flex gap-2">
+        <div
+          className="flex gap-2"
+          onClick={() => {
+            startTransition(() => {
+              navigate(`/profile/${user?.id}`);
+            });
+          }}
+        >
           <InfoCircleOutlined style={{ color: "green" }} />
-          <p className="font-bold text-sm">Information</p>
+          <p className="font-bold text-sm">Thông tin cá nhân</p>
         </div>
       ),
       key: "0",
@@ -97,7 +84,7 @@ const NavStaff = ({
           className="flex justify-center items-center gap-2"
         >
           <LogoutOutlined style={{ color: "red" }} />
-          <span className="font-bold text-sm">Log out</span>
+          <span className="font-bold text-sm">Đăng xuất</span>
         </div>
       ),
     },

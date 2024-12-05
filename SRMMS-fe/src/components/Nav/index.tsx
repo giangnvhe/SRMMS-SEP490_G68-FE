@@ -18,7 +18,7 @@ import {
   Typography,
 } from "antd";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import socket from "~/common/const/mockSocket";
 import logo from "../../assets/images/logo2.png";
@@ -86,7 +86,11 @@ const NavComponent = ({
       label: (
         <div
           className="flex gap-2"
-          onClick={() => navigate(`/profile/${user?.id}`)}
+          onClick={() => {
+            startTransition(() => {
+              navigate(`/profile/${user?.id}`);
+            });
+          }}
         >
           <InfoCircleOutlined style={{ color: "green" }} />
           <p className="font-bold text-sm">Thông tin cá nhân</p>

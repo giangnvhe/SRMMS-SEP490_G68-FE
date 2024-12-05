@@ -15,6 +15,7 @@ export interface AccountData {
   status: boolean;
   startDate?: string;
   endDate?: string;
+  totalPoints: number;
 }
 
 export interface AccountResponse {
@@ -138,5 +139,20 @@ export const resetPassword = async (params: RequestResetPassword) => {
     RequestResetPassword,
     AxiosResponse<OtpResponse>
   >(getApi("api", "reset-password"), params);
+  return result;
+};
+
+export interface ChangePasswordRequest {
+  phone: number;
+  oldPassword: number;
+  newPassword: number;
+  confirmNewPassword: number;
+}
+
+export const ChangePassword = async (params: ChangePasswordRequest) => {
+  const result = await axiosInstance.post<
+    ChangePasswordRequest,
+    AxiosResponse<OtpResponse>
+  >(getApi("api", "change-password"), params);
   return result;
 };
