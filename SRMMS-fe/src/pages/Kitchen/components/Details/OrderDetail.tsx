@@ -4,7 +4,7 @@ import {
   GiftOutlined,
   PercentageOutlined,
   TrophyOutlined,
-  UserOutlined
+  UserOutlined,
 } from "@ant-design/icons";
 import { faBowlFood, faTable } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +12,7 @@ import {
   Button,
   Card,
   Descriptions,
+  Modal,
   Result,
   Space,
   Spin,
@@ -24,14 +25,18 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getOrderById, OrderData } from "~/services/order";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { getOrderKitchenByStatus } from "~/services/kitchen";
+import useNotification from "~/hooks/useNotification";
 
 const { Title } = Typography;
 
-const OrderDetails = () => {
+const OrderDetailKitchens = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { errorMessage, successMessage } = useNotification();
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -52,6 +57,32 @@ const OrderDetails = () => {
       style: "currency",
       currency: "VND",
     }).format(amount);
+  };
+  const handleChangeStatus = async (status: number) => {
+    Modal.confirm({
+      title: "Xác nhận thay đổi trạng thái",
+      content: "Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng này không?",
+      okText: "Có",
+      cancelText: "Không",
+      onOk: async () => {
+        try {
+          await getOrderKitchenByStatus(status);
+          successMessage({
+            title: "Thành công",
+            description: "Đã thay đổi trạng thái đơn hàng thành công.",
+          });
+        } catch (error) {
+          errorMessage({
+            title: "Thất bại",
+            description:
+              "Đã có lỗi xảy ra, thay đổi trạng thái đơn hàng thất bại.",
+          });
+        }
+      },
+      onCancel: () => {
+        console.log("Status change canceled");
+      },
+    });
   };
 
   if (loading) {
@@ -139,7 +170,23 @@ const OrderDetails = () => {
   ];
 
   return (
-    <div style={{ padding: "24px", maxWidth: 1200, margin: "0 auto" }}>
+    <div
+      style={{
+        padding: "24px",
+        maxWidth: 1200,
+        margin: "0 auto",
+        position: "relative",
+      }}
+    >
+      {/* Back Button */}
+      <Button
+        type="default"
+        icon={<ArrowLeftOutlined />}
+        onClick={() => navigate(-1)} // Quay lại trang trước
+        style={{ marginBottom: 16 }}
+      >
+        Quay lại
+      </Button>
       {/* Header Section */}
       <Card
         style={{ marginBottom: 24 }}
@@ -250,7 +297,23 @@ const OrderDetails = () => {
           />
         </Card>
       )}
-
+      {orderData.status === 2 && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 52,
+            right: 40,
+            zIndex: 999,
+          }}
+        >
+          <Button
+            type="primary"
+            onClick={() => handleChangeStatus(orderData.orderId)} // Change status to "Đang chuẩn bị"
+          >
+            Hoàn Thành
+          </Button>
+        </div>
+      )}
       {/* Additional Information */}
       <div
         style={{
@@ -284,7 +347,7 @@ const OrderDetails = () => {
             title={
               <Space>
                 <TrophyOutlined />
-                <span>Points Earned</span>
+                <span>Điểm đã kiếm được</span>
               </Space>
             }
           >
@@ -322,4 +385,4 @@ const OrderDetails = () => {
   );
 };
 
-export default OrderDetails;
+export default OrderDetailKitchens;
