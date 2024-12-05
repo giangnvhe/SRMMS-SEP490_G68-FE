@@ -2,17 +2,16 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import {
-    FormFields,
-    getListOrderKitchen,
-    OrderKitchenData,
+  FormFields,
+  getListOrderKitchen,
+  OrderKitchenData,
 } from "~/services/kitchen";
 import TableKitchen from "./components/KitchenTable";
 import { socket } from "./components/KitchenTable/socket";
 
 const Kitchen = () => {
   const [form] = Form.useForm<FormFields>();
-    const [dataTable, setDataTable] = useState<OrderKitchenData[]>([]);
-    
+  const [dataTable, setDataTable] = useState<OrderKitchenData[]>([]);
 
   const getListOrders = useQuery("getListOrders", () =>
     getListOrderKitchen(form.getFieldsValue(true))
@@ -29,26 +28,6 @@ const Kitchen = () => {
       updateDataTable(getListOrders.data);
     }
   }, [getListOrders.data]);
-
-  useEffect(() => {
-    socket.on("orderUpdated", (updatedOrder) => {
-      setDataTable((prevData) => {
-        const updatedData = prevData.map((order) =>
-          order.orderId === updatedOrder.orderId ? updatedOrder : order
-        );
-
-        if (!prevData.some((order) => order.orderId === updatedOrder.orderId)) {
-          updatedData.push(updatedOrder);
-        }
-
-        return updatedData;
-      });
-    });
-
-    return () => {
-      socket.off("orderUpdated");
-    };
-  }, []);
 
   const updateDataTable = (response: any) => {
     const processedData = response.data?.orders.map((d: any, i: any) => ({

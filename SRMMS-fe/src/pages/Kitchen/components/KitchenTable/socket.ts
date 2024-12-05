@@ -1,13 +1,20 @@
 import io from "socket.io-client";
 
-// Replace with your actual backend WebSocket/Socket.IO endpoint
-export const socket = io("https://localhost:8081", {
+export const socket = io("http://localhost:3000/", {
   reconnection: true,
-  reconnectionAttempts: 5,
-  reconnectionDelay: 1000,
+  reconnectionAttempts: Infinity,
+  reconnectionDelayMax: 5000,
+  randomizationFactor: 0.5,
 });
 
-// Optional: Add connection error handling
+socket.on("connect", () => {
+  console.log("Socket connected successfully");
+});
+
+socket.on("disconnect", (reason) => {
+  console.log("Socket disconnected:", reason);
+});
+
 socket.on("connect_error", (error) => {
   console.error("Socket connection error:", error);
 });

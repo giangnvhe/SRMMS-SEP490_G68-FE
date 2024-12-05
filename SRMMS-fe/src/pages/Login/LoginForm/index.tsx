@@ -44,7 +44,6 @@ const LoginForm = () => {
       if (result.data.roleName === permissionObject.ADMIN) {
         navigate("/admin/dashboard");
       } else if (
-        result.data.roleName === permissionObject.STAFF.CASHIER ||
         result.data.roleName === permissionObject.STAFF.SERVICE_STAFF
       ) {
         navigate("/tables");
@@ -52,6 +51,8 @@ const LoginForm = () => {
         navigate("/kitchen");
       } else if (result.data.roleName === permissionObject.MANAGER) {
         navigate("/admin/employees");
+      } else if (result.data.roleName === permissionObject.STAFF.CASHIER) {
+        navigate("/tables");
       } else {
         navigate("/home");
       }

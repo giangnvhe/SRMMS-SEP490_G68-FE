@@ -2,6 +2,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { Select } from "antd";
 import { startTransition } from "react";
 import { useNavigate } from "react-router-dom";
+import { permissionObject } from "~/common/const/permission";
 import ButtonComponent from "~/components/ButtonComponent";
 import { useAuth } from "~/context/authProvider";
 import { TableData } from "~/services/table";
@@ -71,7 +72,8 @@ const StatusButtonGroup = ({
 
       {user && (
         <div className="flex gap-2 flex-wrap w-full md:w-auto">
-          {(user.roleName === "Admin" || user.roleName === "Quản lý") && (
+          {(user.roleName === permissionObject.ADMIN ||
+            user.roleName === permissionObject.MANAGER) && (
             <>
               <ButtonComponent
                 icon={<PlusCircleOutlined />}
@@ -95,9 +97,9 @@ const StatusButtonGroup = ({
           >
             QR Code Bàn
           </ButtonComponent>
-          {(user.roleName === "Nhân viên thu ngân" ||
-            user.roleName === "Admin" ||
-            user.roleName === "Quản lý") && (
+          {(user.roleName === permissionObject.STAFF.CASHIER ||
+            user.roleName === permissionObject.ADMIN ||
+            user.roleName === permissionObject.MANAGER) && (
             <ButtonComponent
               className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
               onClick={() => {

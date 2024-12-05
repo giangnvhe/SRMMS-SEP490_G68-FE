@@ -41,3 +41,32 @@ export const getOrderTable = async (
   );
   return result;
 };
+
+export interface ProductTableRequest {
+  totalMoney: number;
+  comboDetails: [
+    {
+      comboId: number;
+      quantity: number;
+      price: number;
+    }
+  ];
+  productDetails: [
+    {
+      proId: number;
+      quantity: number;
+      price: number;
+    }
+  ];
+}
+
+export const updateProductTable = async (
+  id: number,
+  data: ProductTableRequest
+) => {
+  const response = await axiosInstance.put(
+    getApi("api", `Order/staffUpdate/${id}`),
+    data
+  );
+  return response.data;
+};

@@ -7,6 +7,8 @@ import TableComponent from "~/components/TableComponent";
 import UseColumn from "./columns";
 import ButtonComponent from "~/components/ButtonComponent";
 import DatePickerComponent from "~/components/DatePickerComponent";
+import InputComponent from "~/components/InputComponent";
+import SelectComponent, { Option } from "~/components/SelectComponent";
 const cx = classNames.bind(styles);
 
 interface IProps {
@@ -14,6 +16,7 @@ interface IProps {
   refetch: () => void;
   loading: boolean;
   form: FormInstance;
+  onSelected: (id: OrderData | undefined) => void;
 }
 
 const initialValue = {
@@ -23,8 +26,21 @@ const initialValue = {
   pageSize: PAGE_SIZE,
 };
 
-const TableOrder = ({ dataTable, refetch, loading, form }: IProps) => {
-  const columns = UseColumn();
+const TableOrder = ({
+  dataTable,
+  refetch,
+  loading,
+  form,
+  onSelected,
+}: IProps) => {
+  const columns = UseColumn({ onSelected });
+
+  const options: Option[] = [
+    { value: 1, label: "Chờ xác nhận" },
+    { value: 2, label: "Đang chuẩn bị" },
+    { value: 3, label: "Đã hoàn thành" },
+    { value: 4, label: "Đã thanh toán" },
+  ];
 
   const handleTableChange: TableProps["onChange"] = (pagination) => {
     form.setFieldValue("pageSize", pagination.pageSize);
@@ -41,30 +57,45 @@ const TableOrder = ({ dataTable, refetch, loading, form }: IProps) => {
   return (
     <div>
       <Form form={form} onFinish={onSubmitTable} initialValues={initialValue}>
-        <div className={cx(styles["order-search-table"])}>
-          <div className="flex items-center w-96">
-            <DatePickerComponent
-              name="fromDate"
+        <Row gutter={8} className={cx("category-search-table")}>
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <InputComponent
+              name="tableName"
               form={form}
-              placeholder="Ngày bắt đầu"
-              className="w-96"
+              placeholder="Tìm bàn"
             />
-            <span className="mr-3 mb-6">~</span>
-            <DatePickerComponent
-              name="toDate"
-              form={form}
-              placeholder="Ngày kết thúc"
-              className="w-96"
+          </Col>
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <SelectComponent
+              name="statusId"
+              options={options}
+              placeholder="Trạng thái"
             />
-          </div>
-          <div>
-            <ButtonComponent onClick={() => form.submit()} className="mb-2">
-              Tìm Kiếm
+          </Col>
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <div className="flex items-center">
+              <DatePickerComponent
+                name="fromDate"
+                form={form}
+                placeholder="Ngày bắt đầu"
+                className="w-96"
+              />
+              <span className="mr-3 mb-6">~</span>
+              <DatePickerComponent
+                name="toDate"
+                form={form}
+                placeholder="Ngày kết thúc"
+                className="w-96"
+              />
+            </div>
+          </Col>
+          <Col sm={{ span: 4 }} xs={{ span: 24 }}>
+            <ButtonComponent onClick={() => form.submit()}>
+              TÌm Kiếm
             </ButtonComponent>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </Form>
-
       <TableComponent
         columns={columns}
         dataSource={dataTable}

@@ -1,3 +1,4 @@
+import { EyeOutlined, SyncOutlined } from "@ant-design/icons";
 import {
   Form,
   FormInstance,
@@ -8,13 +9,8 @@ import {
   Tooltip,
 } from "antd";
 import { PAGE_NUMBER, PAGE_SIZE } from "~/common/const/pagingation";
-import { OrderKitchenData } from "~/services/kitchen";
-import styles from "./index.module.scss";
-import classNames from "classnames";
 import TableComponent from "~/components/TableComponent";
-import ButtonComponent from "~/components/ButtonComponent";
-import { EyeOutlined, SyncOutlined } from "@ant-design/icons";
-const cx = classNames.bind(styles);
+import { OrderKitchenData } from "~/services/kitchen";
 
 interface IProps {
   dataTable: OrderKitchenData[] | [];

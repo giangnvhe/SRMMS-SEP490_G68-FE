@@ -7,7 +7,7 @@ import classNames from "classnames";
 const cx = classNames.bind(styles);
 
 export interface Option {
-  value: string;
+  value: string | number;
   label: string;
 }
 interface Iprops {
