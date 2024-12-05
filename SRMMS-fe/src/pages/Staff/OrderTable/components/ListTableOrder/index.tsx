@@ -7,7 +7,7 @@ import { TableData } from "~/services/table";
 
 interface IProps {
   table: TableData[];
-  onSelect: (tableName: string) => void;
+  onSelect: (tableId: number) => void;
 }
 
 const ListTableOrder = ({ table, onSelect }: IProps) => {
@@ -18,7 +18,7 @@ const ListTableOrder = ({ table, onSelect }: IProps) => {
           table.map((table) => (
             <Col xs={24} sm={12} md={8} lg={6} key={table.tableId}>
               <Card
-                onClick={() => onSelect(table.tableName)}
+                onClick={() => onSelect(table.tableId)}
                 className="flex flex-col justify-center items-center bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-200 ease-in-out cursor-pointer relative h-[200px]"
               >
                 <div>

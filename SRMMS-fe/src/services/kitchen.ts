@@ -55,3 +55,12 @@ export const getListOrderKitchen = async (
   );
   return result;
 };
+
+export const getOrderKitchenByStatus = async (
+  id: number
+): Promise<OrderDataKitchenResponse> => {
+  const result = await axiosInstance.put(
+    getApi("api", `Order/kitchen-status/${id}`)
+  );
+  return result;
+};

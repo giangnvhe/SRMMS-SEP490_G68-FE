@@ -8,6 +8,7 @@ import KitchenOfficer from "~/middleware/Kitchen";
 import Kitchen from "~/pages/Kitchen";
 import SettingPoint from "~/pages/Admin/SettingPoint";
 import StaffCASHIER, { Staff } from "~/middleware/Staff";
+import OrderDetailKitchens from "~/pages/Kitchen/components/Details/OrderDetail";
 
 const AdminOfficer = lazy(() => import("~/middleware/Admin"));
 const EmployeeLayout = lazy(() => import("~/layouts/EmployeeLayout"));
@@ -140,6 +141,14 @@ const RouterComponent = () => {
               element: (
                 <KitchenOfficer>
                   <Kitchen />
+                </KitchenOfficer>
+              ),
+            },
+            {
+              path: "/kitchen/:id",
+              element: (
+                <KitchenOfficer>
+                  <OrderDetailKitchens />
                 </KitchenOfficer>
               ),
             },
