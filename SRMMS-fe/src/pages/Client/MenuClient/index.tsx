@@ -29,6 +29,7 @@ const MenuClient = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | undefined>(
     undefined
   );
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [cart, setCart] = useState<ProductData[]>([]);
   const [cartCombo, setCartCombo] = useState<ComboData[]>([]);
   const [loading, setLoading] = useState(false);
@@ -74,7 +75,7 @@ const MenuClient = () => {
       setLoading(true);
       try {
         const response = await getListProduct({
-          name: "",
+          name: searchTerm, // Pass search term to backend
           categoryId: selectedCategory,
           pageNumber: 1,
           pageSize: 10,
@@ -82,9 +83,19 @@ const MenuClient = () => {
           minPrice,
           maxPrice,
         });
+
+        // Additional client-side filtering if needed
         const filteredProducts = response.data.products.filter(
-          (product) => product.price >= minPrice && product.price <= maxPrice
+          (product) =>
+            product.status === true &&
+            product.price >= minPrice &&
+            product.price <= maxPrice &&
+            (searchTerm === "" ||
+              product.productName
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()))
         );
+
         setProducts(filteredProducts);
       } catch (error) {
         message.error("Failed to load products!");
@@ -94,9 +105,7 @@ const MenuClient = () => {
     };
 
     fetchProducts();
-  }, [selectedCategory, minPrice, maxPrice]);
-
-  //fetch combo
+  }, [selectedCategory, minPrice, maxPrice, searchTerm]);
 
   useEffect(() => {
     const fetchCombos = async () => {
@@ -110,10 +119,12 @@ const MenuClient = () => {
           minPrice: 0,
           maxPrice: 1000000,
         });
-        const validatedCombos = response?.data?.combos.map((combo) => ({
-          ...combo,
-          ProductNames: combo?.ProductNames || [],
-        }));
+        const validatedCombos = response?.data?.combos
+          .filter((combo) => combo.comboStatus === true)
+          .map((combo) => ({
+            ...combo,
+            ProductNames: combo?.ProductNames || [],
+          }));
         setCombos(validatedCombos);
       } catch (error) {
         message.error("Failed to load combos!");
@@ -249,8 +260,10 @@ const MenuClient = () => {
   const handleTabChange = (key: string) => {
     if (key === "Combo") {
       setSelectedView("combos");
+      setSelectedCategory(undefined);
     } else if (key === "all") {
       setSelectedView("products");
+      setSelectedCategory(undefined);
     } else {
       setSelectedView("products");
       setSelectedCategory(parseInt(key, 10));
@@ -268,10 +281,12 @@ const MenuClient = () => {
         </div>
         <div className="w-full max-w-md ml-auto mt-2">
           <InputComponent
-            name="search"
+            name="name"
             type="search"
             placeholder="Tìm kiếm món ăn..."
             className="w-full rounded-full px-4 py-2"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
@@ -281,6 +296,7 @@ const MenuClient = () => {
         <FilterDish
           categories={categories}
           selectedCategory={selectedCategory}
+          selectedView={selectedView}
           onTabChange={handleTabChange}
         />
         <FilterPrice

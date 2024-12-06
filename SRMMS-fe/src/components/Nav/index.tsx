@@ -126,6 +126,7 @@ const NavComponent = ({
         dataSource={notification}
         renderItem={(notif) => (
           <List.Item
+            onClick={() => navigate("/admin/booking-list")}
             key={notif.id}
             style={{
               borderBottom: "1px solid #f0f0f0",
@@ -157,7 +158,7 @@ const NavComponent = ({
   return (
     <div className={cx(styles["nav-wrapper"])}>
       <div className="nav-component">
-        <div className="logo" onClick={() => navigate("/admin/dashboard")}>
+        <div className="logo">
           {isOpenSideBar ? (
             <CloseOutlined
               className="btn-expaned-sp"

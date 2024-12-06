@@ -67,13 +67,6 @@ function UseColumn({ onSelected, onOk }: IProps) {
         <div className="truncate text-sm text-gray-700">{name}</div>
       ),
     },
-
-    {
-      title: "Mô tả",
-      dataIndex: "comboDescription",
-      align: "center",
-      width: 80,
-    },
     {
       title: "Giá",
       dataIndex: "comboMoney",
