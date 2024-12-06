@@ -93,6 +93,7 @@ const AddOrEditProduct = ({
         });
         form.resetFields();
         setFormValues(initialFormValues);
+        setImagePreview(undefined);
         refetch();
       },
       onError: (error: AxiosError<{ message: string }>) => {
@@ -167,6 +168,7 @@ const AddOrEditProduct = ({
       // Set the existing image preview
       if (productData.image) {
         setImagePreview(productData.image);
+        setFile(null);
       }
     } else {
       form.resetFields();
@@ -268,6 +270,10 @@ const AddOrEditProduct = ({
                   required: true,
                   message: "Calories không được để trống",
                 },
+                {
+                  pattern: /^[0-9]+$/,
+                  message: "Không phải là chữ số",
+                },
               ]}
               placeholder="Nhập Calories"
             />
@@ -292,7 +298,7 @@ const AddOrEditProduct = ({
             {imagePreview && (
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                  Hình ảnh hiện tại
+                {isEditProduct ? "Hình ảnh hiện tại" : "Xem trước hình ảnh"}
                 </label>
                 <img
                   src={imagePreview}

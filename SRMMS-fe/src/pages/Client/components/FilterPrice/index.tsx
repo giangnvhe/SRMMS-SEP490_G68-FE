@@ -1,5 +1,4 @@
-import { Input, Row, Col } from "antd";
-import InputComponent from "~/components/InputComponent";
+import { Col, Input, Row } from "antd";
 
 interface IProps {
   minPrice: number;
@@ -16,7 +15,6 @@ const FilterPrice = ({
 }: IProps) => {
   return (
     <div className="mb-6 w-full flex gap-2 mt-2">
-     
       <Row gutter={[12, 12]} className="flex items-center">
         <h3 className="text-sm font-medium text-gray-800 mb-3 flex items-center">
           GIá:{" "}
