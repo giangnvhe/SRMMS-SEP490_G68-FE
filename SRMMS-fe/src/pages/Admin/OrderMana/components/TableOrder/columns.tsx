@@ -98,15 +98,17 @@ const UseColumn = ({ onSelected }: IProps) => {
           <Tooltip title="Xem chi tiết">
             <EyeOutlined
               className="text-blue-500 cursor-pointer"
-              onClick={() => navigate(`/admin/order/${record.orderId}`)} // Hàm này có thể dùng để chọn bản ghi
+              onClick={() => navigate(`/admin/order/${record.orderId}`)}
             />
           </Tooltip>
-          <Tooltip title="Chỉnh Sửa">
-            <EditOutlined
-              className="text-blue-500 cursor-pointer"
-              onClick={() => onSelected(record)}
-            />
-          </Tooltip>
+          {record.status !== 4 && (
+            <Tooltip title="Chỉnh Sửa">
+              <EditOutlined
+                className="text-blue-500 cursor-pointer"
+                onClick={() => onSelected(record)}
+              />
+            </Tooltip>
+          )}
         </Space>
       ),
     },

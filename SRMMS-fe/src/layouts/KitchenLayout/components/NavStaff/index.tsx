@@ -18,11 +18,12 @@ import {
   Typography,
 } from "antd";
 import classNames from "classnames";
-import { startTransition, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "~/assets/images/logo2.png";
 import styles from "./index.module.scss";
 import { useAuth } from "~/context/authProvider";
+import socket from "~/common/const/socketKitchen";
 
 interface Props {
   isOpenSideBar: boolean;
@@ -50,8 +51,32 @@ const NavStaff = ({
   const [notificationVisible, setNotificationVisible] = useState(false);
   const { user } = useAuth();
 
+  useEffect(() => {
+    socket.on("orderUpdated", (orderData) => {
+      const newNotification: Notification = {
+        id: `order-${orderData.orderId}`,
+        message: `Có đơn hàng mới được đưa tới bếp`,
+        status: "pending",
+      };
+
+      setNotification((prevNotifications) => [
+        newNotification,
+        ...prevNotifications,
+      ]);
+
+      setUnreadCount((prev) => prev + 1);
+    });
+
+    return () => {
+      socket.off("orderUpdated");
+    };
+  }, []);
+
   const handleNotificationVisibleChange = (visible: boolean) => {
     setNotificationVisible(visible);
+    if (visible) {
+      setUnreadCount(0);
+    }
   };
 
   const clearAllNotifications = () => {
@@ -104,6 +129,7 @@ const NavStaff = ({
         dataSource={notification}
         renderItem={(notif) => (
           <List.Item
+            onClick={() => navigate("/kitchen")}
             key={notif.id}
             style={{
               borderBottom: "1px solid #f0f0f0",

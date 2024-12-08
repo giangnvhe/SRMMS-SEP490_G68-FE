@@ -44,20 +44,16 @@ export const getOrderTable = async (
 
 export interface ProductTableRequest {
   totalMoney: number;
-  comboDetails: [
-    {
-      comboId: number;
-      quantity: number;
-      price: number;
-    }
-  ];
-  productDetails: [
-    {
-      proId: number;
-      quantity: number;
-      price: number;
-    }
-  ];
+  comboDetails: {
+    comboId: number;
+    quantity: number;
+    price: number;
+  }[]; // Regular array, allows multiple or zero elements
+  productDetails: {
+    proId: number;
+    quantity: number;
+    price: number;
+  }[]; // Regular array, allows multiple or zero elements
 }
 
 export const updateProductTable = async (

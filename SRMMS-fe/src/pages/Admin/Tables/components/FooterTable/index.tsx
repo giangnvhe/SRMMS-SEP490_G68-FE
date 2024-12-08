@@ -5,6 +5,7 @@ import ButtonComponent from "~/components/ButtonComponent";
 import { TableData } from "~/services/table";
 import { TABLE_STATUS } from "../const";
 import { useAuth } from "~/context/authProvider";
+import { permissionObject } from "~/common/const/permission";
 
 interface IProps {
   selectedTable: TableData | undefined;
@@ -42,7 +43,7 @@ const FooterTable = ({ selectedTable, onSelected }: IProps) => {
         <Typography.Title level={4} style={{ margin: 0 }}>
           Đang chọn : {selectedTable?.tableName || "N/A"}
         </Typography.Title>
-        {user && (user.roleName === "Admin" || user.roleName === "Quản lý") && (
+        {user && !(user.roleName === permissionObject.KITCHEN) && (
           <ButtonComponent
             className="rounded-lg"
             disabled={!selectedTable}

@@ -110,6 +110,34 @@ const RouterComponent = () => {
       ],
     },
 
+    {
+      path: "/",
+      element: <ProtectedRoute />,
+      children: [
+        {
+          element: <ClientLayout />,
+          children: [
+            {
+              path: "/order-table",
+              element: (
+                <StaffCASHIER>
+                  <OrderTable />
+                </StaffCASHIER>
+              ),
+            },
+            {
+              path: "/payment/:id",
+              element: (
+                <StaffCASHIER>
+                  <Payment />
+                </StaffCASHIER>
+              ),
+            },
+          ],
+        },
+      ],
+    },
+
     //Client Layout
 
     {
@@ -167,23 +195,6 @@ const RouterComponent = () => {
         {
           element: <EmployeeLayout />,
           children: [
-            {
-              path: "/order-table",
-              element: (
-                <StaffCASHIER>
-                  <OrderTable />
-                </StaffCASHIER>
-              ),
-            },
-
-            {
-              path: "/payment/:id",
-              element: (
-                <StaffCASHIER>
-                  <Payment />
-                </StaffCASHIER>
-              ),
-            },
             {
               path: "/invoice",
               element: (

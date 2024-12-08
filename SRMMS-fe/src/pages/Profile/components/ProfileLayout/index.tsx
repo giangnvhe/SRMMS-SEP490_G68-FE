@@ -1,16 +1,16 @@
-import React, { startTransition, useState } from "react";
-import { Layout, Menu, Avatar, Dropdown, Typography } from "antd";
 import {
-  UserOutlined,
+  HomeOutlined,
   LockOutlined,
   LogoutOutlined,
-  HomeOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import { useAuth } from "~/context/authProvider";
+import { Avatar, Dropdown, Layout, Menu, Typography } from "antd";
+import React, { startTransition } from "react";
 import { useNavigate } from "react-router-dom";
-import { removeAccessToken } from "~/configs/accessToken";
-import useNotification from "~/hooks/useNotification";
 import { permissionObject } from "~/common/const/permission";
+import { removeAccessToken } from "~/configs/accessToken";
+import { useAuth } from "~/context/authProvider";
+import useNotification from "~/hooks/useNotification";
 
 const { Sider, Content, Header } = Layout;
 const { Title } = Typography;
@@ -64,7 +64,10 @@ const ProfileLayout = ({
     {
       key: "restaurant",
       icon: <HomeOutlined />,
-      label: "Quay lại nhà hàng",
+      label:
+        user?.roleName === permissionObject.CUSTOMER
+          ? "Quay lại trang chủ"
+          : "Quay lại nhà hàng",
       onClick: handleGoBack,
     },
   ];

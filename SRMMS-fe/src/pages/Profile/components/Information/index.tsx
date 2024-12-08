@@ -1,12 +1,11 @@
 import {
-  ArrowLeftOutlined,
   CalendarOutlined,
+  CloseOutlined,
   EditOutlined,
   MailOutlined,
   PhoneOutlined,
   SaveOutlined,
-  UserOutlined,
-  CloseOutlined,
+  UserOutlined
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -21,8 +20,7 @@ import {
 } from "antd";
 import { AxiosResponse } from "axios";
 import moment from "moment";
-import { useEffect, useState, useTransition } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { permissionObject } from "~/common/const/permission";
 import { useAuth } from "~/context/authProvider";
 import {
