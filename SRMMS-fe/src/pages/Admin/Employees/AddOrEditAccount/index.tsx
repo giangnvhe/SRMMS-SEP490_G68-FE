@@ -231,7 +231,6 @@ const AddOrEditAccount = ({
                   },
                 ]}
                 placeholder="Nhập email"
-                disabled={true}
               />
             ) : (
               <InputComponent

@@ -50,65 +50,10 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
   const [productNames, setProductNames] = useState<string[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [availableProducts, setAvailableProducts] = useState<any[]>([]);
-  // const [previewImage, setPreviewImage] = useState<string | null>(null);
-  // const [previewOpen, setPreviewOpen] = useState(false);
-  // const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [file, setFile] = useState<RcFile | null>(null);
   const [imagePreview, setImagePreview] = useState<string | undefined>(
     undefined
   );
-
-  // const getBase64 = (file: File): Promise<string> =>
-  //   new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result as string);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // const handlePreview = async (file: UploadFile) => {
-  //   const filePreview =
-  //     file.url || file.preview || (await getBase64(file.originFileObj as File));
-  //   setPreviewImage(filePreview);
-  //   setPreviewOpen(true);
-  // };
-
-  // const handleFileChange: UploadProps["onChange"] = ({
-  //   fileList: newFileList,
-  // }) => {
-  //   setFileList(newFileList);
-  //   const lastFile = newFileList[newFileList.length - 1];
-  //   if (lastFile?.status === "done" && lastFile.originFileObj) {
-  //     getBase64(lastFile.originFileObj).then((base64) =>
-  //       setPreviewImage(base64)
-  //     );
-  //   }
-  // };
-
-  // const handleCustomRequest = async ({
-  //   file,
-  //   onProgress,
-  //   onSuccess,
-  //   onError,
-  // }: any) => {
-  //   let progress = 0;
-  //   try {
-  //     const interval = setInterval(() => {
-  //       progress += 20;
-  //       onProgress?.({ percent: progress }, file);
-  //       if (progress >= 100) {
-  //         clearInterval(interval);
-  //         onSuccess?.("Upload successful");
-  //       }
-  //     }, 500);
-  //   } catch (error) {
-  //     onError?.(error);
-  //   }
-  // };
-
-  // const clearPreviewImage = () => {
-  //   setPreviewImage(null);
-  //   setFileList([]);
-  // };
 
   const handleUpdateCombo = useMutation(
     ({ id, data }: MutationUpdateCombo) => updateCombo(Number(id), data),
@@ -140,6 +85,8 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
         });
         form.resetFields();
         setFormValues(initialFormValues);
+        setImagePreview(undefined);
+        setFile(null);
         refetch();
       },
       onError: (error: AxiosError<{ message: string }>) => {
@@ -229,20 +176,12 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
       });
       if (comboData.comboImg) {
         setImagePreview(comboData.comboImg);
+        setFile(null);
       } else {
         form.resetFields();
         setImagePreview(undefined);
       }
     }
-    // isEditCombo
-    //   ? form.setFieldsValue({
-    //       ComboName: comboData?.comboName,
-    //       ComboDescription: comboData?.comboDescription,
-    //       ComboMoney: comboData?.comboMoney,
-    //       ComboStatus: comboData?.comboStatus,
-    //       ProductNames: comboData?.ProductNames,
-    //     })
-    //   : form.resetFields();
   }, [comboData, isEditCombo]);
 
   const onSubmitForm = (values: {
@@ -364,7 +303,7 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
             {imagePreview && (
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                  Hình ảnh hiện tại
+                  {isEditCombo ? "Hình ảnh hiện tại" : "Xem trước hình ảnh"}
                 </label>
                 <img
                   src={imagePreview}
