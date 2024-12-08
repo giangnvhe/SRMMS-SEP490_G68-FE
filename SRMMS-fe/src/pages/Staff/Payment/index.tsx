@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { PaymentOrder, RequestPaymentOrder } from "~/services/order";
 import PaymentMethod from "./components/PaymentMethod";
+import InvoiceDialog from "~/pages/Invoice";
 
 const ORDER_HEIGHT_CONTAINER = "calc(100vh - 64px)";
 const ORDER_TABLE_HEIGHT = "calc(100vh - 64px - 64px - 64px - 150px)";
@@ -35,6 +36,7 @@ interface DataType {
 const Payment = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [showInvoice, setShowInvoice] = useState(false);
 
   const { data, isLoading, isError, error } = useQuery(
     ["orderData", id],
@@ -51,6 +53,7 @@ const Payment = () => {
     {
       onSuccess: (response) => {
         message.success("Thanh toán thành công!");
+        setShowInvoice(true);
       },
       onError: (error) => {
         message.error("Thanh toán thất bại. Vui lòng thử lại.");
@@ -68,6 +71,11 @@ const Payment = () => {
     cash: "Tiền Mặt",
     card: "Chuyển Khoản",
     other: "Khác",
+  };
+
+  const handleCloseInvoice = () => {
+    setShowInvoice(false);
+    navigate("/order-table");
   };
 
   const columns: TableColumnsType<DataType> = [
@@ -114,68 +122,59 @@ const Payment = () => {
       ),
     },
   ];
-  const tableData: DataType[] =
-    data?.data?.flatMap((order: TableOrderData) => {
-      const products = order.products.map((product) => ({
-        productName: product.proName,
-        comboName: "",
-        quantity: product.quantity,
-        price: product.price,
-        subTotal: product.price * product.quantity,
-      }));
+  const tableData: DataType[] = Array.isArray(data?.data)
+    ? data.data.flatMap((order: TableOrderData, index) => {
+        const products = order.products.map((product, productIndex) => ({
+          key: `${index}-${productIndex}`,
+          productName: product.proName,
+          comboName: "",
+          quantity: product.quantity,
+          price: product.price,
+          subTotal: product.price * product.quantity,
+        }));
 
-      const combos = order.combos?.map((combo) => ({
-        productName: "",
-        comboName: combo.comboName,
-        quantity: combo.quantity,
-        price: combo.price,
-        subTotal: combo.price * combo.quantity,
-      }));
+        const combos = (order.combos || []).map((combo, comboIndex) => ({
+          key: `${index}-${comboIndex}`,
+          productName: "",
+          comboName: combo.comboName,
+          quantity: combo.quantity,
+          price: combo.price,
+          subTotal: combo.price * combo.quantity,
+        }));
 
-      return [...products, ...combos];
-    }) || [];
+        return [...products, ...combos];
+      })
+    : [];
 
   const totalBill = useMemo(() => {
-    return (
-      data?.data?.reduce(
-        (acc: any, order: any) => acc + parseFloat(order.totalMoney),
-        0
-      ) || 0
+    if (!data?.data || !Array.isArray(data.data)) {
+      return 0;
+    }
+    return data.data.reduce(
+      (acc: number, order: any) => acc + parseFloat(order.totalMoney || 0),
+      0
     );
   }, [data]);
 
   const handlePayNow = (discountId?: number, accId?: number) => {
-    if (!data?.data?.length) {
+    const orders = Array.isArray(data?.data) ? data.data : [data?.data];
+
+    if (!orders.length) {
       message.error("Không có order để thanh toán.");
       return;
     }
-    if (data.data.length === 1) {
-      const order = data.data[0];
+    orders.forEach((order: any) => {
       paymentMutation.mutate({
         id: order.orderId,
         data: {
           discountId: discountId || null,
-          accId: accId || null,
+          accId: accId || order.accId || null,
           totalMoney: discountId
-            ? totalBill - (order.discountValue || 0) // Apply discount
+            ? totalBill - (order.discountValue || 0)
             : parseFloat(order.totalMoney.toString()),
         },
       });
-    } else {
-      // Multiple orders
-      data.data.forEach((order: any) => {
-        paymentMutation.mutate({
-          id: order.orderId,
-          data: {
-            discountId: discountId || null,
-            accId: order.accId || null,
-            totalMoney: discountId
-              ? totalBill - (order.discountValue || 0) // Apply discount
-              : parseFloat(order.totalMoney.toString()),
-          },
-        });
-      });
-    }
+    });
   };
 
   return (
@@ -250,10 +249,13 @@ const Payment = () => {
                 }}
               >
                 {formatVND(
-                  data?.data?.reduce(
-                    (acc, order) => acc + parseFloat(order.totalMoney),
-                    0
-                  )
+                  Array.isArray(data?.data)
+                    ? data.data.reduce(
+                        (acc, order) =>
+                          acc + parseFloat(order.totalMoney || "0"),
+                        0
+                      )
+                    : 0
                 )}
               </div>
             </div>
@@ -270,6 +272,13 @@ const Payment = () => {
           </Card>
         </Col>
       </Row>
+      {showInvoice && (
+        <InvoiceDialog
+          onClose={handleCloseInvoice}
+          orderData={data?.data}
+          totalBill={totalBill}
+        />
+      )}
     </div>
   );
 };

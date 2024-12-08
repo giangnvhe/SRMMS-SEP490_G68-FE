@@ -5,9 +5,9 @@ import { BREAKPOINT_SCREEN } from "~/common/const/const";
 import Spinner from "~/components/Spiner";
 import { useWindowSize } from "~/hooks/useWindowSize";
 import NavStaff from "../KitchenLayout/components/NavStaff";
-import SidebarStaff from "../KitchenLayout/components/SidebarStaff";
 import classNames from "classnames";
 import styles from "./index.module.scss";
+import SidebarStaff from "./components/SidebarStaff";
 
 const cx = classNames.bind(styles);
 

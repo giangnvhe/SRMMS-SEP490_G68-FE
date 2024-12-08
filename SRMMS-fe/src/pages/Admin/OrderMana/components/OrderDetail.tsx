@@ -59,6 +59,24 @@ const OrderDetails = () => {
     }).format(amount);
   };
 
+  const calculateOriginalTotal = () => {
+    const productTotal =
+      orderData?.products?.reduce(
+        (total, product) => total + product.price * product.quantity,
+        0
+      ) || 0;
+
+    const comboTotal =
+      orderData?.combos?.reduce(
+        (total, combo) => total + combo.price * combo.quantity,
+        0
+      ) || 0;
+
+    return productTotal + comboTotal;
+  };
+
+  const originalTotal = calculateOriginalTotal();
+
   if (loading) {
     return (
       <div
@@ -314,6 +332,24 @@ const OrderDetails = () => {
       </div>
 
       {/* Total Section */}
+      <Card
+        style={{ backgroundColor: "#fafafa" }}
+        title={
+          <Space>
+            <DollarOutlined />
+            <span>Tổng hóa đơn trước khi giảm giá</span>
+          </Space>
+        }
+      >
+        <Statistic
+          value={originalTotal}
+          suffix=" VNĐ"
+          groupSeparator="."
+          valueStyle={{ color: "#1890ff", fontSize: 24 }}
+        />
+      </Card>
+
+      {/* Final Total Section */}
       <Card
         style={{ backgroundColor: "#fafafa" }}
         title={

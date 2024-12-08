@@ -1,5 +1,5 @@
 import { Input, Spin, Typography } from "antd";
-import { useState } from "react";
+import { startTransition, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "~/context/authProvider";
@@ -96,14 +96,20 @@ const OrderTable = () => {
               }}
               className="bg-gray-100 shadow-inner"
             />
-            {user?.roleName === permissionObject.ADMIN && (
-              <ButtonComponent
-                btnType="back"
-                onClick={() => navigate("/admin/tables")}
-              >
-                Back
-              </ButtonComponent>
-            )}
+            <ButtonComponent
+              btnType="back"
+              onClick={() => {
+                startTransition(() => {
+                  const targetPath =
+                    user?.roleName === permissionObject.ADMIN
+                      ? "/admin/tables"
+                      : "/tables";
+                  navigate(targetPath);
+                });
+              }}
+            >
+              Back
+            </ButtonComponent>
           </div>
         </div>
       </div>

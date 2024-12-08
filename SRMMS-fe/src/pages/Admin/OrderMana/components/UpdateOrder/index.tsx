@@ -1,13 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Form,
-  InputNumber,
-  Button,
-  Table,
-  Typography,
-  Space,
-  Modal,
-} from "antd";
+import { Form, InputNumber, Button, Table, Space, Modal } from "antd";
 import {
   PlusOutlined,
   MinusOutlined,
@@ -19,6 +11,7 @@ import useNotification from "~/hooks/useNotification";
 import { OrderData } from "~/services/order";
 import { ProductTableRequest, updateProductTable } from "~/services/orderTable";
 import { formatVND } from "~/common/utils/formatPrice";
+import socket from "~/common/const/socketKitchen";
 
 interface IProps {
   orderData: OrderData | undefined;
@@ -81,7 +74,6 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
     }
   );
 
-  // Initialize form with order data
   useEffect(() => {
     if (orderData) {
       const initialComboDetails =
@@ -130,10 +122,24 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
             comboDetails: comboDetails,
             productDetails: productDetails,
           };
-          handleUpdateOrder.mutate({
-            id: orderData?.tableId,
-            data: formData,
-          });
+
+          handleUpdateOrder.mutate(
+            {
+              id: orderData?.tableId,
+              data: formData,
+            },
+            {
+              onSuccess: () => {
+                socket.emit("orderUpdated", {
+                  orderId: orderData?.tableId,
+                  totalMoney,
+                  comboDetails,
+                  productDetails,
+                  updatedAt: new Date().toISOString(),
+                });
+              },
+            }
+          );
         },
       });
     } catch (error) {
