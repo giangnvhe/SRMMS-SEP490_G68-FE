@@ -56,6 +56,13 @@ const ComboTable = ({
               placeholder="Tìm kiếm theo tên"
             />
           </Col>
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <InputComponent name="minPrice" form={form} placeholder="Giá từ" />
+          </Col>
+
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <InputComponent name="maxPrice" form={form} placeholder="Giá đến" />
+          </Col>
           <Col sm={{ span: 4 }} xs={{ span: 24 }}>
             <ButtonComponent onClick={() => form.submit()}>
               Tìm Kiếm

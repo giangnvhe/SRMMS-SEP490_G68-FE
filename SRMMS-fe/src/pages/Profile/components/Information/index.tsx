@@ -4,7 +4,9 @@ import {
   EditOutlined,
   MailOutlined,
   PhoneOutlined,
+  SaveOutlined,
   UserOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -12,6 +14,7 @@ import {
   Card,
   Descriptions,
   Divider,
+  Input,
   Spin,
   Tag,
   Typography,
@@ -22,21 +25,32 @@ import { useEffect, useState, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import { permissionObject } from "~/common/const/permission";
 import { useAuth } from "~/context/authProvider";
-import { AccountData, getEmployeeById } from "~/services/account";
+import {
+  AccountData,
+  getEmployeeById,
+  updateEmployee,
+} from "~/services/account";
 
 const { Title } = Typography;
+
 const ProfilePage = () => {
   const { user } = useAuth();
   const [employeeData, setEmployeeData] = useState<AccountData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
-  const [isPending, startTransition] = useTransition();
-
-  const handleGoBack = () => {
-    startTransition(() => {
-      navigate(-1);
-    });
-  };
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [updatedEmployeeData, setUpdatedEmployeeData] = useState<{
+    fullName: string;
+    email: string;
+    phone: number;
+    roleId: number;
+    status: boolean;
+  }>({
+    fullName: "",
+    email: "",
+    phone: 0,
+    roleId: 0, // Adjust based on your requirements
+    status: true, // Default value
+  });
 
   if (!user) {
     return <p>Vui lòng đăng nhập để xem thông tin.</p>;
@@ -50,6 +64,13 @@ const ProfilePage = () => {
         setLoading(true);
         const result: AxiosResponse<AccountData> = await getEmployeeById(id);
         setEmployeeData(result.data); // Lưu dữ liệu trả về từ API
+        setUpdatedEmployeeData({
+          fullName: result.data.fullName,
+          email: result.data.email,
+          phone: result.data.phone,
+          roleId: result.data.roleId,
+          status: result.data.status,
+        });
       } catch (error) {
         console.error("Error fetching employee data:", error);
       } finally {
@@ -61,6 +82,31 @@ const ProfilePage = () => {
       fetchEmployeeData(); // Gọi API với ID của người dùng
     }
   }, [id]);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    setUpdatedEmployeeData({
+      fullName: employeeData?.fullName || "",
+      email: employeeData?.email || "",
+      phone: employeeData?.phone || 0,
+      roleId: employeeData?.roleId || 0,
+      status: employeeData?.status || true,
+    });
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      await updateEmployee(id, updatedEmployeeData); // Call your update function
+      setIsEditing(false); // Exit edit mode after saving
+      setEmployeeData(updatedEmployeeData); // Update local state with new data
+    } catch (error) {
+      console.error("Error updating employee data:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -94,13 +140,7 @@ const ProfilePage = () => {
         marginTop: "50px",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          marginBottom: 24,
-        }}
-      >
+      <div style={{ display: "flex", alignItems: "center", marginBottom: 24 }}>
         <Avatar
           size={120}
           icon={<UserOutlined />}
@@ -111,7 +151,19 @@ const ProfilePage = () => {
         />
         <div>
           <Title level={2} style={{ margin: 0 }}>
-            {fullName}
+            {isEditing ? (
+              <Input
+                value={updatedEmployeeData.fullName}
+                onChange={(e) =>
+                  setUpdatedEmployeeData({
+                    ...updatedEmployeeData,
+                    fullName: e.target.value,
+                  })
+                }
+              />
+            ) : (
+              fullName
+            )}
           </Title>
           <Tag color={status ? "success" : "error"} style={{ marginTop: 8 }}>
             {status ? "Đang làm việc" : "Nghỉ việc"}
@@ -129,7 +181,19 @@ const ProfilePage = () => {
             </>
           }
         >
-          {email}
+          {isEditing ? (
+            <Input
+              value={updatedEmployeeData.email}
+              onChange={(e) =>
+                setUpdatedEmployeeData({
+                  ...updatedEmployeeData,
+                  email: e.target.value,
+                })
+              }
+            />
+          ) : (
+            email
+          )}
         </Descriptions.Item>
 
         <Descriptions.Item
@@ -139,7 +203,20 @@ const ProfilePage = () => {
             </>
           }
         >
-          {phone}
+          {isEditing ? (
+            <Input
+              type="number"
+              value={updatedEmployeeData.phone}
+              onChange={(e) =>
+                setUpdatedEmployeeData({
+                  ...updatedEmployeeData,
+                  phone: Number(e.target.value),
+                })
+              }
+            />
+          ) : (
+            phone
+          )}
         </Descriptions.Item>
 
         <Descriptions.Item
@@ -194,25 +271,37 @@ const ProfilePage = () => {
           gap: "10px",
         }}
       >
-        <Button
-          type="default"
-          icon={<ArrowLeftOutlined />}
-          onClick={handleGoBack}
-        >
-          Quay lại
-        </Button>
-        <Button
-          type="primary"
-          icon={<EditOutlined />}
-          style={{
-            backgroundColor: "#08979C",
-            borderColor: "#08979C",
-          }}
-        >
-          Chỉnh Sửa Thông Tin
-        </Button>
+        {isEditing ? (
+          <>
+            <Button
+              type="default"
+              icon={<CloseOutlined />}
+              onClick={handleCancelClick}
+            >
+              Hủy
+            </Button>
+            <Button
+              type="primary"
+              icon={<SaveOutlined />}
+              onClick={handleSaveClick}
+            >
+              Lưu Thay Đổi
+            </Button>
+          </>
+        ) : (
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
+            onClick={handleEditClick}
+            style={{
+              backgroundColor: "#08979C",
+              borderColor: "#08979C",
+            }}
+          >
+            Chỉnh Sửa Thông Tin
+          </Button>
+        )}
       </div>
-      {isPending && <div>Loading...</div>}
     </Card>
   );
 };
