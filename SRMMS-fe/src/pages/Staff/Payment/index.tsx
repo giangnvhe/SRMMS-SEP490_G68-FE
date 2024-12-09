@@ -1,11 +1,11 @@
 import { TableOutlined } from "@ant-design/icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Button,
   Card,
   Col,
   Divider,
   message,
-  QRCode,
   Row,
   Table,
   TableColumnsType,
@@ -15,12 +15,10 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatVND } from "~/common/utils/formatPrice";
-import { getOrderTable, TableOrderData } from "~/services/orderTable";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { PaymentOrder, RequestPaymentOrder } from "~/services/order";
-import PaymentMethod from "./components/PaymentMethod";
 import InvoiceDialog from "~/pages/Invoice";
+import { PaymentOrder, RequestPaymentOrder } from "~/services/order";
+import { getOrderTable, TableOrderData } from "~/services/orderTable";
+import PaymentMethod from "./components/PaymentMethod";
 
 const ORDER_HEIGHT_CONTAINER = "calc(100vh - 64px)";
 const ORDER_TABLE_HEIGHT = "calc(100vh - 64px - 64px - 64px - 150px)";
@@ -156,7 +154,11 @@ const Payment = () => {
     );
   }, [data]);
 
-  const handlePayNow = (discountId?: number, accId?: number) => {
+  const handlePayNow = (
+    discountId?: number,
+    accId?: number,
+    usedPoints?: number
+  ) => {
     const orders = Array.isArray(data?.data) ? data.data : [data?.data];
 
     if (!orders.length) {
@@ -172,6 +174,7 @@ const Payment = () => {
           totalMoney: discountId
             ? totalBill - (order.discountValue || 0)
             : parseFloat(order.totalMoney.toString()),
+          usedPoints: usedPoints || null, // Add usedPoints
         },
       });
     });

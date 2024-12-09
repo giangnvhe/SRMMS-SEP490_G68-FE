@@ -24,6 +24,7 @@ import logo from "~/assets/images/logo2.png";
 import styles from "./index.module.scss";
 import { useAuth } from "~/context/authProvider";
 import socket from "~/common/const/socketKitchen";
+import useNotification from "~/hooks/useNotification";
 
 interface Props {
   isOpenSideBar: boolean;
@@ -49,7 +50,8 @@ const NavStaff = ({
   const [unreadCount, setUnreadCount] = useState(0);
   const [notification, setNotification] = useState<Notification[]>([]);
   const [notificationVisible, setNotificationVisible] = useState(false);
-  const { user } = useAuth();
+  const { user, removeToken } = useAuth();
+  const { successMessage } = useNotification();
 
   useEffect(() => {
     socket.on("orderUpdated", (orderData) => {
@@ -84,6 +86,17 @@ const NavStaff = ({
     setUnreadCount(0);
   };
 
+  const handleLogout = () => {
+    startTransition(() => {
+      removeToken();
+      successMessage({
+        title: "Đăng Xuất",
+        description: "Bạn đã đăng xuất thành công.",
+      });
+      navigate("/home");
+    });
+  };
+
   const items: MenuProps["items"] = [
     {
       label: (
@@ -105,7 +118,7 @@ const NavStaff = ({
       key: "1",
       icon: (
         <div
-          onClick={() => navigate("/admin/logout")}
+          onClick={handleLogout}
           className="flex justify-center items-center gap-2"
         >
           <LogoutOutlined style={{ color: "red" }} />

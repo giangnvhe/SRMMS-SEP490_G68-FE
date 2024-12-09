@@ -8,7 +8,6 @@ import { Avatar, Dropdown, Layout, Menu, Typography } from "antd";
 import React, { startTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import { permissionObject } from "~/common/const/permission";
-import { removeAccessToken } from "~/configs/accessToken";
 import { useAuth } from "~/context/authProvider";
 import useNotification from "~/hooks/useNotification";
 
@@ -24,7 +23,7 @@ const ProfileLayout = ({
   selectedKey: string;
   setSelectedKey: (key: string) => void;
 }) => {
-  const { user } = useAuth();
+  const { user, removeToken } = useAuth();
   const navigate = useNavigate();
   const { successMessage } = useNotification();
 
@@ -71,10 +70,9 @@ const ProfileLayout = ({
       onClick: handleGoBack,
     },
   ];
-
   const handleLogout = () => {
     startTransition(() => {
-      removeAccessToken();
+      removeToken();
       successMessage({
         title: "Đăng Xuất",
         description: "Bạn đã đăng xuất thành công.",
@@ -88,9 +86,7 @@ const ProfileLayout = ({
       key: "logout",
       icon: <LogoutOutlined />,
       label: "Đăng xuất",
-      onClick: () => {
-        handleLogout;
-      },
+      onClick: handleLogout,
     },
   ];
 

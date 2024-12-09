@@ -16,6 +16,7 @@ import InputComponent from "~/components/InputComponent";
 import { CombosData, getLisComboProduct } from "~/services/combos";
 import ComboContent from "../components/comboContent";
 import HistoryOrder from "../components/HistoryOrder";
+import socket from "~/common/const/mockSocket";
 
 export interface CartItem extends ProductData {
   quantity: number;
@@ -243,14 +244,25 @@ const MenuClient = () => {
         0
       );
 
-    orderMutation.mutate({
-      tableId: Number(id),
-      orderDate: new Date().toISOString(),
-      totalMoney,
-      status: 1,
-      productDetails: productDetails,
-      comboDetails: comboDetails,
-    });
+      const orderData = {
+        tableId: Number(id),
+        orderDate: new Date().toISOString(),
+        totalMoney,
+        status: 1,
+        productDetails: productDetails,
+        comboDetails: comboDetails,
+      };
+    
+      orderMutation.mutate(orderData, {
+        onSuccess: () => {
+          socket.emit("newOrder", {
+            tableId: Number(id),
+            totalMoney,
+            message: `Bàn ${id} đã gọi món`,
+          });
+        }
+      });
+    
   };
 
   const toggleCart = () => {
