@@ -7,7 +7,7 @@ import { HEIGHT_CONTENT_CONTAINER } from "../const";
 
 const QRCodeScreen = () => {
   const navigate = useNavigate();
-  const baseUrl = `http://192.168.1.1:3000/menu-client`;
+  const baseUrl = `http://srmms-sep-490-g68-fe.vercel.app/menu-client`;
 
   const {
     data: tableData = [], // Default to an empty array if data is undefined
