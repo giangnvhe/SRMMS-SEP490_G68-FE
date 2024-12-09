@@ -24,6 +24,7 @@ import socket from "~/common/const/mockSocket";
 import logo from "../../assets/images/logo2.png";
 import styles from "./index.module.scss";
 import { useAuth } from "~/context/authProvider";
+import useNotification from "~/hooks/useNotification";
 
 interface Props {
   isOpenSideBar: boolean;
@@ -49,22 +50,35 @@ const NavComponent = ({
   const [unreadCount, setUnreadCount] = useState(0);
   const [notification, setNotification] = useState<Notification[]>([]);
   const [notificationVisible, setNotificationVisible] = useState(false);
-  const { user } = useAuth();
+  const { user, removeToken } = useAuth();
+  const { successMessage } = useNotification();
 
   useEffect(() => {
     socket.on("booking", (bookingData) => {
       addNotification(bookingData);
     });
 
+    // New order listener
+    socket.on("newOrder", (orderData) => {
+      const newNotification: Notification = {
+        id: `order-${Date.now()}`,
+        message: orderData.message,
+        status: "pending",
+      };
+      setNotification((prev) => [...prev, newNotification]);
+      setUnreadCount((prev) => prev + 1);
+    });
+
     return () => {
       socket.off("booking");
+      socket.off("newOrder");
     };
   }, []);
 
   const addNotification = (data: any) => {
     const newNotification: Notification = {
       id: data.idBooking,
-      message: `${data.nameBooking} đã đặt bàn `,
+      message: `có khách mới đã đặt bàn `,
       status: data.status || "pending",
       nameBooking: data.nameBooking,
     };
@@ -79,6 +93,17 @@ const NavComponent = ({
   const clearAllNotifications = () => {
     setNotification([]);
     setUnreadCount(0);
+  };
+
+  const handleLogout = () => {
+    startTransition(() => {
+      removeToken();
+      successMessage({
+        title: "Đăng Xuất",
+        description: "Bạn đã đăng xuất thành công.",
+      });
+      navigate("/home");
+    });
   };
 
   const items: MenuProps["items"] = [
@@ -102,7 +127,7 @@ const NavComponent = ({
       key: "1",
       icon: (
         <div
-          onClick={() => navigate("/admin/logout")}
+          onClick={handleLogout}
           className="flex justify-center items-center gap-2"
         >
           <LogoutOutlined style={{ color: "red" }} />
@@ -126,7 +151,13 @@ const NavComponent = ({
         dataSource={notification}
         renderItem={(notif) => (
           <List.Item
-            onClick={() => navigate("/admin/booking-list")}
+            onClick={() => {
+              if (notif.message.includes("đã đặt bàn")) {
+                navigate("/admin/booking-list");
+              } else if (notif.message.includes("đã gọi món")) {
+                navigate("/admin/order-list");
+              }
+            }}
             key={notif.id}
             style={{
               borderBottom: "1px solid #f0f0f0",

@@ -7,7 +7,7 @@ import { HEIGHT_CONTENT_CONTAINER } from "../const";
 
 const QRCodeScreen = () => {
   const navigate = useNavigate();
-  const baseUrl = "http://192.168.1.13:3000/menu-client";
+  const baseUrl = `http://192.168.1.1:3000/menu-client`;
 
   const {
     data: tableData = [], // Default to an empty array if data is undefined
@@ -63,7 +63,7 @@ const QRCodeScreen = () => {
           <Row gutter={[24, 24]}>
             {Array.isArray(tableData) && tableData.length > 0 ? (
               tableData.map((table) => {
-                const qrValue = `${baseUrl}?tableId=${table.tableId}`;
+                const qrValue = `${baseUrl}/${table.tableId}`;
                 return (
                   <Col xs={24} sm={12} md={8} lg={6} key={table.tableId}>
                     <Card

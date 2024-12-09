@@ -33,6 +33,7 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
   );
   const [pageNumber, setPageNumber] = useState(1);
   const [searchPhone, setSearchPhone] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
 
   const { data: voucherData, isLoading } = useQuery(
     "availableVouchers",
@@ -87,17 +88,30 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
     remove: "Xóa",
   };
 
+  const handleCashClick = () => {
+    setPaymentMethod("cash"); // Chọn Tiền mặt
+    setShowQRCode(false);
+  };
+
   const handleBankTransferClick = () => {
+    setPaymentMethod("bank"); // Chuyển khoản
     setShowQRCode(true);
+  };
+
+  const handleVoucherClick = () => {
+    setPaymentMethod("voucher"); // Voucher
+    setShowVoucherModal(true);
+    setShowQRCode(false);
+  };
+
+  const handleAccountClick = () => {
+    setPaymentMethod("addPoint"); // Tích điểm
+    setShowAccountModal(true);
+    setShowQRCode(false);
   };
 
   const cancel = () => {
     setShowQRCode(false);
-  };
-
-  //discount code
-  const handleVoucherClick = () => {
-    setShowVoucherModal(true);
   };
 
   const handleSelectVoucher = (voucher: DiscountData) => {
@@ -128,13 +142,10 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
 
   // account point
   const handleSelectAccount = (account: AccountCusData) => {
-    setSelectedAccount(account); 
-    setShowAccountModal(false); 
+    setSelectedAccount(account);
+    setShowAccountModal(false);
   };
 
-  const handleAccountClick = () => {
-    setShowAccountModal(true);
-  };
   const handleRemoveAccount = () => {
     setSelectedAccount(null); // Clear the selected account
   };
@@ -228,7 +239,7 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
           <Button
             type="default"
             style={{ height: 50, width: "100%" }}
-            onClick={cancel}
+            onClick={handleCashClick}
           >
             {CONSTANT.cash.toUpperCase()}
           </Button>
@@ -255,7 +266,7 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
           <Button
             type="default"
             style={{ height: 50, width: "100%" }}
-            onClick={() => handleAccountClick()}
+            onClick={handleAccountClick}
           >
             {CONSTANT.addPoint.toUpperCase()}
           </Button>
@@ -360,7 +371,6 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
           />
         </div>
       )}
-
       <Divider />
 
       {/* Total Amount Section with Discount */}
@@ -393,17 +403,19 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
       </div>
 
       {/* Pay Now Button */}
-      <Button
-        type="primary"
-        block
-        style={{ marginTop: "24px", height: 50 }}
-        onClick={() =>
-          onPayNow(selectedVoucher?.codeId, selectedAccount?.accountId)
-        }
-        loading={isPaying}
-      >
-        {CONSTANT.payment.toUpperCase()}
-      </Button>
+      {paymentMethod === "cash" && (
+        <Button
+          type="primary"
+          block
+          style={{ marginTop: "24px", height: 50 }}
+          onClick={() =>
+            onPayNow(selectedVoucher?.codeId, selectedAccount?.accountId)
+          }
+          loading={isPaying}
+        >
+          {CONSTANT.payment.toUpperCase()}
+        </Button>
+      )}
 
       <Modal
         title="Chọn Tài Khoản"

@@ -18,11 +18,13 @@ import {
   Typography,
 } from "antd";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import socket from "~/common/const/mockSocket";
 import logo from "~/assets/images/logo2.png";
 import styles from "./index.module.scss";
+import { useAuth } from "~/context/authProvider";
+import useNotification from "~/hooks/useNotification";
 
 interface Props {
   isOpenSideBar: boolean;
@@ -48,14 +50,27 @@ const NavStaff = ({
   const [unreadCount, setUnreadCount] = useState(0);
   const [notification, setNotification] = useState<Notification[]>([]);
   const [notificationVisible, setNotificationVisible] = useState(false);
+  const { user, removeToken } = useAuth();
+  const { successMessage } = useNotification();
 
   useEffect(() => {
     socket.on("booking", (bookingData) => {
       addNotification(bookingData);
     });
 
+    socket.on("newOrder", (orderData) => {
+      const newNotification: Notification = {
+        id: `order-${Date.now()}`,
+        message: orderData.message,
+        status: "pending",
+      };
+      setNotification((prev) => [...prev, newNotification]);
+      setUnreadCount((prev) => prev + 1);
+    });
+
     return () => {
       socket.off("booking");
+      socket.off("newOrder");
     };
   }, []);
 
@@ -79,12 +94,30 @@ const NavStaff = ({
     setUnreadCount(0);
   };
 
+  const handleLogout = () => {
+    startTransition(() => {
+      removeToken();
+      successMessage({
+        title: "Đăng Xuất",
+        description: "Bạn đã đăng xuất thành công.",
+      });
+      navigate("/home");
+    });
+  };
+
   const items: MenuProps["items"] = [
     {
       label: (
-        <div className="flex gap-2">
+        <div
+          className="flex gap-2"
+          onClick={() => {
+            startTransition(() => {
+              navigate(`/profile/${user?.id}`);
+            });
+          }}
+        >
           <InfoCircleOutlined style={{ color: "green" }} />
-          <p className="font-bold text-sm">Information</p>
+          <p className="font-bold text-sm">Thông tin cá nhân</p>
         </div>
       ),
       key: "0",
@@ -93,11 +126,11 @@ const NavStaff = ({
       key: "1",
       icon: (
         <div
-          onClick={() => navigate("/admin/logout")}
+          onClick={handleLogout}
           className="flex justify-center items-center gap-2"
         >
           <LogoutOutlined style={{ color: "red" }} />
-          <span className="font-bold text-sm">Log out</span>
+          <span className="font-bold text-sm">Đăng xuất</span>
         </div>
       ),
     },
@@ -117,6 +150,13 @@ const NavStaff = ({
         dataSource={notification}
         renderItem={(notif) => (
           <List.Item
+            onClick={() => {
+              if (notif.message.includes("đã đặt bàn")) {
+                navigate("/booking-list");
+              } else if (notif.message.includes("đã gọi món")) {
+                navigate("/order-list");
+              }
+            }}
             key={notif.id}
             style={{
               borderBottom: "1px solid #f0f0f0",

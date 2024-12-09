@@ -136,6 +136,7 @@ export interface RequestPaymentOrder {
   discountId: number | null;
   totalMoney: number;
   accId: number | null;
+  usedPoints: number | null;
 }
 
 export interface dataResponse {
