@@ -14,10 +14,9 @@ const SettingPoint: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [fetchingRates, setFetchingRates] = useState(true);
   const [currentRates, setCurrentRates] = useState<DataPoint | null>(null);
-  console.log("🚀 ~ currentRates:", currentRates);
   const [form] = Form.useForm();
 
-  const { errorMessage, successMessage } = useNotification();
+  const { successMessage } = useNotification();
 
   // Fetch existing point rates on component mount
   useEffect(() => {
@@ -87,8 +86,8 @@ const SettingPoint: React.FC = () => {
           ) : (
             <>
               <Text>
-                1 điểm ={" "}
-                {currentRates?.moneyToPointRate?.toLocaleString() || "N/A"} VND
+                1000 VND ={" "}
+                {currentRates?.moneyToPointRate?.toLocaleString() || "N/A"} điểm
               </Text>
               <Text>
                 {currentRates?.pointToMoneyRate?.toLocaleString() || "N/A"} điểm

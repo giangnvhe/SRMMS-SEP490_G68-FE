@@ -10,14 +10,19 @@ import {
   Typography,
 } from "antd";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { formatVND } from "~/common/utils/formatPrice";
 import { AccountCusData, getListCustomers } from "~/services/api_customer";
 import { DiscountData, getDiscount } from "~/services/voucher";
+import VietQR from "../VietQR";
+import useNotification from "~/hooks/useNotification";
+import { PostVietQR, requestVietQr } from "~/services/vietqr";
+import { AxiosError, AxiosResponse } from "axios";
+import { DataPoint, getPoint } from "~/services/point";
 
 interface IProps {
   totalAmount: number;
-  onPayNow: () => void;
+  onPayNow: (discountId?: number, accId?: number, usedPoints?: number) => void;
   isPaying: boolean;
 }
 
@@ -34,6 +39,17 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [searchPhone, setSearchPhone] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
+  const { errorMessage } = useNotification();
+  const [qrUrl, setQrUrl] = useState("");
+  const [usedPoints, setUsedPoints] = useState<number>(0);
+
+  const { data: pointData } = useQuery<{ data: DataPoint[] }>(
+    "pointConversion",
+    getPoint,
+    {
+      enabled: !!selectedAccount,
+    }
+  );
 
   const { data: voucherData, isLoading } = useQuery(
     "availableVouchers",
@@ -93,11 +109,6 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
     setShowQRCode(false);
   };
 
-  const handleBankTransferClick = () => {
-    setPaymentMethod("bank"); // Chuyển khoản
-    setShowQRCode(true);
-  };
-
   const handleVoucherClick = () => {
     setPaymentMethod("voucher"); // Voucher
     setShowVoucherModal(true);
@@ -110,10 +121,37 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
     setShowQRCode(false);
   };
 
-  const cancel = () => {
-    setShowQRCode(false);
-  };
+  const handleVietQr = useMutation(
+    ({ data }: { data: requestVietQr }) => PostVietQR(data),
+    {
+      onError: (error: AxiosError<{ message: string }>) => {
+        errorMessage({
+          description:
+            error.response?.data.message ||
+            "Đã có lỗi xảy ra, tạo mới không thành công!!",
+        });
+      },
+    }
+  );
 
+  const handleBankTransferClick = () => {
+    setPaymentMethod("bank");
+    setShowQRCode(true);
+
+    const qrUrl = `https://api.vietqr.io/image/970407-5302122002-st5LSme.jpg?accountName=NGUYEN%20VAN%20GIANG&amount=${calculateDiscountedTotal()}&addInfo=Cam%20on%20quy%20khach`;
+    setQrUrl(qrUrl);
+
+    const requestData: requestVietQr = {
+      accountNo: selectedAccount?.accountId || "",
+      accountName: selectedAccount?.fullName || "",
+      acqId: "SomeAcqId",
+      addInfo: "Additional information",
+      amount: calculateDiscountedTotal().toString(),
+      template: "SomeTemplate",
+    };
+
+    handleVietQr.mutate({ data: requestData });
+  };
   const handleSelectVoucher = (voucher: DiscountData) => {
     setSelectedVoucher(voucher);
     setShowVoucherModal(false);
@@ -123,31 +161,109 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
     setSelectedVoucher(null);
   };
 
+  const calculatePointValue = () => {
+    if (!pointData?.data || !usedPoints) return 0;
+
+    const { moneyToPointRate } = pointData.data;
+    return usedPoints * moneyToPointRate;
+  };
+
   const calculateDiscountedTotal = () => {
-    if (!selectedVoucher) return totalAmount;
+    let finalTotal = totalAmount;
 
-    const { discountValue, discountType } = selectedVoucher;
-
-    if (discountType === 0) {
-      const discountAmount = totalAmount * (discountValue / 100);
-      return Math.max(0, totalAmount - discountAmount);
+    if (selectedVoucher) {
+      const { discountValue, discountType } = selectedVoucher;
+      finalTotal =
+        discountType === 0
+          ? finalTotal * (1 - discountValue / 100)
+          : finalTotal - discountValue;
     }
 
-    if (discountType === 1) {
-      return Math.max(0, totalAmount - discountValue);
-    }
+    finalTotal = Math.max(0, finalTotal - calculatePointValue());
 
-    return totalAmount;
+    return finalTotal;
   };
 
   // account point
   const handleSelectAccount = (account: AccountCusData) => {
     setSelectedAccount(account);
+    setUsedPoints(0);
     setShowAccountModal(false);
   };
 
   const handleRemoveAccount = () => {
     setSelectedAccount(null); // Clear the selected account
+    setUsedPoints(0);
+  };
+
+  const handlePayNow = () => {
+    onPayNow(
+      selectedVoucher?.codeId,
+      selectedAccount?.accountId,
+      usedPoints || undefined
+    );
+  };
+
+  const renderAccountSelection = () => {
+    if (!selectedAccount) return null;
+
+    return (
+      <>
+        <div
+          style={{
+            marginTop: "16px",
+            padding: "10px",
+            backgroundColor: "#f0f0f0",
+            borderRadius: "8px",
+          }}
+        >
+          <Row justify="space-between" align="middle">
+            <Col>
+              <Typography.Text strong>
+                Số điện thoại: {selectedAccount.phone}
+              </Typography.Text>
+              <Typography.Text type="secondary" style={{ marginLeft: "10px" }}>
+                Tên: {selectedAccount.fullName}
+              </Typography.Text>
+              <Typography.Text style={{ marginLeft: "10px", color: "#1890ff" }}>
+                Điểm hiện tại: {selectedAccount.totalPoints}
+              </Typography.Text>
+            </Col>
+            <Col>
+              <Button type="link" onClick={handleRemoveAccount} danger>
+                {CONSTANT.remove}
+              </Button>
+            </Col>
+          </Row>
+
+          {/* Point Input Section */}
+          <Row style={{ marginTop: "10px" }}>
+            <Col span={24}>
+              <Typography.Text>Nhập số điểm sử dụng:</Typography.Text>
+              <Input
+                type="number"
+                value={usedPoints}
+                max={selectedAccount.totalPoints}
+                onChange={(e) => {
+                  const inputPoints = Math.min(
+                    Number(e.target.value),
+                    selectedAccount.totalPoints
+                  );
+                  setUsedPoints(inputPoints);
+                }}
+                placeholder="Nhập số điểm muốn sử dụng"
+                style={{ width: "100%", marginTop: "5px" }}
+              />
+              {pointData?.data[0] && (
+                <Typography.Text type="secondary">
+                  {usedPoints} điểm = {formatVND(calculatePointValue())} VND
+                </Typography.Text>
+              )}
+            </Col>
+          </Row>
+        </div>
+      </>
+    );
   };
 
   //column discount code
@@ -350,26 +466,18 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
           }}
         />
       </Modal>
-
+      {selectedAccount && renderAccountSelection()}
       {/* QR Code Section */}
       {showQRCode && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "200px",
-            marginTop: "20px",
-            textAlign: "center",
-            padding: "10px",
-            backgroundColor: "#f9f9f9",
-            borderRadius: "8px",
-          }}
+        <Modal
+          title="Quét mã QR để thanh toán"
+          open={showQRCode}
+          onCancel={() => setShowQRCode(false)} // Đóng modal khi người dùng nhấn "X"
+          footer={null}
+          centered
         >
-          <QRCode
-            value={`BANK_TRANSFER_AMOUNT_${calculateDiscountedTotal()}`}
-          />
-        </div>
+          <VietQR qrUrl={qrUrl} />
+        </Modal>
       )}
       <Divider />
 
@@ -383,11 +491,11 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
           style={{
             fontSize: "20px",
             marginLeft: "10px",
-            color: selectedVoucher ? "red" : "inherit",
+            color: selectedVoucher || usedPoints ? "red" : "inherit",
           }}
         >
-          {calculateDiscountedTotal().toLocaleString()} VND
-          {selectedVoucher && (
+          {formatVND(calculateDiscountedTotal())}
+          {(selectedVoucher || usedPoints) && (
             <span
               style={{
                 textDecoration: "line-through",
@@ -396,21 +504,19 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
                 fontSize: "14px",
               }}
             >
-              {totalAmount.toLocaleString()} VND
+              {formatVND(totalAmount)}
             </span>
           )}
         </Typography.Text>
       </div>
 
       {/* Pay Now Button */}
-      {paymentMethod === "cash" && (
+      {paymentMethod === "addPoint" && selectedAccount && (
         <Button
           type="primary"
           block
           style={{ marginTop: "24px", height: 50 }}
-          onClick={() =>
-            onPayNow(selectedVoucher?.codeId, selectedAccount?.accountId)
-          }
+          onClick={handlePayNow}
           loading={isPaying}
         >
           {CONSTANT.payment.toUpperCase()}
