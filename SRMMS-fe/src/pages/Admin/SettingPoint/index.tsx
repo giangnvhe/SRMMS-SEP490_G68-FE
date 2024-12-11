@@ -86,12 +86,12 @@ const SettingPoint: React.FC = () => {
           ) : (
             <>
               <Text>
-                1000 VND ={" "}
-                {currentRates?.moneyToPointRate?.toLocaleString() || "N/A"} điểm
+                {currentRates?.moneyToPointRate?.toLocaleString() || "N/A"} VND
+                = 1 điểm
               </Text>
               <Text>
-                {currentRates?.pointToMoneyRate?.toLocaleString() || "N/A"} điểm
-                = 1000 VND
+                1 điểm =
+                {currentRates?.pointToMoneyRate?.toLocaleString() || "N/A"} VND
               </Text>
             </>
           )}

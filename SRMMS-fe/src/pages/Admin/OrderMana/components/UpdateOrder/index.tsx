@@ -105,6 +105,22 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
     form.setFieldsValue({ totalMoney });
   }, [totalMoney, form]);
 
+  useEffect(() => {
+    if (orderData) {
+      console.log("Original Order Data:", orderData);
+      console.log(
+        "Combo Quantities:",
+        orderData.combos?.map((combo) => combo.quantity)
+      );
+      console.log(
+        "Product Quantities:",
+        orderData.products?.map((product) => product.quantity)
+      );
+
+      // ... rest of the existing code
+    }
+  }, [orderData]);
+
   const onSubmitForm = async () => {
     try {
       await form.validateFields();
