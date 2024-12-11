@@ -164,8 +164,8 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
   const calculatePointValue = () => {
     if (!pointData?.data || !usedPoints) return 0;
 
-    const { moneyToPointRate } = pointData.data;
-    return usedPoints * moneyToPointRate;
+    const { pointToMoneyRate } = pointData.data;
+    return usedPoints * pointToMoneyRate;
   };
 
   const calculateDiscountedTotal = () => {
@@ -192,7 +192,7 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
   };
 
   const handleRemoveAccount = () => {
-    setSelectedAccount(null); // Clear the selected account
+    setSelectedAccount(null);
     setUsedPoints(0);
   };
 
@@ -511,7 +511,7 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
       </div>
 
       {/* Pay Now Button */}
-      {paymentMethod === "addPoint" && selectedAccount && (
+      {paymentMethod === "cash" && (
         <Button
           type="primary"
           block
