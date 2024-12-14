@@ -47,7 +47,6 @@ const InvoiceDialog = ({
 
   const [invoiceItems, setInvoiceItems] = useState<any[]>([]);
 
-
   const contentRef = useRef(null);
   const reactToPrintFn = useReactToPrint({
     content: () => contentRef.current,
@@ -72,7 +71,7 @@ const InvoiceDialog = ({
       ]);
       setInvoiceItems(updatedInvoiceItems);
     }
-  }, [orderData]); 
+  }, [orderData]);
 
   const columns = [
     {

@@ -12,6 +12,7 @@ import { OrderData } from "~/services/order";
 import { ProductTableRequest, updateProductTable } from "~/services/orderTable";
 import { formatVND } from "~/common/utils/formatPrice";
 import socket from "~/common/const/socketKitchen";
+import { AxiosResponse } from "axios";
 
 interface IProps {
   orderData: OrderData | undefined;
@@ -60,8 +61,12 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
     ({ id, data }: MutationUpdateCategory) =>
       updateProductTable(Number(id), data),
     {
-      onSuccess: () => {
-        successMessage({ description: "Chỉnh sửa thành công" });
+      onSuccess: (success: AxiosResponse<{ message: string }>) => {
+        successMessage({
+          description:
+            success?.data?.message ||
+            "Chỉnh sửa thành công, Đơn hàng đã được đưa tới bếpbếp",
+        });
         form.resetFields();
         refetch();
         onCancel();
@@ -79,6 +84,7 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
       const initialComboDetails =
         orderData.combos?.map((combo) => ({
           comboId: combo.comboId,
+          comboName: combo.comboName,
           quantity: combo.quantity,
           price: combo.price,
         })) || [];
@@ -86,6 +92,7 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
       const initialProductDetails =
         orderData.products?.map((product) => ({
           proId: product.productId,
+          proName: product.proName,
           quantity: product.quantity,
           price: product.price,
         })) || [];
@@ -116,8 +123,6 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
         "Product Quantities:",
         orderData.products?.map((product) => product.quantity)
       );
-
-      // ... rest of the existing code
     }
   }, [orderData]);
 
@@ -201,9 +206,9 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
   // Combo Details Columns
   const comboColumns = [
     {
-      title: "STT",
-      dataIndex: "comboId",
-      key: "comboId",
+      title: "Tên Combo",
+      dataIndex: "comboName",
+      key: "comboName",
     },
     {
       title: "Số lượng",
@@ -250,9 +255,9 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
   // Product Details Columns
   const productColumns = [
     {
-      title: "STT",
-      dataIndex: "proId",
-      key: "proId",
+      title: "Tên món",
+      dataIndex: "proName",
+      key: "proName",
     },
     {
       title: "Số lượng",
