@@ -19,14 +19,25 @@ import useNotification from "~/hooks/useNotification";
 import { PostVietQR, requestVietQr } from "~/services/vietqr";
 import { AxiosError, AxiosResponse } from "axios";
 import { DataPoint, getPoint } from "~/services/point";
+import InvoiceDialog from "~/pages/Invoice";
 
 interface IProps {
   totalAmount: number;
   onPayNow: (discountId?: number, accId?: number, usedPoints?: number) => void;
   isPaying: boolean;
+  showInvoice: boolean;
+  handleCloseInvoice: () => void;
+  orderData: any;
 }
 
-const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
+const PaymentMethod = ({
+  totalAmount,
+  onPayNow,
+  isPaying,
+  showInvoice,
+  handleCloseInvoice,
+  orderData,
+}: IProps) => {
   const [showQRCode, setShowQRCode] = useState(false);
   const [showVoucherModal, setShowVoucherModal] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
@@ -548,6 +559,15 @@ const PaymentMethod = ({ totalAmount, onPayNow, isPaying }: IProps) => {
           }}
         />
       </Modal>
+
+      {showInvoice && (
+        <InvoiceDialog
+          onClose={handleCloseInvoice}
+          orderData={orderData}
+          totalBill={calculateDiscountedTotal()}
+          
+        />
+      )}
     </div>
   );
 };

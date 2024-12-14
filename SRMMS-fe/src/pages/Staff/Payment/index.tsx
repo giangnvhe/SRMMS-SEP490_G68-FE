@@ -15,7 +15,6 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatVND } from "~/common/utils/formatPrice";
-import InvoiceDialog from "~/pages/Invoice";
 import { PaymentOrder, RequestPaymentOrder } from "~/services/order";
 import { getOrderTable, TableOrderData } from "~/services/orderTable";
 import PaymentMethod from "./components/PaymentMethod";
@@ -271,17 +270,13 @@ const Payment = () => {
               totalAmount={totalBill}
               onPayNow={handlePayNow}
               isPaying={paymentMutation.isLoading}
+              showInvoice={showInvoice}
+              handleCloseInvoice={handleCloseInvoice}
+              orderData = {data?.data}
             />
           </Card>
         </Col>
       </Row>
-      {showInvoice && (
-        <InvoiceDialog
-          onClose={handleCloseInvoice}
-          orderData={data?.data}
-          totalBill={totalBill}
-        />
-      )}
     </div>
   );
 };
