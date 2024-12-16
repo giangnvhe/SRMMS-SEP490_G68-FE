@@ -10,6 +10,8 @@ import useNotification from "~/hooks/useNotification";
 import { login } from "~/services/auth";
 import styles from "./index.module.scss";
 import { permissionObject } from "~/common/const/permission";
+import { AxiosError } from "axios";
+import { startTransition } from "react";
 
 const cx = classNames.bind(styles);
 
@@ -56,13 +58,16 @@ const LoginForm = () => {
         navigate("/home");
       }
     },
-    onError: () => {
+    onError: (error: AxiosError<{ message: string }>) => {
+      const backendMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Đăng nhập thất bại, vui lòng kiểm tra lại tài khoản mật khẩu";
       errorMessage({
         title: "Đăng nhập",
-        description:
-          "Đăng nhập thất bại, vui lòng kiểm tra lại tài khoản mật khẩu",
+        description: backendMessage,
       });
-      navigate("/");
+      navigate("/login");
     },
   });
 
@@ -125,7 +130,11 @@ const LoginForm = () => {
             Bạn có tài khoản chưa?{" "}
             <span
               className="text-blue-500 hover:text-blue-700 font-medium ml-1 cursor-pointer"
-              onClick={() => navigate("/register")}
+              onClick={() => {
+                startTransition(() => {
+                  navigate(`/register`);
+                });
+              }}
             >
               Đăng kí
             </span>
@@ -133,7 +142,11 @@ const LoginForm = () => {
         </div>
         <div
           className="text-blue-500 hover:text-blue-700 font-medium cursor-pointer"
-          onClick={() => navigate("/forget-password")}
+          onClick={() => {
+            startTransition(() => {
+              navigate(`/forget-password`);
+            });
+          }}
         >
           Quên mật khẩu?
         </div>

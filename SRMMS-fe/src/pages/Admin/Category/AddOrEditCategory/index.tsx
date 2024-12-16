@@ -135,6 +135,7 @@ const AddOrEditCategory = ({ onCancel, categoryData, refetch }: IProps) => {
               ]}
               form={form}
               placeholder="Nhập mô tả"
+              maxLength={2000}
             />
           </div>
           <div className="mt-6 flex justify-end space-x-3">

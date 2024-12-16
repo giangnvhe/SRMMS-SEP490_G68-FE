@@ -43,9 +43,13 @@ const UpdateBooking = ({ refetch, bookingData, onCancel }: IProps) => {
         refetch();
       },
       onError: (error: AxiosError<{ message: string }>) => {
+        const backendMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "Đã có lỗi xảy ra, chỉnh sửa không thành công!!";
         errorMessage({
           title: "Thất bại",
-          description: "Đã có lỗi xảy ra, chỉnh sửa không thành công!!",
+          description: backendMessage,
         });
       },
     }
@@ -86,7 +90,7 @@ const UpdateBooking = ({ refetch, bookingData, onCancel }: IProps) => {
   const isLoadings = handleUpdateBooking.isLoading;
 
   const disablePastDates = (currentDate: dayjs.Dayjs) => {
-    return currentDate.isBefore(dayjs(), "day"); // Disable past dates
+    return currentDate.isBefore(dayjs(), "day"); 
   };
 
   return (

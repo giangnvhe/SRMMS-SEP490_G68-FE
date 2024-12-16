@@ -12,7 +12,7 @@ import { OrderData } from "~/services/order";
 import { ProductTableRequest, updateProductTable } from "~/services/orderTable";
 import { formatVND } from "~/common/utils/formatPrice";
 import socket from "~/common/const/socketKitchen";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 interface IProps {
   orderData: OrderData | undefined;
@@ -65,15 +65,19 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
         successMessage({
           description:
             success?.data?.message ||
-            "Chỉnh sửa thành công, Đơn hàng đã được đưa tới bếpbếp",
+            "Chỉnh sửa thành công, Đơn hàng đã được đưa tới bếp",
         });
         form.resetFields();
         refetch();
         onCancel();
       },
-      onError: () => {
+      onError: (error: AxiosError<{ message: string }>) => {
+        const backendMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "Đã có lỗi xảy ra, chỉnh sửa không thành công!!";
         errorMessage({
-          description: "Đã có lỗi xảy ra, chỉnh sửa không thành công!!",
+          description: backendMessage,
         });
       },
     }

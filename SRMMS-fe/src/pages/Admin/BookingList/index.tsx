@@ -27,32 +27,6 @@ const BookingList = () => {
     getListBooking(form.getFieldsValue(true))
   );
 
-  // useEffect(() => {
-  //   const connection = new HubConnectionBuilder()
-  //     .withUrl("http://localhost:8081/bookingHub")
-  //     .withAutomaticReconnect()
-  //     .build();
-
-  //   connection.start().catch((err) => console.error("Connection failed", err));
-
-  //   connection.on("ReceiveBookingUpdate", (updatedBooking: BookingData) => {
-  //     setDataTable((prevData) => {
-  //       const newData = [...prevData];
-  //       const index = newData.findIndex((item) => item.bookingId === updatedBooking.bookingId);
-  //       if (index !== -1) {
-  //         newData[index] = updatedBooking;
-  //       } else {
-  //         newData.push(updatedBooking);
-  //       }
-  //       return newData;
-  //     });
-  //   });
-
-  //   return () => {
-  //     connection.stop();
-  //   };
-  // }, []);
-
   const onSelected = (id: BookingData | undefined) => {
     setSelectedBooking(id);
     setOpenModal(true);
