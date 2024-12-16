@@ -58,7 +58,7 @@ function TableCategory({
               onSelected(record);
             }}
           />
-          <DeleteOutlined
+          {/* <DeleteOutlined
             onClick={() =>
               comfirmMessage({
                 description: "Do you want delete " + record.catName + " ?",
@@ -69,7 +69,7 @@ function TableCategory({
                 },
               })
             }
-          />
+          /> */}
         </Space>
       ),
     },

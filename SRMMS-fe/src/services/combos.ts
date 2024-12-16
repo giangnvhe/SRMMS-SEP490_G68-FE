@@ -12,7 +12,7 @@ export interface CombosData {
   comboImg?: string;
   comboMoney: number;
   comboStatus: boolean;
-  ProductNames: string[];
+  productNames: string[];
   quantity: number;
 }
 

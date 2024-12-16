@@ -1,17 +1,16 @@
 import {
-  CalendarOutlined,
   ClockCircleOutlined,
   PhoneOutlined,
   TeamOutlined,
-  UserOutlined
+  UserOutlined,
 } from "@ant-design/icons";
-import { Form, InputNumber, TimePicker } from "antd";
+import { DatePicker, Form, InputNumber, TimePicker } from "antd";
 import { AxiosError, AxiosResponse } from "axios";
+import dayjs from "dayjs";
 import moment from "moment";
 import { useMutation } from "react-query";
 import socket from "~/common/const/mockSocket";
 import ButtonComponent from "~/components/ButtonComponent";
-import DatePickerComponent from "~/components/DatePickerComponent";
 import InputComponent from "~/components/InputComponent";
 import useNotification from "~/hooks/useNotification";
 import { Booking, BookingRequest } from "~/services/booking";
@@ -28,10 +27,12 @@ const BookingForm = () => {
       form.resetFields();
     },
     onError: (error: AxiosError<{ message: string }>) => {
+      const backendMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Đã có lỗi xảy ra, Đặt bàn thất bại!!";
       errorMessage({
-        description:
-          (error as AxiosError).message ||
-          "Đã có lỗi xảy ra, Đặt bàn thất bại!!",
+        description: backendMessage,
       });
     },
   });
@@ -52,6 +53,10 @@ const BookingForm = () => {
     };
     bookingMutation.mutate(bookingData);
     socket.emit("booking", bookingData);
+  };
+
+  const disablePastDates = (currentDate: dayjs.Dayjs) => {
+    return currentDate.isBefore(dayjs(), "day"); // Disable past dates
   };
 
   return (
@@ -88,14 +93,17 @@ const BookingForm = () => {
           prefix={<PhoneOutlined />}
         />
 
-        <DatePickerComponent
-          label="Ngày"
+        <Form.Item
+          label="Ngày đặt"
           name="dayBooking"
-          form={form}
-          rules={[{ required: true, message: "Vui lòng chọn ngày!" }]}
-          style={{ width: "100%" }}
-          prefix={<CalendarOutlined />}
-        />
+          rules={[{ required: true, message: "Vui lòng chọn ngày" }]}
+        >
+          <DatePicker
+            style={{ width: "100%" }}
+            format="YYYY-MM-DD"
+            disabledDate={disablePastDates}
+          />
+        </Form.Item>
 
         <Form.Item
           label="Thời gian"
