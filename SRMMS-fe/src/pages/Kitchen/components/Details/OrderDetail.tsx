@@ -69,7 +69,7 @@ const OrderDetailKitchens = () => {
           await getOrderKitchenByStatus(status);
           successMessage({
             title: "Thành công",
-            description: "Đã thay đổi trạng thái đơn hàng thành công.",
+            description: "Món ăn đã được hoàn thành.",
           });
         } catch (error) {
           errorMessage({

@@ -56,10 +56,12 @@ const TableEmployee = ({
   const { isLoading, isError, error } = useQuery("role", getRoles, {
     onSuccess: (result) => {
       setRole(
-        result.data.map((value: any) => ({
-          label: value.roleName,
-          value: `${value.roleId}`,
-        }))
+        result.data
+          .filter((value: any) => value.roleId !== 1 && value.roleId !== 5)
+          .map((value: any) => ({
+            label: value.roleName,
+            value: `${value.roleId}`,
+          }))
       );
     },
   });

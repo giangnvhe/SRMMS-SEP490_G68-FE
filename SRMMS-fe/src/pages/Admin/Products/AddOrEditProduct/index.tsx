@@ -68,6 +68,7 @@ const AddOrEditProduct = ({
     {
       onSuccess: (success: AxiosResponse<{ message: string }>) => {
         successMessage({
+          title: "Thành công",
           description: success?.data?.message || "Chỉnh sửa thành công",
         });
         form.resetFields();
@@ -75,10 +76,13 @@ const AddOrEditProduct = ({
         refetch();
       },
       onError: (error: AxiosError<{ message: string }>) => {
+        const backendMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "Đã có lỗi xảy ra, chỉnh sửa không thành công!!";
         errorMessage({
-          description:
-            (error as AxiosError).message ||
-            "Đã có lỗi xảy ra, chỉnh sửa không thành công!!",
+          title: "Thất bại",
+          description: backendMessage,
         });
       },
     }
@@ -298,7 +302,7 @@ const AddOrEditProduct = ({
             {imagePreview && (
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                {isEditProduct ? "Hình ảnh hiện tại" : "Xem trước hình ảnh"}
+                  {isEditProduct ? "Hình ảnh hiện tại" : "Xem trước hình ảnh"}
                 </label>
                 <img
                   src={imagePreview}
@@ -318,6 +322,7 @@ const AddOrEditProduct = ({
               ]}
               placeholder="Nhập mô tả"
               form={form}
+              maxLength={2000}
             />
             {isEditProduct && (
               <SwitchComponent

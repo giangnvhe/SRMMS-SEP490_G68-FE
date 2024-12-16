@@ -28,7 +28,7 @@ const ListEmployee = () => {
   const { isLoading, isError, error } = useQuery("role-admin", getRoles, {
     onSuccess: (result) => {
       setRoles(
-        result.data.map((value: any) => ({
+        result.data.filter((value: any) => value.roleId !== 1 && value.roleId !== 5).map((value: any) => ({
           label: value.roleName,
           value: value.roleId,
         }))

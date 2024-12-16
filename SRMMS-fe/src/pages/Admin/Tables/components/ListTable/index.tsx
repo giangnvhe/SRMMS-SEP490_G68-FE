@@ -26,10 +26,13 @@ const ListTable = ({ tables, onSelect }: IProps) => {
                 )}
                 {table.tableOfPeople != null &&
                   table.tableOfPeople > 2 &&
-                  table.tableOfPeople <= 4 && <MediumTable table={table} />}
+                  table.tableOfPeople <= 4 && <SmallTable table={table} />}
                 {table.tableOfPeople != null &&
                   table.tableOfPeople > 4 &&
-                  table.tableOfPeople <= 6 && <LargeTable table={table} />}
+                  table.tableOfPeople <= 6 && <MediumTable table={table} />}
+                {table.tableOfPeople != null && table.tableOfPeople > 6 && (
+                  <LargeTable table={table} />
+                )}
               </div>
               <div
                 className="absolute bottom-0 left-0 right-0 h-2"

@@ -63,6 +63,7 @@ const AddTable = ({ onCancel, refetch, tableData }: IProps) => {
     {
       onSuccess: (success: AxiosResponse<{ message: string }>) => {
         successMessage({
+          title: "Thành công",
           description: success?.data?.message || "Tạo mới thành công",
         });
         setFormValues(initialFormValues);
@@ -71,6 +72,7 @@ const AddTable = ({ onCancel, refetch, tableData }: IProps) => {
       },
       onError: (error: AxiosError<{ message: string }>) => {
         errorMessage({
+          title: "Thất bại",
           description:
             error.response?.data.message ||
             "Đã có lỗi xảy ra, tạo mới không thành công!!",

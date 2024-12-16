@@ -67,8 +67,10 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
       message.success("Đặt bàn đã được phê duyệt thành công");
       onApprove();
       onClose();
-    } catch (error) {
-      message.error("Phê duyệt thất bại, vui lòng thử lại");
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message || "Phê duyệt thất bại, vui lòng thử lại";
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }

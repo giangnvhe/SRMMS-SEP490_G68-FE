@@ -107,21 +107,19 @@ function UseColumn({ setSelectedBooking, onReject, onSelected }: IProps) {
 
           {/* Nút "Reject" */}
           <Tooltip title="Từ chối">
-            <Popconfirm
-              title={`Bạn có chắc chắn muốn từ ${record?.nameBooking}?`}
-              onConfirm={() =>
+            <CloseOutlined
+              onClick={() =>
                 comfirmMessage({
-                  description: `Bạn có chắc chắn muốn duyệt món ${record.nameBooking}?`,
+                  description: `Bạn có chắc chắn muốn từ chối ${record.nameBooking}?`,
                   onSubmit: () => {
                     if (record.bookingId) {
-                      onReject(record.bookingId); // Hàm xử lý trạng thái duyệt
+                      onReject(record.bookingId);
                     }
                   },
                 })
               }
-            >
-              <CloseOutlined className="text-red-500 cursor-pointer hover:text-red-700" />
-            </Popconfirm>
+              className="text-red-500 cursor-pointer hover:text-red-700"
+            />
           </Tooltip>
 
           <Tooltip title="Chỉnh sửa">

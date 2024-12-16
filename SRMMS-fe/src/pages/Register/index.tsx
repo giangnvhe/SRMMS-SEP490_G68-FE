@@ -1,13 +1,14 @@
 import { Button, Form, notification } from "antd";
+import { AxiosError } from "axios";
+import classNames from "classnames";
+import { startTransition, useState } from "react";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router";
 import ButtonComponent from "~/components/ButtonComponent";
 import InputComponent from "~/components/InputComponent";
+import { register, resendOtp, verifyOtp } from "~/services/auth";
 import LoginImage from "../../assets/images/background.jpg";
 import styles from "./index.module.scss";
-import classNames from "classnames";
-import { useMutation } from "react-query";
-import { register, resendOtp, verifyOtp } from "~/services/auth";
-import { startTransition, useState } from "react";
-import { useNavigate } from "react-router";
 const cx = classNames.bind(styles);
 
 const Register = () => {
@@ -56,16 +57,14 @@ const Register = () => {
         setApiErrorMessage(null);
       },
 
-      onError: (error: any) => {
-        let apiMessage = "";
-        const responseMessage = error.response?.data;
-        if (responseMessage === "Email is already registered.") {
-          apiMessage = "Email đã tồn tại.";
-        }
-        setApiErrorMessage(apiMessage);
+      onError: (error: AxiosError<{ message: string }>) => {
+        const backendMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "Có lỗi xảy ra. Vui lòng thử lại.";
         notification.error({
           message: "Đăng ký thất bại",
-          description: error.message || "Có lỗi xảy ra. Vui lòng thử lại.",
+          description: backendMessage,
         });
         setIsRegistered(false);
       },

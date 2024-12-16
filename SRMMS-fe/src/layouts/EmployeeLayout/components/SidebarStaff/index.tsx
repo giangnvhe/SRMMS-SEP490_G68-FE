@@ -111,7 +111,6 @@ const SidebarStaff = ({ isOpenSideBar, isAdmin }: Props) => {
       >
         <Menu
           onClick={onClick}
-          //defaultSelectedKeys={[location.pathname]}
           selectedKeys={[selectedKey]}
           mode="inline"
           items={items}
