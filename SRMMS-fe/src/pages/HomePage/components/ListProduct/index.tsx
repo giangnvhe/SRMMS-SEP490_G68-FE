@@ -12,6 +12,8 @@ interface IProps {
 const ListProduct = ({ products, isLoading }: IProps) => {
   const navigate = useNavigate();
 
+  const activeProducts = products.filter((product) => product.status === true);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-full text-gray-500">
@@ -31,7 +33,7 @@ const ListProduct = ({ products, isLoading }: IProps) => {
   return (
     <div style={{ height: CONTENT_HEIGHT, overflowY: "auto", padding: "16px" }}>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {products.map((product) => (
+        {activeProducts.map((product) => (
           <Card
             key={product.productId}
             className="rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"

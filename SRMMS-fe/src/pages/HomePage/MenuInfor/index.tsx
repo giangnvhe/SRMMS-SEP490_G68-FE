@@ -32,7 +32,6 @@ const MenuInfor = () => {
         name: "",
         categoryId:
           currentCategory === "0" ? undefined : parseInt(currentCategory),
-        pagination: { pageNumber: 1, pageSize: 100 },
         pageNumber: 1,
         pageSize: 100,
         totalProducts: 0,
@@ -48,14 +47,12 @@ const MenuInfor = () => {
   };
 
   useEffect(() => {
-    // Retrieve the selected category from localStorage
     const savedCategory = localStorage.getItem("currentCategory");
     if (savedCategory) {
       setCurrentCategory(savedCategory);
     }
   }, []);
 
-  // Inside your component
   const handlePriceChange = (value: number[]) => {
     if (value.length === 2) {
       setPriceRange(value.length === 2 ? [value[0], value[1]] : null);
@@ -78,7 +75,6 @@ const MenuInfor = () => {
   }
   return (
     <div className="flex-1 bg-gray-100 p-4 sm:p-6 overflow-auto">
-      {/* Header with Tabs */}
       <div className="bg-white shadow-md px-4 rounded-xl">
         <CategoryTabs
           categories={data?.data || []}
@@ -88,7 +84,6 @@ const MenuInfor = () => {
         />
       </div>
 
-      {/* Product Grid */}
       <div className="flex-1 bg-gray-100 p-4 sm:p-6">
         <ListProduct
           products={productsQuery.data?.data?.products || []}
