@@ -118,7 +118,7 @@ const Dashboard = () => {
                 style={{ fontSize: "24px", color: "#1890ff" }}
               />
             }
-            to="/admin/product"
+            to="/admin/employees"
             title="Số lượng nhân viên"
             subtitle={
               comboCount !== null ? comboCount.toString() : "Loading..."

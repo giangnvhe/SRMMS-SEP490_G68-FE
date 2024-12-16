@@ -180,7 +180,7 @@ const Payment = () => {
   };
 
   return (
-    <div style={{ padding: "24px", height: "100%" }}>
+    <div style={{ padding: "24px", height: "100%" }} >
       <Row gutter={24}>
         <Col xs={24} md={16}>
           <Card bordered={false} style={{ height: ORDER_HEIGHT_CONTAINER }}>

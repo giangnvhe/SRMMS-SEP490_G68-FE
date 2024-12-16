@@ -101,7 +101,7 @@ const UseColumn = ({ onSelected }: IProps) => {
               onClick={() => navigate(`/admin/order/${record.orderId}`)}
             />
           </Tooltip>
-          {record.status !== 4 && (
+          {record.status === 2 && (
             <Tooltip title="Chỉnh Sửa">
               <EditOutlined
                 className="text-blue-500 cursor-pointer"

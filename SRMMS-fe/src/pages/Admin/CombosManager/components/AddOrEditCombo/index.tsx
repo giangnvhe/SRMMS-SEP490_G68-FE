@@ -167,22 +167,37 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
 
   useEffect(() => {
     if (isEditCombo && comboData) {
+      const { productNames, ...rest } = comboData;
       form.setFieldsValue({
         ComboName: comboData?.comboName,
         ComboDescription: comboData?.comboDescription,
         ComboMoney: comboData?.comboMoney,
         ComboStatus: comboData?.comboStatus,
-        ProductNames: comboData?.ProductNames,
+        ProductNames: productNames || [],
       });
+      const productNamesToSet = productNames || [];
+      setProductNames(productNamesToSet);
+
       if (comboData.comboImg) {
         setImagePreview(comboData.comboImg);
         setFile(null);
       } else {
         form.resetFields();
         setImagePreview(undefined);
+        setProductNames([]);
       }
     }
   }, [comboData, isEditCombo]);
+
+  useEffect(() => {
+    if (!isEditCombo) {
+      setImagePreview(undefined);
+      setFile(null);
+      form.resetFields();
+      setFormValues(initialFormValues);
+      setProductNames([]);
+    }
+  }, [comboData, isEditCombo, form]);
 
   const onSubmitForm = (values: {
     ComboName: string;
