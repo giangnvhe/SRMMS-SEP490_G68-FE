@@ -1,7 +1,6 @@
 import {
   ClockCircleOutlined,
-  LoadingOutlined,
-  TeamOutlined,
+  LoadingOutlined
 } from "@ant-design/icons";
 import { DatePicker, Form, InputNumber, Select, Spin, TimePicker } from "antd";
 import { AxiosError, AxiosResponse } from "axios";
@@ -10,7 +9,6 @@ import moment from "moment";
 import { useEffect } from "react";
 import { useMutation } from "react-query";
 import ButtonComponent from "~/components/ButtonComponent";
-import InputComponent from "~/components/InputComponent";
 import useNotification from "~/hooks/useNotification";
 import {
   BookingData,

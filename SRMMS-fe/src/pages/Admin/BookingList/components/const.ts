@@ -5,6 +5,6 @@ export const statusOptions = [
 ];
 
 export const shiftOptions = [
-  { label: "Ca sáng", value: "Ca sáng" },
-  { label: "Ca tối", value: "Ca tối" },
+  { label: "Ca trưa", value: "Ca Trưa" },
+  { label: "Ca tối", value: "Ca Tối" },
 ];
