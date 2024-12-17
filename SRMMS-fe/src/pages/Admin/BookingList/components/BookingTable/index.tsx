@@ -1,4 +1,4 @@
-import { Col, Form, FormInstance, Row, Select, TableProps } from "antd";
+import { Col, Form, FormInstance, Input, Row, Select, TableProps } from "antd";
 import { PAGE_NUMBER, PAGE_SIZE } from "~/common/const/pagingation";
 import ButtonComponent from "~/components/ButtonComponent";
 import DatePickerComponent from "~/components/DatePickerComponent";
@@ -42,6 +42,11 @@ const BookingTable = ({
     <div>
       <Form form={form} onFinish={onSubmitTable} layout="horizontal">
         <Row gutter={8}>
+          <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
+            <Form.Item name="phoneBooking" label="Số điện thoại">
+              <Input placeholder="Nhập số điện thoại" />
+            </Form.Item>
+          </Col>
           <Col md={{ span: 6 }} sm={{ span: 10 }} xs={{ span: 24 }}>
             <Form.Item name="statusId" label="Trạng thái">
               <Select
