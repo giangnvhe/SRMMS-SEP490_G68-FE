@@ -39,7 +39,7 @@ export const downloadRevenueAsExcel = (
   // Daily Revenue Worksheet
   const worksheetData = data.map((item) => ({
     Ngày: item.name,
-    "Doanh thu": item.revenue,
+    "Doanh thu": `${item.revenue} VNĐ`,
   }));
   const worksheet = XLSX.utils.json_to_sheet(worksheetData);
   XLSX.utils.book_append_sheet(workbook, worksheet, "Doanh thu theo ngày");
@@ -91,9 +91,9 @@ export const downloadRevenueAsExcel = (
       },
       {
         "Tiêu đề": "Doanh thu trung bình/đơn",
-        "Giá trị": (
+        "Giá trị": `${(
           additionalData.totalRevenue / additionalData.orders.length
-        ).toFixed(2),
+        ).toFixed(2)} VNĐ`,
       },
     ];
     const summaryWorksheet = XLSX.utils.json_to_sheet(summaryData);
