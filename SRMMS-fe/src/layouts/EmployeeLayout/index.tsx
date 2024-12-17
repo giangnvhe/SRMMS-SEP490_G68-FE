@@ -4,15 +4,14 @@ import { Outlet } from "react-router-dom";
 import { BREAKPOINT_SCREEN } from "~/common/const/const";
 import Spinner from "~/components/Spiner";
 import { useWindowSize } from "~/hooks/useWindowSize";
-import NavStaff from "../KitchenLayout/components/NavStaff";
 import classNames from "classnames";
 import styles from "./index.module.scss";
 import SidebarStaff from "./components/SidebarStaff";
+import NavStaff from "~/components/Nav";
 
 const cx = classNames.bind(styles);
 
 const EmployeeLayout = () => {
-
   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
   const resize = useWindowSize();
   const handleShowSideBar = () => {
@@ -34,51 +33,51 @@ const EmployeeLayout = () => {
 
   return (
     <ConfigProvider
-    theme={{
-      token: {
-        colorPrimary: "#08979C",
-      },
-      components: {
-        Button: {
-          primaryShadow: "0px 10px 20px -10px #08979C",
-          borderRadius: 2,
-          borderRadiusLG: 2,
+      theme={{
+        token: {
+          colorPrimary: "#08979C",
         },
-        Input: {
-          borderRadius: 2,
-          borderRadiusLG: 2,
+        components: {
+          Button: {
+            primaryShadow: "0px 10px 20px -10px #08979C",
+            borderRadius: 2,
+            borderRadiusLG: 2,
+          },
+          Input: {
+            borderRadius: 2,
+            borderRadiusLG: 2,
+          },
+          InputNumber: {
+            borderRadius: 2,
+            borderRadiusLG: 2,
+          },
+          Select: {
+            borderRadius: 2,
+            borderRadiusLG: 2,
+          },
+          DatePicker: {
+            borderRadius: 2,
+            borderRadiusLG: 2,
+          },
         },
-        InputNumber: {
-          borderRadius: 2,
-          borderRadiusLG: 2,
-        },
-        Select: {
-          borderRadius: 2,
-          borderRadiusLG: 2,
-        },
-        DatePicker: {
-          borderRadius: 2,
-          borderRadiusLG: 2,
-        },
-      },
-    }}
-  >
-    <div>
-      <NavStaff
-        isOpenSideBar={isOpenSideBar}
-        handleHiddenSideBar={handleHiddenSideBar}
-        handleShowSideBar={handleShowSideBar}
-      />
-      <div className={cx("admin-layout")}>
-        <SidebarStaff isOpenSideBar={isOpenSideBar} isAdmin />
-        <div className="body-layout">
-          <Suspense fallback={<Spinner />}>
-            <Outlet />
-          </Suspense>
+      }}
+    >
+      <div>
+        <NavStaff
+          isOpenSideBar={isOpenSideBar}
+          handleHiddenSideBar={handleHiddenSideBar}
+          handleShowSideBar={handleShowSideBar}
+        />
+        <div className={cx("admin-layout")}>
+          <SidebarStaff isOpenSideBar={isOpenSideBar} isAdmin />
+          <div className="body-layout">
+            <Suspense fallback={<Spinner />}>
+              <Outlet />
+            </Suspense>
+          </div>
         </div>
       </div>
-    </div>
-  </ConfigProvider>
+    </ConfigProvider>
   );
 };
 

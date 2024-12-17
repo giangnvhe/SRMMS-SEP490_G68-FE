@@ -20,11 +20,25 @@ import {
 import classNames from "classnames";
 import { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import socket from "~/common/const/mockSocket";
+// import socket from "~/common/const/mockSocket";
 import logo from "../../assets/images/logo2.png";
 import styles from "./index.module.scss";
 import { useAuth } from "~/context/authProvider";
 import useNotification from "~/hooks/useNotification";
+import { io, Socket } from "socket.io-client";
+import { BookingRequest } from "~/services/booking";
+const WS_URL = "http://localhost:5000";
+
+interface ServerToClientEvents {
+  "new-message": (message: string, username: string) => void;
+}
+
+interface ClientToServerEvents {
+  booking: (data: BookingRequest) => void;
+  "send-message": (message: string, username: string) => void;
+}
+
+export type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 interface Props {
   isOpenSideBar: boolean;
@@ -52,14 +66,17 @@ const NavComponent = ({
   const [notificationVisible, setNotificationVisible] = useState(false);
   const { user, removeToken } = useAuth();
   const { successMessage } = useNotification();
+  const [socket, setSocket] = useState<MySocket>();
 
   useEffect(() => {
-    socket.on("booking", (bookingData) => {
+    const socket = io(WS_URL);
+    setSocket(socket);
+    socket.on("receive-booking", (bookingData) => {
       addNotification(bookingData);
     });
 
     // New order listener
-    socket.on("newOrder", (orderData) => {
+    socket.on("receive-order", (orderData) => {
       const newNotification: Notification = {
         id: `order-${Date.now()}`,
         message: orderData.message,
@@ -68,11 +85,6 @@ const NavComponent = ({
       setNotification((prev) => [...prev, newNotification]);
       setUnreadCount((prev) => prev + 1);
     });
-
-    return () => {
-      socket.off("booking");
-      socket.off("newOrder");
-    };
   }, []);
 
   const addNotification = (data: any) => {

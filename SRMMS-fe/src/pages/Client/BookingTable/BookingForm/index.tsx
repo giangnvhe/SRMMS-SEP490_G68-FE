@@ -9,15 +9,37 @@ import { AxiosError, AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import { useMutation } from "react-query";
-import socket from "~/common/const/mockSocket";
+// import socket from "~/common/const/mockSocket";
 import ButtonComponent from "~/components/ButtonComponent";
 import InputComponent from "~/components/InputComponent";
 import useNotification from "~/hooks/useNotification";
 import { Booking, BookingRequest } from "~/services/booking";
+// import socket from "socket.io-client";
+import { io, Socket } from "socket.io-client";
+import { useEffect, useState } from "react";
+
+const WS_URL = "http://localhost:5000";
+
+interface ServerToClientEvents {
+  "new-message": (message: string, username: string) => void;
+}
+
+interface ClientToServerEvents {
+  "booking": (data: BookingRequest) => void;
+  "send-message": (message: string, username: string) => void;
+}
+
+export type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 const BookingForm = () => {
   const [form] = Form.useForm();
   const { successMessage, errorMessage } = useNotification();
+  const [socket, setSocket] = useState<MySocket>();
+
+  useEffect(() => {
+    const socket = io(WS_URL);
+    setSocket(socket);
+  }, [form]);
 
   const bookingMutation = useMutation(Booking, {
     onSuccess: (success: AxiosResponse<{ message: string }>) => {
@@ -51,6 +73,8 @@ const BookingForm = () => {
       hourBooking: values.hourBooking,
       numberOfPeople: values.numberOfPeople,
     };
+    const socket = io(WS_URL);
+    setSocket(socket);
     bookingMutation.mutate(bookingData);
     socket.emit("booking", bookingData);
   };
