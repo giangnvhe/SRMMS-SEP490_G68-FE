@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import { getRevenueOrder, ResponseRevenue } from "~/services/order";
 import { downloadRevenueAsExcel, groupOrdersByDayOfWeek } from "../const";
+import { formatVND } from "~/common/utils/formatPrice";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -54,7 +55,7 @@ const RevenueChart = () => {
               Tổng Doanh Thu
             </Title>
             <Text strong className="text-2xl text-green-500">
-              ${data?.totalRevenue?.toLocaleString() || "0"}
+              {formatVND(data?.totalRevenue) || "0"}
             </Text>
           </div>
           <Button
@@ -100,7 +101,7 @@ const RevenueChart = () => {
             disabled={isLoading}
           >
             {[...Array(4)].map((_, i) => (
-              <Option key={i + 1} value={i + 1}>{`Week ${i + 1}`}</Option>
+              <Option key={i + 1} value={i + 1}>{`Tuần ${i + 1}`}</Option>
             ))}
           </Select>
         </Space>
@@ -123,11 +124,13 @@ const RevenueChart = () => {
           <LineChart data={transformedData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis tickFormatter={(value) => `$${value.toLocaleString()}`} />
+            <YAxis
+              tickFormatter={(value) => `${formatVND(value).toLocaleString()}`}
+            />
             <Tooltip
               formatter={(value) => [
-                `$${Number(value).toLocaleString()}`,
-                "Revenue",
+                `${formatVND(Number(value))}`,
+                "Doanh thu",
               ]}
             />
             <Legend />
