@@ -120,6 +120,7 @@ const AddOrEditVoucher = ({ refetch, voucherData, onCancel }: IProps) => {
       status: values.status !== undefined ? values.status : true,
       discountType: values.discountType,
     };
+    console.log("🚀 ~ AddOrEditVoucher ~ formData:", formData);
     if (isEditVoucher) {
       handleUpdateEmployee.mutate({
         id: voucherData?.codeId,
