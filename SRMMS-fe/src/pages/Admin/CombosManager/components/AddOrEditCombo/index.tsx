@@ -138,8 +138,15 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
   useEffect(() => {
     if (isModalVisible) {
       const fetchProducts = async () => {
-        const response = await getListProduct();
-        setAvailableProducts(response?.data);
+        try {
+          const response = await getListProduct();
+          const filteredProducts = response?.data.filter(
+            (product) => product.status === true
+          );
+          setAvailableProducts(filteredProducts);
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
       };
       fetchProducts();
     }
