@@ -11,13 +11,15 @@ import {
   TableColumnsType,
   Typography,
 } from "antd";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatVND } from "~/common/utils/formatPrice";
 import { PaymentOrder, RequestPaymentOrder } from "~/services/order";
 import { getOrderTable, TableOrderData } from "~/services/orderTable";
 import PaymentMethod from "./components/PaymentMethod";
+import { getTableId, TableData } from "~/services/table";
+import { AxiosResponse } from "axios";
 
 const ORDER_HEIGHT_CONTAINER = "calc(100vh - 64px)";
 const ORDER_TABLE_HEIGHT = "calc(100vh - 64px - 64px - 64px - 150px)";
@@ -33,7 +35,26 @@ interface DataType {
 const Payment = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [tableDatass, setTableData] = useState<TableData | null>(null);
+
   const [showInvoice, setShowInvoice] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      const fetchTableData = async () => {
+        try {
+          const response: AxiosResponse<TableData> = await getTableId(
+            Number(id)
+          );
+          setTableData(response.data);
+        } catch (error) {
+          message.error("Failed to fetch table data.");
+          console.error(error);
+        }
+      };
+      fetchTableData();
+    }
+  }, [id]);
 
   const { data, isLoading, isError, error } = useQuery(
     ["orderData", id],
@@ -180,7 +201,7 @@ const Payment = () => {
   };
 
   return (
-    <div style={{ padding: "24px", height: "100%" }} >
+    <div style={{ padding: "24px", height: "100%" }}>
       <Row gutter={24}>
         <Col xs={24} md={16}>
           <Card bordered={false} style={{ height: ORDER_HEIGHT_CONTAINER }}>
@@ -210,7 +231,7 @@ const Payment = () => {
                 <div>
                   <TableOutlined style={{ marginRight: "8px" }} />
                   <Typography.Text style={{ marginRight: "16px" }}>
-                    {`Bàn: ${id}`}
+                    {tableDatass?.tableName}
                   </Typography.Text>
                 </div>
               </div>
@@ -272,7 +293,7 @@ const Payment = () => {
               isPaying={paymentMutation.isLoading}
               showInvoice={showInvoice}
               handleCloseInvoice={handleCloseInvoice}
-              orderData = {data?.data}
+              orderData={data?.data}
             />
           </Card>
         </Col>

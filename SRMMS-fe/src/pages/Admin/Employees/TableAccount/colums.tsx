@@ -67,7 +67,7 @@ const UseColumn = ({ onSelected, onOk }: IProps) => {
       ),
     },
     {
-      title: "Action",
+      title: "Hành động",
       width: "50px",
       fixed: "right",
       align: "center",

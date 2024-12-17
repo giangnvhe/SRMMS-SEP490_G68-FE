@@ -50,7 +50,7 @@ const AddOrEditCategory = ({ onCancel, categoryData, refetch }: IProps) => {
       onError: (error: AxiosError<{ message: string }>) => {
         errorMessage({
           description:
-            (error as AxiosError).message ||
+            error.response?.data.message ||
             "Đã có lỗi xảy ra, chỉnh sửa không thành công!!",
         });
       },

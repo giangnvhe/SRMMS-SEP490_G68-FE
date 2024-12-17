@@ -1,22 +1,33 @@
-import { Card, Col, QRCode, Row, Spin } from "antd"; // Import from Ant Design
+import { Card, Col, QRCode, Row, Select, Spin } from "antd"; // Import from Ant Design
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "~/components/ButtonComponent";
 import { getTables, TableData } from "~/services/table";
 import { HEIGHT_CONTENT_CONTAINER } from "../const";
+import { useState } from "react";
 
 const QRCodeScreen = () => {
   const navigate = useNavigate();
   const baseUrl = `http://srmms-sep-490-g68-fe.vercel.app/menu-client`;
 
   const {
-    data: tableData = [], // Default to an empty array if data is undefined
+    data: tableData = [],
     isLoading,
     isError,
     error,
   } = useQuery<TableData[]>(["tables"], async () => {
     const response = await getTables();
     return response.data;
+  });
+
+  const [selectedShift, setSelectedShift] = useState<string>("Lunch");
+
+  const handleShiftChange = (value: string) => {
+    setSelectedShift(value);
+  };
+
+  const filteredTableData = tableData.filter((table) => {
+    return table.shift === selectedShift; // Assuming table has a "shift" field
   });
 
   if (isLoading) {
@@ -44,10 +55,17 @@ const QRCodeScreen = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      {/* Header */}
       <header className="p-2 bg-white shadow-md">
         <h2 className="text-3xl font-bold text-center">Danh Sách Mã QR Bàn</h2>
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-between mt-4">
+          <Select
+            value={selectedShift}
+            onChange={handleShiftChange}
+            style={{ width: 120 }}
+          >
+            <Select.Option value="Lunch">Trưa</Select.Option>
+            <Select.Option value="Dinner">Tối</Select.Option>
+          </Select>
           <ButtonComponent btnType="back" onClick={handleBack}>
             Quay lại
           </ButtonComponent>
@@ -61,8 +79,9 @@ const QRCodeScreen = () => {
           style={{ height: HEIGHT_CONTENT_CONTAINER }}
         >
           <Row gutter={[24, 24]}>
-            {Array.isArray(tableData) && tableData.length > 0 ? (
-              tableData.map((table) => {
+            {Array.isArray(filteredTableData) &&
+            filteredTableData.length > 0 ? (
+              filteredTableData.map((table) => {
                 const qrValue = `${baseUrl}/${table.tableId}`;
                 return (
                   <Col xs={24} sm={12} md={8} lg={6} key={table.tableId}>
@@ -87,7 +106,7 @@ const QRCodeScreen = () => {
               })
             ) : (
               <div className="text-center text-gray-500">
-                No tables available
+                No tables available for {selectedShift}
               </div>
             )}
           </Row>

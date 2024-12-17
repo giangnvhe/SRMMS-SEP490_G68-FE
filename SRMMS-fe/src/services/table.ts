@@ -16,6 +16,7 @@ export interface TableStatusResponse {
   data: TableStatusData[];
 }
 
+
 export interface TableStatusData {
   statusId: number;
   statusName: string;

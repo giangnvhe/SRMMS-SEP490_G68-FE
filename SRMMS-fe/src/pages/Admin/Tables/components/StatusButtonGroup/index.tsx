@@ -29,7 +29,7 @@ const StatusButtonGroup = ({
     "Tất cả",
     "Trống",
     "Đang sử dụng",
-    "Đã đặt",
+    "Đã đặt bàn",
     "Đang sửa chữa",
   ];
   const shifts = [

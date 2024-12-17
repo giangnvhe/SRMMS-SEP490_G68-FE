@@ -95,32 +95,32 @@ function UseColumn({ setSelectedBooking, onReject, onSelected }: IProps) {
       align: "center",
       render: (_, record) => (
         <Space size="middle">
-          <Space size="middle">
+          {record.statusName !== "Hủy" && record.statusName !== "Đã duyệt" && (
             <Tooltip title="Duyệt">
               <CheckOutlined
                 className="text-green-500 cursor-pointer hover:text-green-700"
                 onClick={() => setSelectedBooking(record)}
               />
             </Tooltip>
-            {/* Existing reject button */}
-          </Space>
+          )}
 
-          {/* Nút "Reject" */}
-          <Tooltip title="Từ chối">
-            <CloseOutlined
-              onClick={() =>
-                comfirmMessage({
-                  description: `Bạn có chắc chắn muốn từ chối ${record.nameBooking}?`,
-                  onSubmit: () => {
-                    if (record.bookingId) {
-                      onReject(record.bookingId);
-                    }
-                  },
-                })
-              }
-              className="text-red-500 cursor-pointer hover:text-red-700"
-            />
-          </Tooltip>
+          {record.statusName !== "Hủy" && (
+            <Tooltip title="Từ chối">
+              <CloseOutlined
+                onClick={() =>
+                  comfirmMessage({
+                    description: `Bạn có chắc chắn muốn từ chối ${record.nameBooking}?`,
+                    onSubmit: () => {
+                      if (record.bookingId) {
+                        onReject(record.bookingId);
+                      }
+                    },
+                  })
+                }
+                className="text-red-500 cursor-pointer hover:text-red-700"
+              />
+            </Tooltip>
+          )}
 
           <Tooltip title="Chỉnh sửa">
             <EditOutlined

@@ -222,6 +222,7 @@ const Register = () => {
                   ]}
                 />
               </div>
+              
               <div>
                 <InputComponent
                   name="password"
