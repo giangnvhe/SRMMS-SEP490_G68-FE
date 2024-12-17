@@ -27,6 +27,7 @@ import { useAuth } from "~/context/authProvider";
 import useNotification from "~/hooks/useNotification";
 import { io, Socket } from "socket.io-client";
 import { BookingRequest } from "~/services/booking";
+import { permissionObject } from "~/common/const/permission";
 const WS_URL = "http://localhost:5000";
 
 interface ServerToClientEvents {
@@ -164,10 +165,23 @@ const NavComponent = ({
         renderItem={(notif) => (
           <List.Item
             onClick={() => {
-              if (notif.message.includes("đã đặt bàn")) {
-                navigate("/admin/booking-list");
-              } else if (notif.message.includes("đã gọi món")) {
-                navigate("/admin/order-list");
+              if (user) {
+                if (
+                  user.roleName === permissionObject.ADMIN ||
+                  user.roleName === permissionObject.MANAGER
+                ) {
+                  if (notif.message.includes("đã đặt bàn")) {
+                    navigate("/admin/booking-list");
+                  } else if (notif.message.includes("đã gọi món")) {
+                    navigate("/admin/order-list");
+                  }
+                } else {
+                  if (notif.message.includes("đã đặt bàn")) {
+                    navigate("/booking-list");
+                  } else if (notif.message.includes("đã gọi món")) {
+                    navigate("/order-list");
+                  }
+                }
               }
             }}
             key={notif.id}

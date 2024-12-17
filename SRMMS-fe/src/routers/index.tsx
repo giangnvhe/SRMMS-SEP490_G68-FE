@@ -196,14 +196,6 @@ const RouterComponent = () => {
           element: <EmployeeLayout />,
           children: [
             {
-              path: "/invoice",
-              element: (
-                <StaffCASHIER>
-                  <InvoiceDialog />
-                </StaffCASHIER>
-              ),
-            },
-            {
               path: "/tables",
               element: (
                 <Staff>
@@ -338,6 +330,14 @@ const RouterComponent = () => {
               element: (
                 <AdminOfficer>
                   <BookingList />
+                </AdminOfficer>
+              ),
+            },
+            {
+              path: "/admin/qr-code",
+              element: (
+                <AdminOfficer>
+                  <QRCodeScreen />
                 </AdminOfficer>
               ),
             },

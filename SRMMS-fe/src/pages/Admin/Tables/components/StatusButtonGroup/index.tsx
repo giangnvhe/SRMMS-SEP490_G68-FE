@@ -90,7 +90,14 @@ const StatusButtonGroup = ({
           <ButtonComponent
             onClick={() => {
               startTransition(() => {
-                navigate("/qr-code");
+                if (
+                  user.roleName === permissionObject.ADMIN ||
+                  user.roleName === permissionObject.MANAGER
+                ) {
+                  navigate("/admin/qr-code");
+                } else {
+                  navigate("/qr-code");
+                }
               });
             }}
             className="text-white font-medium rounded-md px-4 py-2 flex items-center gap-2 w-full sm:w-auto"
