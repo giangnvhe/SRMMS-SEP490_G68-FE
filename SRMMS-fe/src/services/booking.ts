@@ -43,6 +43,7 @@ export interface BookingData {
   numberOfPeople: number;
   nameBooking: string;
   phoneBooking: string;
+  tableNames: string;
   shift: string;
   statusId: number;
   statusName: string;

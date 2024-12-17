@@ -42,6 +42,13 @@ function UseColumn({ setSelectedBooking, onReject, onSelected }: IProps) {
       width: 100,
     },
     {
+      title: "Bàn",
+      dataIndex: "tableNames",
+      align: "left",
+      width: 100,
+      render: (tableNames) => tableNames.join(", "),
+    },
+    {
       title: "Giờ Đặt Bàn",
       dataIndex: "hourBooking",
       align: "left",
