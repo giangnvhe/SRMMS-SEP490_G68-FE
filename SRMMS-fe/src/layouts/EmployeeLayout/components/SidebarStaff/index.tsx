@@ -45,37 +45,23 @@ const SidebarStaff = ({ isOpenSideBar, isAdmin }: Props) => {
             icon: <AppstoreOutlined />,
           },
         ]
-      : []),
-    {
-      key: "/tables",
-      label: "Danh sách bàn",
-      icon: <TableOutlined />,
-    },
-    {
-      key: "/product",
-      label: "Danh sách món",
-      icon: <FolderOpenOutlined />,
-    },
-    {
-      key: "/combos-list",
-      label: "Danh sách combo",
-      icon: <FontAwesomeIcon icon={faTh} />,
-    },
-    {
-      key: "/order-list",
-      label: "Danh sách Đơn",
-      icon: <FontAwesomeIcon icon={faClipboardList} />,
-    },
-    {
-      key: "/voucher",
-      label: "Danh sách Voucher",
-      icon: <FontAwesomeIcon icon={faTicket} />,
-    },
-    {
-      key: "/booking-list",
-      label: "Danh sách đặt bàn",
-      icon: <FontAwesomeIcon icon={faClock} />,
-    },
+      : [
+          {
+            key: "/tables",
+            label: "Danh sách bàn",
+            icon: <TableOutlined />,
+          },
+          {
+            key: "/order-list",
+            label: "Danh sách Đơn",
+            icon: <FontAwesomeIcon icon={faClipboardList} />,
+          },
+          {
+            key: "/booking-list",
+            label: "Danh sách đặt bàn",
+            icon: <FontAwesomeIcon icon={faClock} />,
+          },
+        ]),
   ];
 
   useEffect(() => {
