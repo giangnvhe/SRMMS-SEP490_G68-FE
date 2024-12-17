@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import useNotification from "~/hooks/useNotification";
 import { AxiosError } from "axios";
 import EditOrder from "./components/UpdateOrder";
+import { useLocation } from "react-router-dom";
 
 const OrderManager = () => {
   const [form] = Form.useForm<FormFields>();
@@ -17,10 +18,18 @@ const OrderManager = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const { errorMessage } = useNotification();
+  const location = useLocation();
 
   const getListOrders = useQuery("getListOrders", () =>
     getListOrder(form.getFieldsValue(true))
   );
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("timestamp")) {
+      getListOrders.refetch();
+    }
+  }, [location.search]);
 
   const onSelected = (id: OrderData | undefined) => {
     setSelectedAccount(id);

@@ -20,13 +20,12 @@ import {
 import classNames from "classnames";
 import { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "~/assets/images/logo2.png";
-import styles from "./index.module.scss";
-import { useAuth } from "~/context/authProvider";
-import socket from "~/common/const/socketKitchen";
-import useNotification from "~/hooks/useNotification";
 import { io, Socket } from "socket.io-client";
+import logo from "~/assets/images/logo2.png";
+import { useAuth } from "~/context/authProvider";
+import useNotification from "~/hooks/useNotification";
 import { BookingRequest } from "~/services/booking";
+import styles from "./index.module.scss";
 
 interface Props {
   isOpenSideBar: boolean;
@@ -106,8 +105,6 @@ const NavStaff = ({
     });
   }, []);
 
-  
-
   const handleNotificationVisibleChange = (visible: boolean) => {
     setNotificationVisible(visible);
     if (visible) {
@@ -176,11 +173,14 @@ const NavStaff = ({
         dataSource={notification}
         renderItem={(notif) => (
           <List.Item
-            onClick={() => navigate("/kitchen")}
+            onClick={() => {
+              navigate(`/kitchen?timestamp=${Date.now()}`);
+            }}
             key={notif.id}
             style={{
               borderBottom: "1px solid #f0f0f0",
               padding: "10px 15px",
+              cursor: "pointer",
               background: notif.status === "pending" ? "#fffbe6" : "#ffffff",
             }}
           >

@@ -8,6 +8,7 @@ import {
 } from "~/services/kitchen";
 import TableKitchen from "./components/KitchenTable";
 import Title from "antd/es/typography/Title";
+import { useLocation } from "react-router-dom";
 
 const Kitchen = () => {
   const [form] = Form.useForm<FormFields>();
@@ -15,9 +16,18 @@ const Kitchen = () => {
   const [selectedProduct, setSelectedProduct] = useState<
     OrderKitchenData | undefined
   >(undefined);
+  const location = useLocation();
+
   const getListOrders = useQuery("getListOrders", () =>
     getListOrderKitchen(form.getFieldsValue(true))
   );
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("timestamp")) {
+      getListOrders.refetch();
+    }
+  }, [location.search]);
 
   const onSelected = (id: OrderKitchenData | undefined) => {
     setSelectedProduct(id);

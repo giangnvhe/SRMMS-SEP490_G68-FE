@@ -171,15 +171,15 @@ const NavComponent = ({
                   user.roleName === permissionObject.MANAGER
                 ) {
                   if (notif.message.includes("đã đặt bàn")) {
-                    navigate("/admin/booking-list");
+                    navigate(`/admin/booking-list?timestamp=${Date.now()}`);
                   } else if (notif.message.includes("đã gọi món")) {
-                    navigate("/admin/order-list");
+                    navigate(`/admin/order-list?timestamp=${Date.now()}`);
                   }
                 } else {
                   if (notif.message.includes("đã đặt bàn")) {
-                    navigate("/booking-list");
+                    navigate(`/booking-list?timestamp=${Date.now()}`);
                   } else if (notif.message.includes("đã gọi món")) {
-                    navigate("/order-list");
+                    navigate(`/order-list?timestamp=${Date.now()}`);
                   }
                 }
               }
@@ -188,6 +188,7 @@ const NavComponent = ({
             style={{
               borderBottom: "1px solid #f0f0f0",
               padding: "10px 15px",
+              cursor: "pointer",
               background: notif.status === "pending" ? "#fffbe6" : "#ffffff",
             }}
           >
