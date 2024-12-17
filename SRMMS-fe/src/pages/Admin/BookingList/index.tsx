@@ -2,6 +2,7 @@ import { Form, Modal } from "antd";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 import useNotification from "~/hooks/useNotification";
 import {
   BookingData,
@@ -9,10 +10,9 @@ import {
   FormFields,
   getListBooking,
 } from "~/services/booking";
-import BookingTable from "./components/BookingTable";
 import ApprovalModal from "./components/ApprovalModal";
+import BookingTable from "./components/BookingTable";
 import UpdateBooking from "./components/EditBooking";
-import { HubConnectionBuilder } from "@microsoft/signalr";
 
 const BookingList = () => {
   const [form] = Form.useForm<FormFields>();
@@ -22,10 +22,18 @@ const BookingList = () => {
     BookingData | undefined
   >(undefined);
   const [openModal, setOpenModal] = useState(false);
+  const location = useLocation();
 
   const getListBookings = useQuery("getListBooking", () =>
     getListBooking(form.getFieldsValue(true))
   );
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("timestamp")) {
+      getListBookings.refetch();
+    }
+  }, [location.search]);
 
   const onSelected = (id: BookingData | undefined) => {
     setSelectedBooking(id);
