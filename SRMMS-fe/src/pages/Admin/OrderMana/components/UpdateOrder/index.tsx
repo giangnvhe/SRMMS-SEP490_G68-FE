@@ -13,6 +13,7 @@ import { ProductTableRequest, updateProductTable } from "~/services/orderTable";
 import { formatVND } from "~/common/utils/formatPrice";
 import socket from "~/common/const/socketKitchen";
 import { AxiosError, AxiosResponse } from "axios";
+import { io, Socket } from "socket.io-client";
 
 interface IProps {
   orderData: OrderData | undefined;
@@ -37,12 +38,35 @@ interface ProductDetail {
   price: number;
 }
 
+const WS_URL = "http://localhost:5000";
+
+interface ServerToClientEvents {
+  "receive-order-update": (data: {
+    orderId: number | string | undefined;
+    totalMoney: number;
+    updatedAt: string;
+  }) => void;
+}
+
+interface ClientToServerEvents {
+  orderUpdated: (data: {
+    orderId: number | string | undefined;
+    totalMoney: number;
+    comboDetails: ComboDetail[];
+    productDetails: ProductDetail[];
+    updatedAt: string;
+  }) => void;
+}
+
+type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
+
 const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
   const [form] = Form.useForm();
   const { successMessage, errorMessage } = useNotification();
 
   const [comboDetails, setComboDetails] = useState<ComboDetail[]>([]);
   const [productDetails, setProductDetails] = useState<ProductDetail[]>([]);
+  const [socket, setSocket] = useState<MySocket>();
 
   const totalMoney = useMemo(() => {
     const comboTotal = comboDetails.reduce(
@@ -130,6 +154,41 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
     }
   }, [orderData]);
 
+  useEffect(() => {
+    const newSocket = io(WS_URL, {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
+
+    // Socket connection success handler
+    newSocket.on("connect", () => {
+      console.log("Socket connected successfully");
+    });
+
+    // Socket connection error handler
+    newSocket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+    });
+
+    // Listen for order update confirmations
+    newSocket.on("receive-order-update", (data) => {
+      console.log("Order update received:", data);
+      successMessage({
+        description: `Đơn hàng ${data.orderId} đã được cập nhật lúc ${new Date(
+          data.updatedAt
+        ).toLocaleString()}`,
+      });
+    });
+
+    setSocket(newSocket);
+
+    // Cleanup socket connection on component unmount
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
   const onSubmitForm = async () => {
     try {
       await form.validateFields();
@@ -155,13 +214,21 @@ const EditOrder: React.FC<IProps> = ({ orderData, refetch, onCancel }) => {
             },
             {
               onSuccess: () => {
-                socket.emit("orderUpdated", {
-                  orderId: orderData?.tableId,
-                  totalMoney,
-                  comboDetails,
-                  productDetails,
-                  updatedAt: new Date().toISOString(),
-                });
+                try {
+                  socket?.emit("orderUpdated", {
+                    orderId: orderData?.tableId,
+                    totalMoney,
+                    comboDetails,
+                    productDetails,
+                    updatedAt: new Date().toISOString(),
+                  });
+                  console.log("Order update event emitted successfully");
+                } catch (error) {
+                  console.error("Error emitting order update event:", error);
+                  errorMessage({
+                    description: "Không thể gửi cập nhật đơn hàng",
+                  });
+                }
               },
             }
           );

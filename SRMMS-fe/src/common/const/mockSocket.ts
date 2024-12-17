@@ -1,41 +1,8 @@
-interface Events {
-  [key: string]: (data: any) => void;
-}
+import { io, Socket } from "socket.io-client";
 
-const socket = {
-  events: {} as Events,
+// "undefined" means the URL will be computed from the `window.location` object
+const URL = "http://localhost:5000";
 
-  emit(eventName: string, data: any) {
-    console.log(`Event Emitted: ${eventName}`, data);
-
-    if (this.events[eventName]) {
-      this.events[eventName](data);
-    }
-
-    const event = { eventName, data, timestamp: Date.now() };
-    localStorage.setItem("mockSocketEvent", JSON.stringify(event));
-  },
-
-  on(eventName: string, callback: (data: any) => void) {
-    this.events[eventName] = callback;
-  },
-
-  off(eventName: string) {
-    delete this.events[eventName];
-  },
-
-  initialize() {
-    window.addEventListener("storage", (event) => {
-      if (event.key === "mockSocketEvent" && event.newValue) {
-        const { eventName, data } = JSON.parse(event.newValue);
-        if (this.events[eventName]) {
-          this.events[eventName](data);
-        }
-      }
-    });
-  },
-};
-
-socket.initialize();
+const socket = io(URL);
 
 export default socket;

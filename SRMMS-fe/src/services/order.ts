@@ -56,7 +56,7 @@ interface OrderDataResponse {
   };
 }
 
-interface AddToOrderRequest {
+export interface AddToOrderRequest {
   tableId: number;
   orderDate: string;
   totalMoney: number;
@@ -148,7 +148,6 @@ export interface dataResponse {
   discountId: number;
   discountValue: number;
 }
-
 
 export const PaymentOrder = async (
   id: number,

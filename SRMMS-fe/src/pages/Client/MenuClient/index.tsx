@@ -1,22 +1,47 @@
 import { ClockCircleOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import { Button, Layout, message, Modal, Spin, Tooltip } from "antd";
+import { Button, Layout, message, Modal, Tooltip } from "antd";
+import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import { useMutation } from "react-query";
+import { useParams } from "react-router-dom";
+import socket from "~/common/const/mockSocket";
+import InputComponent from "~/components/InputComponent";
+import useNotification from "~/hooks/useNotification";
 import { CategoryData, getListCategory } from "~/services/category_product";
+import { CombosData, getLisComboProduct } from "~/services/combos";
+import { AddToOrder } from "~/services/order";
 import { ComboData, getListProduct, ProductData } from "~/services/product";
+import ComboContent from "../components/comboContent";
 import FilterDish from "../components/FilterDish";
 import FilterPrice from "../components/FilterPrice";
+import HistoryOrder from "../components/HistoryOrder";
 import MenuContent from "../components/MenuContent";
 import ViewCart from "../components/ViewCart";
-import { useMutation } from "react-query";
-import { AddToOrder } from "~/services/order";
-import { useParams } from "react-router-dom";
-import useNotification from "~/hooks/useNotification";
-import { AxiosError, AxiosResponse } from "axios";
-import InputComponent from "~/components/InputComponent";
-import { CombosData, getLisComboProduct } from "~/services/combos";
-import ComboContent from "../components/comboContent";
-import HistoryOrder from "../components/HistoryOrder";
-import socket from "~/common/const/mockSocket";
+import { io, Socket } from "socket.io-client";
+
+const WS_URL = "http://localhost:5000";
+
+interface ServerToClientEvents {
+  "receive-order": (data: {
+    tableId: number;
+    totalMoney: number;
+    message: string;
+  }) => void;
+  "receive-booking": (data: any) => void;
+  "new-message": (message: string, username: string) => void;
+}
+
+interface ClientToServerEvents {
+  newOrder: (data: {
+    tableId: number;
+    totalMoney: number;
+    message: string;
+  }) => void;
+  booking: (data: any) => void;
+  "send-message": (message: string, username: string) => void;
+}
+
+export type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 export interface CartItem extends ProductData {
   quantity: number;
@@ -43,6 +68,7 @@ const MenuClient = () => {
   const { successMessage, errorMessage } = useNotification();
   const [tableId, setTableId] = useState<number | null>(null);
   const [showHistory, setShowHistory] = useState(false);
+  const [socket, setSocket] = useState<MySocket>();
 
   const handleShowHistory = () => {
     if (id) {
@@ -52,6 +78,36 @@ const MenuClient = () => {
       message.error("Không tìm thấy mã bàn!");
     }
   };
+
+  useEffect(() => {
+    const newSocket = io(WS_URL, {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
+
+    newSocket.on("connect", () => {
+      console.log("Socket connected successfully");
+    });
+
+    newSocket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+      message.error("Failed to connect to server");
+    });
+
+    newSocket.on("receive-order", (data) => {
+      console.log("Received order:", data);
+      message.info(`Có đơn mới từ bàn ${data.tableId}: ${data.message}`);
+    });
+
+    // Set the socket state
+    setSocket(newSocket);
+
+    // Cleanup socket connection on component unmount
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []); // Em
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -244,25 +300,31 @@ const MenuClient = () => {
         0
       );
 
-      const orderData = {
-        tableId: Number(id),
-        orderDate: new Date().toISOString(),
-        totalMoney,
-        status: 1,
-        productDetails: productDetails,
-        comboDetails: comboDetails,
-      };
-    
-      orderMutation.mutate(orderData, {
-        onSuccess: () => {
-          socket.emit("newOrder", {
+    const orderData = {
+      tableId: Number(id),
+      orderDate: new Date().toISOString(),
+      totalMoney,
+      status: 1,
+      productDetails: productDetails,
+      comboDetails: comboDetails,
+    };
+
+    orderMutation.mutate(orderData, {
+      onSuccess: () => {
+        // Emit newOrder event with more detailed logging
+        try {
+          socket?.emit("newOrder", {
             tableId: Number(id),
             totalMoney,
             message: `Bàn ${id} đã gọi món`,
           });
+          console.log("Order event emitted successfully");
+        } catch (error) {
+          console.error("Error emitting order event:", error);
+          message.error("Không thể gửi đơn hàng");
         }
-      });
-    
+      },
+    });
   };
 
   const toggleCart = () => {

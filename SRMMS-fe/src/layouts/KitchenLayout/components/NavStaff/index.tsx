@@ -25,6 +25,8 @@ import styles from "./index.module.scss";
 import { useAuth } from "~/context/authProvider";
 import socket from "~/common/const/socketKitchen";
 import useNotification from "~/hooks/useNotification";
+import { io, Socket } from "socket.io-client";
+import { BookingRequest } from "~/services/booking";
 
 interface Props {
   isOpenSideBar: boolean;
@@ -41,6 +43,19 @@ interface Notification {
 
 const cx = classNames.bind(styles);
 
+const WS_URL = "http://localhost:5000";
+
+interface ServerToClientEvents {
+  "new-message": (message: string, username: string) => void;
+}
+
+interface ClientToServerEvents {
+  booking: (data: BookingRequest) => void;
+  "send-message": (message: string, username: string) => void;
+}
+
+export type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
+
 const NavStaff = ({
   isOpenSideBar,
   handleHiddenSideBar,
@@ -52,27 +67,46 @@ const NavStaff = ({
   const [notificationVisible, setNotificationVisible] = useState(false);
   const { user, removeToken } = useAuth();
   const { successMessage } = useNotification();
+  const [socket, setSocket] = useState<MySocket>();
+
+  // useEffect(() => {
+  //   socket.on("orderUpdated", (orderData) => {
+  //     const newNotification: Notification = {
+  //       id: `order-${orderData.orderId}`,
+  //       message: `Có đơn hàng mới được đưa tới bếp`,
+  //       status: "pending",
+  //     };
+
+  //     setNotification((prevNotifications) => [
+  //       newNotification,
+  //       ...prevNotifications,
+  //     ]);
+
+  //     setUnreadCount((prev) => prev + 1);
+  //   });
+
+  //   return () => {
+  //     socket.off("orderUpdated");
+  //   };
+  // }, []);
 
   useEffect(() => {
-    socket.on("orderUpdated", (orderData) => {
+    const socket = io(WS_URL);
+    setSocket(socket);
+
+    // New order listener
+    socket.on("receive-order-update", (orderData) => {
       const newNotification: Notification = {
         id: `order-${orderData.orderId}`,
         message: `Có đơn hàng mới được đưa tới bếp`,
         status: "pending",
       };
-
-      setNotification((prevNotifications) => [
-        newNotification,
-        ...prevNotifications,
-      ]);
-
+      setNotification((prev) => [...prev, newNotification]);
       setUnreadCount((prev) => prev + 1);
     });
-
-    return () => {
-      socket.off("orderUpdated");
-    };
   }, []);
+
+  
 
   const handleNotificationVisibleChange = (visible: boolean) => {
     setNotificationVisible(visible);

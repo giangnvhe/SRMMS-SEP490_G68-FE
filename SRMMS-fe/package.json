@@ -39,6 +39,7 @@
     "react-router-dom": "^6.26.2",
     "react-to-print": "^3.0.2",
     "recharts": "^2.13.3",
+    "socket.io-client": "^4.8.1",
     "uuid": "^11.0.3",
     "vietqr": "^1.1.9",
     "xlsx": "^0.18.5"
