@@ -11,6 +11,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import ButtonComponent from "~/components/ButtonComponent";
 import InputComponent from "~/components/InputComponent";
+import SwitchComponent from "~/components/SwitchComponent";
 import TextAreaComponent from "~/components/TextAreaComponent";
 import UploadComponent from "~/components/UploadComponent";
 import useNotification from "~/hooks/useNotification";
@@ -208,11 +209,11 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
     ProductNames: string[];
   }) => {
     const formData: NewComboRequest = {
-      ComboName: values.ComboName,
+      ComboName: values.ComboName.trim(),
       ComboDescription: values.ComboDescription,
       ComboMoney: values.ComboMoney,
       ComboImg: file,
-      ComboStatus: true,
+      ComboStatus: isEditCombo ? values.ComboStatus : true,
       ProductNames: productNames,
     };
     if (isEditCombo) {
@@ -359,6 +360,15 @@ const AddOrEditCombos = ({ refetch, comboData, onCancel }: IProps) => {
                 className="w-96"
               />
             </div>
+            {isEditCombo && (
+              <SwitchComponent
+                name="ComboStatus"
+                label="Trạng Thái"
+                form={form}
+                checkedChildren="Bật"
+                unCheckedChildren="Tắt"
+              />
+            )}
             <div className="mt-6 flex justify-end space-x-3">
               <ButtonComponent
                 className="px-5 py-2 rounded-md"

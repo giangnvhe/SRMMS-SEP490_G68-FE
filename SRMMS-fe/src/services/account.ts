@@ -156,3 +156,12 @@ export const ChangePassword = async (params: ChangePasswordRequest) => {
   >(getApi("api", "change-password"), params);
   return result;
 };
+
+interface accountCount {
+  employeeCount: number;
+}
+
+export const getCountAccount = async (): Promise<accountCount> => {
+  const result = await axiosInstance.get(getApi("api", "account/total"), {});
+  return result.data;
+};

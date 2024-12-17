@@ -1,5 +1,9 @@
-import { ClockCircleOutlined, LoadingOutlined } from "@ant-design/icons";
-import { DatePicker, Form, Select, Spin, TimePicker } from "antd";
+import {
+  ClockCircleOutlined,
+  LoadingOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
+import { DatePicker, Form, InputNumber, Select, Spin, TimePicker } from "antd";
 import { AxiosError, AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
@@ -90,7 +94,7 @@ const UpdateBooking = ({ refetch, bookingData, onCancel }: IProps) => {
   const isLoadings = handleUpdateBooking.isLoading;
 
   const disablePastDates = (currentDate: dayjs.Dayjs) => {
-    return currentDate.isBefore(dayjs(), "day"); 
+    return currentDate.isBefore(dayjs(), "day");
   };
 
   return (
@@ -137,12 +141,21 @@ const UpdateBooking = ({ refetch, bookingData, onCancel }: IProps) => {
                 />
               </Form.Item>
             </div>
-
-            <InputComponent
-              label="Số người"
+            <Form.Item
+              label="Số lượng người"
               name="numberOfPeople"
-              form={form}
-            />
+              rules={[
+                { required: true, message: "Vui lòng nhập số lượng người!" },
+              ]}
+              tooltip="Nhập số lượng người tham gia"
+            >
+              <InputNumber
+                min={1}
+                max={20}
+                style={{ width: "100%" }}
+                placeholder="Số lượng người"
+              />
+            </Form.Item>
             <Form.Item
               label="Trạng thái"
               name="statusId"

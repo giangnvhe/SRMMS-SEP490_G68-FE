@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "react-query";
 import ButtonComponent from "~/components/ButtonComponent";
 import InputComponent from "~/components/InputComponent";
 import SelectComponent, { Option } from "~/components/SelectComponent";
+import SwitchComponent from "~/components/SwitchComponent";
 import useNotification from "~/hooks/useNotification";
 import {
   AccountData,
@@ -160,6 +161,7 @@ const AddOrEditAccount = ({
           });
         } else {
           formData.password = DEFAULT_PASSWORD;
+          formData.status = true;
           handleCreateEmployee.mutate({ data: formData });
         }
       })
@@ -254,6 +256,15 @@ const AddOrEditAccount = ({
               options={role || []}
               loading={isLoading}
             />
+            {isEditAccount && (
+              <SwitchComponent
+                name="status"
+                label="Trạng Thái"
+                form={form}
+                checkedChildren="Bật"
+                unCheckedChildren="Tắt"
+              />
+            )}
           </div>
           <div className="mt-6 flex justify-end space-x-3">
             <ButtonComponent htmlType="submit" className="px-5 py-2 rounded-md">

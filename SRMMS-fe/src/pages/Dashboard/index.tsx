@@ -10,11 +10,14 @@ import CardWithIcon from "./components/Header/CardWithIcon";
 import { getComboProduct } from "~/services/combos";
 import RevenueChart from "./components/RevenueChart";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { getCountAccount } from "~/services/account";
 
 const Dashboard = () => {
   const [orderCount, setOrderCount] = useState<number | null>(null);
   const [productCount, setProductCount] = useState<number | null>(null);
   const [comboCount, setComboCount] = useState<number | null>(null);
+  const [accountCount, setAccountCount] = useState<number | null>(null);
+
   useEffect(() => {
     const fetchOrderCount = async () => {
       try {
@@ -26,6 +29,18 @@ const Dashboard = () => {
     };
 
     fetchOrderCount();
+  }, []);
+
+  useEffect(() => {
+    const fetchAccountCount = async () => {
+      try {
+        const data = await getCountAccount();
+        setAccountCount(data.employeeCount);
+      } catch (error) {
+        console.error("Failed to fetch order count", error);
+      }
+    };
+    fetchAccountCount();
   }, []);
 
   useEffect(() => {
@@ -121,7 +136,7 @@ const Dashboard = () => {
             to="/admin/employees"
             title="Số lượng nhân viên"
             subtitle={
-              comboCount !== null ? comboCount.toString() : "Loading..."
+              accountCount !== null ? accountCount.toString() : "Loading..."
             }
           />
         </Col>

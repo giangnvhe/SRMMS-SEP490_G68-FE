@@ -116,16 +116,6 @@ const AddTable = ({ onCancel, refetch, tableData }: IProps) => {
       : handleCreateTable.mutate({ data: formData });
   };
 
-  // const handleTableOfPeopleChange = (
-  //   e: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   const value = e.target.value;
-  //   if (/^[0-9]*$/.test(value)) {
-  //     setFormValues((prev) => ({ ...prev, tableOfPeople: value }));
-  //     form.setFieldsValue({ tableOfPeople: value });
-  //   }
-  // };
-
   const isLoadings = useMemo(
     () => handleCreateTable.isLoading || handleUpdateTable.isLoading,
     [handleCreateTable.isLoading, handleUpdateTable.isLoading]
@@ -180,6 +170,14 @@ const AddTable = ({ onCancel, refetch, tableData }: IProps) => {
               {
                 pattern: /^[0-9]+$/,
                 message: "Chỉ được nhập số từ 0-9",
+              },
+              {
+                validator: (_, value) => {
+                  if (value && value > 20) {
+                    return Promise.reject("Số lượng người không được quá 20");
+                  }
+                  return Promise.resolve();
+                },
               },
             ]}
             placeholder="số lượng người của bàn"
